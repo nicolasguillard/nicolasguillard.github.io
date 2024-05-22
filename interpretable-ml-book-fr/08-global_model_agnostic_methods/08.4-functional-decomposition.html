@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apprentissage automatique interprétable</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" rel="next">
+<link href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/index.html">8 - Méthodes globales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html">8.4 - Functional Decomposition</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Apprentissage automatique interprétable</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Recherche"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Résumé</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 - Préface de l’auteur</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 - Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1 - Quelques histoires</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3 - Terminologie</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 - Interprétabilité</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5 - Propriétés des Explications</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 - Jeux de données</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 - Modèles interprétables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1 - Régéression linéaire</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2 - Régéression logistique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4 - Arbre de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5 - Règles de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6 - Ajustement des règles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 - Explications basées sur des exemples</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">8.4 - Functional Decomposition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.6 - Substitut global</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.7 - Prototypes et critiques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.2 - Attribution de pixel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.3 - Détecter les concepts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.4 - Exemples adverses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.5 - Instances Influentes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12 - Contribuer à ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">13 - Citer ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">14 - Traductions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">15 - Remerciements</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#functional-decomposition" id="toc-functional-decomposition" class="nav-link active" data-scroll-target="#functional-decomposition">8.4 - Functional Decomposition</a>
+  <ul>
+  <li><a href="#comment-ne-pas-calculer-les-composantes-i" id="toc-comment-ne-pas-calculer-les-composantes-i" class="nav-link" data-scroll-target="#comment-ne-pas-calculer-les-composantes-i">8.4.1 - Comment ne pas calculer les composantes I</a></li>
+  <li><a href="#décomposition-fonctionnelle" id="toc-décomposition-fonctionnelle" class="nav-link" data-scroll-target="#décomposition-fonctionnelle">8.4.2 - Décomposition fonctionnelle</a></li>
+  <li><a href="#comment-ne-pas-calculer-les-composantes-ii" id="toc-comment-ne-pas-calculer-les-composantes-ii" class="nav-link" data-scroll-target="#comment-ne-pas-calculer-les-composantes-ii">8.4.3 - Comment ne pas calculer les composantes II</a></li>
+  <li><a href="#anova-fonctionnelle" id="toc-anova-fonctionnelle" class="nav-link" data-scroll-target="#anova-fonctionnelle">8.4.4 - ANOVA fonctionnelle</a></li>
+  <li><a href="#anova-fonctionnelle-généralisée-pour-les-caractéristiques-dépendantes" id="toc-anova-fonctionnelle-généralisée-pour-les-caractéristiques-dépendantes" class="nav-link" data-scroll-target="#anova-fonctionnelle-généralisée-pour-les-caractéristiques-dépendantes">8.4.5 - ANOVA fonctionnelle généralisée pour les caractéristiques dépendantes</a></li>
+  <li><a href="#graphiques-des-effets-locaux-accumulés" id="toc-graphiques-des-effets-locaux-accumulés" class="nav-link" data-scroll-target="#graphiques-des-effets-locaux-accumulés">8.4.6 - Graphiques des effets locaux accumulés</a></li>
+  <li><a href="#modèles-de-régression-statistique" id="toc-modèles-de-régression-statistique" class="nav-link" data-scroll-target="#modèles-de-régression-statistique">8.4.7 - Modèles de régression statistique</a></li>
+  <li><a href="#bonus-tracé-de-dépendance-partielle" id="toc-bonus-tracé-de-dépendance-partielle" class="nav-link" data-scroll-target="#bonus-tracé-de-dépendance-partielle">8.4.8 - Bonus : tracé de dépendance partielle</a></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">8.4.9 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">8.4.10 - Inconvénients</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/index.html">8 - Méthodes globales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html">8.4 - Functional Decomposition</a></li></ol></nav>
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modifié</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">10 mai 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="functional-decomposition" class="level2">
+<h2 class="anchored" data-anchor-id="functional-decomposition">8.4 - Functional Decomposition</h2>
+<p>Un modèle d’apprentissage automatique supervisé peut être considéré comme une fonction qui prend un vecteur de caractéristiques de grande dimension en entrée et produit un score de prédiction ou de classification en sortie. La décomposition fonctionnelle est une technique d’interprétation qui déconstruit la fonction de grande dimension et l’exprime comme une somme d’effets de caractéristiques individuelles et d’effets d’interaction pouvant être visualisés. De plus, la décomposition fonctionnelle est un principe fondamental qui sous-tend de nombreuses techniques d’interprétation : elle vous aide à mieux comprendre les autres méthodes d’interprétation.</p>
+<p>Allons droit au but et examinons une fonction particulière. Cette fonction prend deux fonctionnalités en entrée et produit une sortie unidimensionnelle :</p>
+<p><span class="math display">\[y = \hat{f}(x_1, x_2) = 2 + e^{x_1} - x_2 + x_1 \cdot x_2\]</span></p>
+<p>Considérez la fonction comme un modèle d’apprentissage automatique. Nous pouvons visualiser la fonction avec un tracé 3D ou une carte thermique avec des courbes de niveau :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/8_4_figure_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Surface de prédiction d’une fonction à deux caractéristiques <span class="math inline">\(x_1\)</span> et <span class="math inline">\(x_2\)</span></figcaption>
+</figure>
+</div>
+<p>La fonction prend de grandes valeurs lorsque <span class="math inline">\(x_1\)</span> est grand et <span class="math inline">\(x_2\)</span> est petit, et il faut de petites valeurs pour de grandes <span class="math inline">\(x_2\)</span> et petit <span class="math inline">\(x_1\)</span>. La fonction de prédiction n’est pas simplement un effet additif entre les deux caractéristiques, mais une interaction entre les deux. La présence d’une interaction est visible sur la figure - l’effet de la modification des valeurs de la fonctionnalité <span class="math inline">\(x_1\)</span> dépend de la valeur de cette fonctionnalité <span class="math inline">\(x_2\)</span> a.</p>
+<p>Notre travail consiste maintenant à décomposer cette fonction en effets principaux de fonctionnalités <span class="math inline">\(x_1\)</span> et <span class="math inline">\(x_2\)</span> et un terme d’interaction. Pour une fonction bidimensionnelle <span class="math inline">\(\hat{f}\)</span>, cela dépend de seulement deux fonctionnalités d’entrée : <span class="math inline">\(\hat{f}(x_1, x_2)\)</span>, nous voulons que chaque composant représente un effet principal (<span class="math inline">\(\hat{f}_1\)</span> et <span class="math inline">\(\hat{f}_2\)</span>), interaction (<span class="math inline">\(\hat{f}_{1,2}\)</span>) ou intercepter (<span class="math inline">\(\hat{f}_0\)</span>):</p>
+<p><span class="math display">\[\hat{f}(x_1, x_2) = \hat{f}_0 + \hat{f}_1(x_1) + \hat{f}_2(x_2) + \hat{f}_{1,2}(x_{1},x_{2})\]</span></p>
+<p>Les principaux effets indiquent comment chaque caractéristique affecte la prédiction, indépendamment des valeurs de l’autre caractéristique. L’effet d’interaction indique l’effet conjoint des caractéristiques. L’interception nous indique simplement quelle est la prédiction lorsque tous les effets de caractéristiques sont définis sur zéro. Notez que les composants eux-mêmes sont des fonctions (à l’exception de l’interception) avec une dimensionnalité d’entrée différente.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/8_4_figure_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Décomposition d’une fonction.</figcaption>
+</figure>
+</div>
+<p>Pensez-vous que les composants ont du sens étant donné la vraie formule ci-dessus, en ignorant le fait que la valeur d’origine semble un peu aléatoire ? Le <span class="math inline">\(x_1\)</span> la fonctionnalité montre un effet principal exponentiel, et <span class="math inline">\(x_2\)</span> montre un effet linéaire négatif. Le terme d’interaction ressemble un peu à une puce Pringles. En termes moins croustillants et plus mathématiques, il s’agit d’un paraboloïde hyperbolique, comme on pourrait s’y attendre pour <span class="math inline">\(x_1 \cdot x_2\)</span>. Alerte dévulgachage : la décomposition est basée sur des tracés d’effets locaux accumulés, dont nous parlerons plus tard dans le chapitre.</p>
+<section id="comment-ne-pas-calculer-les-composantes-i" class="level3">
+<h3 class="anchored" data-anchor-id="comment-ne-pas-calculer-les-composantes-i">8.4.1 - Comment ne pas calculer les composantes I</h3>
+<p>Mais pourquoi tout cet engouement ? Un coup d’œil à la formule nous donne déjà la réponse à la décomposition, donc pas besoin de méthodes sophistiquées, n’est-ce pas ? Pour la fonctionnalité <span class="math inline">\(x_1\)</span>, on peut prendre toutes les sommes qui contiennent uniquement <span class="math inline">\(x_1\)</span> comme composant de cette fonctionnalité. Ce serait <span class="math inline">\(\hat{f}_1(x_1) = e^{x_1}\)</span> et <span class="math inline">\(\hat{f}_2(x_2) = -x_2\)</span> pour la fonctionnalité <span class="math inline">\(x_2\)</span>. L’interaction est alors <span class="math inline">\(\hat{f}_{12}(x_{1},x_{2}) = x_1 \cdot x_2\)</span>. Bien que ce soit la bonne réponse pour cet exemple (jusqu’aux constantes), cette approche pose deux problèmes : Problème 1) : Bien que l’exemple ait commencé avec la formule, la réalité est que presque aucun modèle d’apprentissage automatique ne peut être décrit avec une telle formule. formule soignée. Le problème 2) est beaucoup plus complexe et concerne ce qu’est une interaction. Imaginez une fonction simple <span class="math inline">\(\hat{f}(x_1,x_2) = x_1 \cdot x_2\)</span>, où les deux caractéristiques prennent des valeurs supérieures à zéro et sont indépendantes l’une de l’autre. En utilisant notre tactique d’examen de la formule, nous conclurions qu’il existe une interaction entre les fonctionnalités <span class="math inline">\(x_1\)</span> et <span class="math inline">\(x_2\)</span>, mais pas les effets de fonctionnalités individuelles. Mais peut-on vraiment dire que cette fonctionnalité <span class="math inline">\(x_1\)</span> n’a-t-il aucun effet individuel sur la fonction de prédiction ? Quelle que soit la valeur de l’autre fonctionnalité <span class="math inline">\(x_2\)</span> prend, la prédiction augmente à mesure que nous augmentons <span class="math inline">\(x_1\)</span>. Par exemple, pour <span class="math inline">\(x_2 = 1\)</span>, l’effet de <span class="math inline">\(x_1\)</span> est <span class="math inline">\(\hat{f}(x_1, 1) = x_1\)</span>, et quand <span class="math inline">\(x_2 = 10\)</span> l’effet est <span class="math inline">\(\hat{f}(x_1, 10) = 10 \cdot x_1\)</span>. Il est donc clair que cette fonctionnalité <span class="math inline">\(x_1\)</span> a un effet positif sur la prédiction, indépendamment de <span class="math inline">\(x_2\)</span>, et n’est pas nul.</p>
+<p>Pour résoudre le problème 1) du manque d’accès à une formule soignée, nous avons besoin d’une méthode qui utilise uniquement la fonction de prédiction ou le score de classification. Pour résoudre le problème 2) du manque de définition, nous avons besoin de quelques axiomes qui nous indiquent à quoi devraient ressembler les composants et comment ils sont liés les uns aux autres. Mais d’abord, il convient de définir plus précisément ce qu’est la décomposition fonctionnelle.</p>
+</section>
+<section id="décomposition-fonctionnelle" class="level3">
+<h3 class="anchored" data-anchor-id="décomposition-fonctionnelle">8.4.2 - Décomposition fonctionnelle</h3>
+<p>Une fonction de prédiction prend <span class="math inline">\(p\)</span> fonctionnalités en entrée, <span class="math inline">\(\hat{f}: \mathbb{R}^p \mapsto \mathbb{R}\)</span> et produit une sortie. Cela peut être une fonction de régression, mais cela peut aussi être la probabilité de classification pour une classe donnée ou le score pour un cluster donné (apprentissage automatique non supervisé). Entièrement décomposée, nous pouvons représenter la fonction de prédiction comme la somme de composants fonctionnels :</p>
+<p><span class="math display">\[\begin{align*}
+\hat{f}(x) = &amp; \hat{f}_0 + \hat{f}_1(x_1) + \ldots + \hat{f}_p(x_p) \\
+&amp; + \hat{f}_{1,2}(x_1, x_2) + \ldots + \hat{f}_{1,p}(x_1, x_p) + \ldots + \hat{f}_{p-1,p}(x_{p-1}, x_p) \\
+&amp; + \ldots  \\ &amp; +  \hat{f}_{1,\ldots,p}(x_1, \ldots, x_p)
+\end{align*}\]</span></p>
+<p>Nous pouvons rendre la formule de décomposition un peu plus agréable en indexant tous les sous-ensembles possibles de combinaisons de fonctionnalités : <span class="math inline">\(S\subseteq\{1,\ldots,p\}\)</span>. Cet ensemble contient l’interception (<span class="math inline">\(S=\emptyset\)</span>), principaux effets (<span class="math inline">\(|S|=1\)</span>), et toutes les interactions (<span class="math inline">\(|S|\geq{}1\)</span>). Avec ce sous-ensemble défini, nous pouvons écrire la décomposition comme suit :</p>
+<p><span class="math display">\[\hat{f}(x) = \sum_{S\subseteq\{1,\ldots,p\}} \hat{f}_S(x_S)\]</span></p>
+<p>Dans la formule, <span class="math inline">\(x_S\)</span> est le vecteur des caractéristiques dans l’ensemble d’index <span class="math inline">\(S\)</span>. Et chaque sous-ensemble <span class="math inline">\(S\)</span> représente un composant fonctionnel, par exemple un effet principal si S ne contient qu’une seule fonctionnalité, ou une interaction si <span class="math inline">\(|S| &gt; 1\)</span>.</p>
+<p>Combien de composants y a-t-il dans la formule ci-dessus ? La réponse se résume au nombre de sous-ensembles possibles <span class="math inline">\(S\)</span> des fonctionnalités <span class="math inline">\(1,\ldots, p\)</span> nous pouvons former. Et ce sont <span class="math inline">\(\sum_{i=0}^p\binom{p}{i}=2^p\)</span> sous-ensembles possibles ! Par exemple, si une fonction utilise 10 fonctionnalités, nous pouvons décomposer la fonction en 1042 composants : 1 intercept, 10 effets principaux, 90 termes d’interaction à 2 voies, 720 termes d’interaction à 3 voies, … Et avec chaque fonctionnalité supplémentaire, le nombre de composants double. De toute évidence, pour la plupart des fonctions, il n’est pas possible de calculer toutes les composantes. Une autre raison de NE PAS calculer toutes les composantes est que les composantes avec <span class="math inline">\(|S|&gt;2\)</span> sont difficiles à visualiser et à interpréter.</p>
+</section>
+<section id="comment-ne-pas-calculer-les-composantes-ii" class="level3">
+<h3 class="anchored" data-anchor-id="comment-ne-pas-calculer-les-composantes-ii">8.4.3 - Comment ne pas calculer les composantes II</h3>
+<p>Jusqu’à présent, j’ai évité de parler de la façon dont les composants sont définis et calculés. Les seules contraintes dont nous avons implicitement parlé étaient le nombre et la dimensionnalité des composants, et le fait que la somme des composants devait produire la fonction d’origine. Mais sans autres contraintes sur ce que devraient être les composants, ils ne sont pas uniques. Cela signifie que nous pourrions déplacer les effets entre les effets principaux et les interactions, ou entre les interactions d’ordre inférieur (peu de fonctionnalités) et les interactions d’ordre supérieur (plus de fonctionnalités). Dans l’exemple du début du chapitre, nous pourrions mettre les deux effets principaux à zéro et ajouter leurs effets à l’effet d’interaction.</p>
+<p>Voici un exemple encore plus extrême qui illustre la nécessité de contraintes sur les composants. Supposons que vous ayez une fonction tridimensionnelle. L’apparence de cette fonction n’a pas vraiment d’importance, mais la décomposition suivante fonctionnerait <strong>toujours</strong> : <span class="math inline">\(\hat{f}_0\)</span> is 0.12. <span class="math inline">\(\hat{f}_1(x_1)=2\cdot{}x_1\)</span> + nombre de chaussures que vous possédez. <span class="math inline">\(\hat{f}_2\)</span>, <span class="math inline">\(\hat{f}_3\)</span>, <span class="math inline">\(\hat{f}_{1,2}\)</span>, <span class="math inline">\(\hat{f}_{2,3}, \hat{f}_{1,3}\)</span> sont tous nuls. Et pour que cette astuce fonctionne, je définis <span class="math inline">\(\hat{f}_{1,2,3}(x_1,x_2,x_3)=\hat{f}(x)-\sum_{S\subset\{1,\ldots,p\}}\hat{f}_S(x_S)\)</span>. Ainsi, le terme d’interaction contenant toutes les caractéristiques aspire simplement tous les effets restants, ce qui, par définition, fonctionne toujours, dans le sens où la somme de toutes les composantes nous donne la fonction de prédiction originale. Cette décomposition ne serait pas très significative et assez trompeuse si vous deviez la présenter comme l’interprétation de votre modèle.</p>
+<p>L’ambiguïté peut être évitée en spécifiant des contraintes supplémentaires ou des méthodes spécifiques de calcul des composants. Dans ce chapitre, nous aborderons trois méthodes qui abordent la décomposition fonctionnelle de différentes manières : - ANOVA fonctionnelle (généralisée) - <a href="../08-global_model_agnostic_methods/08.2-ale.html">Effets locaux accumulés</a> - Modèles de régression statistique</p>
+</section>
+<section id="anova-fonctionnelle" class="level3">
+<h3 class="anchored" data-anchor-id="anova-fonctionnelle">8.4.4 - ANOVA fonctionnelle</h3>
+<p>L’ANOVA fonctionnelle a été proposée par Hooker (2004)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Une condition requise pour cette approche est que la fonction de prédiction du modèle <span class="math inline">\(\hat{f}\)</span> est carré intégrable. Comme pour toute décomposition fonctionnelle, l’ANOVA fonctionnelle décompose la fonction en composants :</p>
+<p><span class="math display">\[\hat{f}(x) = \sum_{S\subseteq\{1,\ldots,p\}} \hat{f}_S(x_S)\]</span></p>
+<p>Hooker (2004) définit chaque composant avec la formule suivante :</p>
+<p><span class="math display">\[\hat{f}_S(x) = \int_{X_{-S}} \left( \hat{f}(x) - \sum_{V \subset S} \hat{f}_V(x)\right) d X_{-S}\]</span></p>
+<p>D’accord, démontons cette chose. Nous pouvons réécrire le composant comme suit :</p>
+<p><span class="math display">\[\hat{f}_S(x) = \int_{X_{-S}} \left( \hat{f}(x)\right) d X_{-S} - \int_{X_{-S}} \left(\sum_{V \subset S} \hat{f}_V(x) \right) d X_{-S}\]</span></p>
+<p>Sur le côté gauche se trouve l’intégrale sur la fonction de prédiction par rapport aux caractéristiques exclues de l’ensemble <span class="math inline">\(S\)</span>, noté par <span class="math inline">\(-S\)</span>. Par exemple, si nous calculons la composante d’interaction bidirectionnelle pour les caractéristiques 2 et 3, nous intégrerions les caractéristiques 1, 4, 5,… L’intégrale peut également être considérée comme la valeur attendue de la fonction de prédiction par rapport à <span class="math inline">\(X_{-S}\)</span>, en supposant que toutes les caractéristiques suivent une distribution uniforme de leur minimum à leur maximum. De cet intervalle, nous soustrayons toutes les composantes avec des sous-ensembles de <span class="math inline">\(S\)</span>. Cette soustraction supprime l’effet de tous les effets d’ordre inférieur et centre l’effet. Pour <span class="math inline">\(S=\{1,2\}\)</span>, nous soustrayons les principaux effets des deux caractéristiques <span class="math inline">\(\hat{f}_1\)</span> eT <span class="math inline">\(\hat{f}_2\)</span>, ainsi que l’interception <span class="math inline">\(\hat{f}_0\)</span>. L’apparition de ces effets d’ordre inférieur rend la formule récursive : nous devons parcourir la hiérarchie des sous-ensembles pour intercepter et calculer toutes ces composantes. Pour le composant d’interception <span class="math inline">\(\hat{f}_0\)</span>, le sous-ensemble est l’ensemble vide <span class="math inline">\(S=\{\emptyset\}\)</span> et donc <span class="math inline">\(-S\)</span> contient toutes les fonctionnalités :</p>
+<p><span class="math display">\[\hat{f}_0(x) = \int_{X} \hat{f}(x) dX\]</span></p>
+<p>Il s’agit simplement de la fonction de prédiction intégrée sur toutes les fonctionnalités. L’ordonnée à l’origine peut également être interprétée comme l’attente de la fonction de prédiction lorsque nous supposons que toutes les caractéristiques sont uniformément distribuées. Maintenant que nous savons <span class="math inline">\(\hat{f}_0\)</span>, on peut calculer <span class="math inline">\(\hat{f}_1\)</span> (et de manière équivalente <span class="math inline">\(\hat{f}_2\)</span>) :</p>
+<p><span class="math display">\[\hat{f}_1(x) = \int_{X_{-1}} \left( \hat{f}(x) - \hat{f}_0\right) d X_{-S}\]</span></p>
+<p>Pour terminer le calcul du composant <span class="math inline">\(\hat{f}_{1,2}\)</span>, nous pouvons tout assembler :</p>
+<p><span class="math display">\[\begin{align*}\hat{f}_{1,2}(x) &amp;= \int_{X_{3,4}} \left( \hat{f}(x) - (\hat{f}_0(x) + \hat{f}_1(x) - \hat{f}_0 + \hat{f}_2(x) - \hat{f}_0)\right) d X_{3},X_4 \\  &amp;= \int_{X_{3,4}} \left(\hat{f}(x) - \hat{f}_1(x) - \hat{f}_2(x) + \hat{f}_0\right) d X_{3},X_4 \end{align*}\]</span></p>
+<p>Cet exemple montre comment chaque effet d’ordre supérieur est défini en intégrant toutes les autres fonctionnalités, mais également en supprimant tous les effets d’ordre inférieur qui sont des sous-ensembles de l’ensemble de fonctionnalités qui nous intéresse.</p>
+<p>Hooker (2004) a montré que cette définition des composants fonctionnels satisfait ces axiomes souhaitables :</p>
+<ul>
+<li>Zéro signifie : <span class="math inline">\(\int{}\hat{f}_S(x_S)dX_s=0\)</span> pour chaque <span class="math inline">\(S\neq\emptyset\)</span>.</li>
+<li>Orthogonalité : <span class="math inline">\(\int{}\hat{f}_S(x_S)\hat{f}_V(x_v)dX=0\)</span> pour <span class="math inline">\(S\neq{}V\)</span>.</li>
+<li>Décomposition de la variance : Soit <span class="math inline">\(\sigma^2_{\hat{f}}=\int \hat{f}(x)^2dX\)</span>, alors <span class="math inline">\(\sigma^2(\hat{f}) = \sum_{S \subseteq \{1,\ldots,p\}} \sigma^2_S(\hat{f}_S)\)</span>.</li>
+</ul>
+<p>L’axiome des moyens zéro implique que tous les effets ou interactions sont centrés autour de zéro. En conséquence, l’interprétation à une position x est relative à la prédiction centrée et non à la prédiction absolue.</p>
+<p>L’axiome d’orthogonalité implique que les composants ne partagent pas d’informations. Par exemple, l’effet de premier ordre de la fonctionnalité <span class="math inline">\(X_1\)</span> et le terme d’interaction de <span class="math inline">\(X_1\)</span> et <span class="math inline">\(X_2\)</span> ne sont pas corrélées. En raison de l’orthogonalité, toutes les composantes sont « pures » dans le sens où elles ne mélangent pas les effets. Il est tout à fait logique que le composant destiné, par exemple, à la fonctionnalité <span class="math inline">\(X_4\)</span> devrait être indépendant du terme d’interaction entre les fonctionnalités <span class="math inline">\(X_1\)</span> et <span class="math inline">\(X_2\)</span>. La conséquence la plus intéressante concerne l’orthogonalité des composants hiérarchiques, où un composant contient des caractéristiques d’un autre, par exemple l’interaction entre <span class="math inline">\(X_1\)</span> et <span class="math inline">\(X_2\)</span> , et l’effet principal de la fonctionnalité <span class="math inline">\(X_1\)</span>. En revanche, un diagramme de dépendance partielle bidimensionnel pour <span class="math inline">\(X_1\)</span> et <span class="math inline">\(X_2\)</span> contiendrait quatre effets : l’interception, les deux effets principaux de <span class="math inline">\(X_1\)</span> et <span class="math inline">\(X_2\)</span> et l’interaction entre eux. Le composant ANOVA fonctionnel pour <span class="math inline">\(\hat{f}_{1,2}(x_1,x_2)\)</span> ne contient que l’interaction pure.</p>
+<p>La décomposition de la variance nous permet de diviser la variance de la fonction <span class="math inline">\(\hat{f}\)</span> entre les composants, et garantit qu’il additionne finalement la variance totale de la fonction. La propriété de décomposition de la variance peut également nous expliquer pourquoi la méthode est appelée “ANOVA fonctionnelle”. En statistiques, ANOVA signifie ANalysis Of VAriance. L’ANOVA fait référence à un ensemble de méthodes qui analysent les différences dans la moyenne d’une variable cible. L’ANOVA fonctionne en divisant la variance et en l’attribuant aux variables. L’ANOVA fonctionnelle peut donc être considérée comme une extension de ce concept à n’importe quelle fonction.</p>
+<p>Des problèmes surviennent avec l’ANOVA fonctionnelle lorsque les caractéristiques sont corrélées. Comme solution, l’ANOVA fonctionnelle généralisée a été proposée.</p>
+</section>
+<section id="anova-fonctionnelle-généralisée-pour-les-caractéristiques-dépendantes" class="level3">
+<h3 class="anchored" data-anchor-id="anova-fonctionnelle-généralisée-pour-les-caractéristiques-dépendantes">8.4.5 - ANOVA fonctionnelle généralisée pour les caractéristiques dépendantes</h3>
+<p>Semblable à la plupart des techniques d’interprétation basées sur des données d’échantillonnage (telles que le PDP), l’ANOVA fonctionnelle peut produire des résultats trompeurs lorsque les caractéristiques sont corrélées. Si nous intégrons sur la distribution uniforme, alors qu’en réalité les caractéristiques sont dépendantes, nous créons un nouvel ensemble de données qui s’écarte de la distribution conjointe et extrapole à des combinaisons improbables de valeurs de caractéristiques.</p>
+<p>Hooker (2007) <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> a proposé l’ANOVA fonctionnelle généralisée, une décomposition qui fonctionne pour les caractéristiques dépendantes. Il s’agit d’une généralisation de l’ANOVA fonctionnelle que nous avons rencontrée précédemment, ce qui signifie que l’ANOVA fonctionnelle est un cas particulier de l’ANOVA fonctionnelle généralisée. Les composantes sont définies comme des projections de f sur l’espace des fonctions additives :</p>
+<p><span class="math display">\[\hat{f}_S(x_S) = argmin_{g_S \in L^2(\mathbb{R}^S)_{S \in P}} \int \left(\hat{f}(x)  - \sum_{S \subset P} g_S(x_S)\right)^2 w(x)dx.\]</span></p>
+<p>Au lieu d’orthogonalité, les composants satisfont une condition d’orthogonalité hiérarchique :</p>
+<p><span class="math display">\[\forall \hat{f}_S(x_S)| S \subset U: \int \hat{f}_S(x_S) \hat{f}_U(x_U) w(x)dx = 0\]</span></p>
+<p>L’orthogonalité hiérarchique est différente de l’orthogonalité. Pour deux ensembles de caractéristiques S et U, dont aucun n’est le sous-ensemble de l’autre (par exemple <span class="math inline">\(S=\{1,2\}\)</span> et <span class="math inline">\(U=\{2,3\}\)</span>), les composants <span class="math inline">\(\hat{f}_S\)</span> et <span class="math inline">\(\hat{f}_U\)</span> n’ont pas besoin d’être orthogonaux pour que la décomposition soit hiérarchiquement orthogonale. Mais tous les composants de tous les sous-ensembles de <span class="math inline">\(S\)</span> doit être orthogonal à <span class="math inline">\(\hat{f}_S\)</span>. En conséquence, l’interprétation diffère de manière pertinente : à l’instar du M-Plot du <a href="../08-global_model_agnostic_methods/08.2-ale.html">chapitre ALE</a>, les composants fonctionnels généralisés de l’ANOVA peuvent emmêler les effets (marginaux) des caractéristiques corrélées. La question de savoir si les composantes enchevêtrent les effets marginaux dépend également du choix de la fonction de pondération <span class="math inline">\(w(x)\)</span>. Si nous choisissons w comme mesure uniforme sur le cube unité, nous obtenons l’ANOVA fonctionnelle à partir de la section ci-dessus. Un choix naturel pour w est la fonction de distribution de probabilité conjointe. Cependant, la distribution conjointe est généralement inconnue et difficile à estimer. Une astuce peut être de commencer par la mesure uniforme sur le cube unité et de découper les zones sans données.</p>
+<p>L’estimation est effectuée sur une grille de points dans l’espace des caractéristiques et est présentée comme un problème de minimisation qui peut être résolu à l’aide de techniques de régression. Cependant, les composants ne peuvent pas être calculés individuellement, ni hiérarchiquement, mais un système complexe d’équations impliquant d’autres composants doit être résolu. Le calcul est donc assez complexe et gourmand en calcul.</p>
+</section>
+<section id="graphiques-des-effets-locaux-accumulés" class="level3">
+<h3 class="anchored" data-anchor-id="graphiques-des-effets-locaux-accumulés">8.4.6 - Graphiques des effets locaux accumulés</h3>
+<p>Les tracés ALE (Apley et Zhu 2020<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>) fournissent également une décomposition fonctionnelle, ce qui signifie que l’ajout de tous les tracés ALE à l’origine, des tracés ALE 1D, des tracés ALE 2D, etc., donne la fonction de prédiction. L’ALE diffère de l’ANOVA fonctionnelle (généralisée), car les composantes ne sont pas orthogonales mais, comme l’appellent les auteurs, pseudo-orthogonales. Pour comprendre la pseudo-orthogonalité, il faut définir l’opérateur <span class="math inline">\(H_S\)</span>, qui prend une fonction <span class="math inline">\(\hat{f}\)</span> et le mappe à son tracé ALE pour le sous-ensemble de fonctionnalités <span class="math inline">\(S\)</span>. Par exemple, l’opérateur <span class="math inline">\(H_{1,2}\)</span> prend en entrée un modèle d’apprentissage automatique et produit le tracé ALE 2D pour les fonctionnalités 1 et 2 : <span class="math inline">\(H_{1,2}(\hat{f}) = \hat{f}_{ALE,12}\)</span>. Si nous appliquons deux fois le même opérateur, nous obtenons le même tracé ALE. Après avoir appliqué l’opérateur <span class="math inline">\(H_{1,2}\)</span> à <span class="math inline">\(f\)</span> une fois, nous obtenons le tracé ALE 2D <span class="math inline">\(\hat{f}_{ALE,12}\)</span>. Ensuite, nous appliquons à nouveau l’opérateur, non pas sur <span class="math inline">\(f\)</span> mais sur <span class="math inline">\(\hat{f}_{ALE,12}\)</span>. Ceci est possible car le composant 2D ALE est lui-même une fonction. Le résultat est encore une fois <span class="math inline">\(\hat{f}_{ALE,12}\)</span>, ce qui signifie que nous pouvons appliquer le même opérateur plusieurs fois et obtenir toujours le même tracé ALE. C’est la première partie de la pseudo-orthogonalité. Mais quel est le résultat si nous appliquons deux opérateurs différents pour différents ensembles de fonctionnalités ? Par exemple, <span class="math inline">\(H_{1,2}\)</span> et <span class="math inline">\(H_{1}\)</span>, ou <span class="math inline">\(H_{1,2}\)</span> et <span class="math inline">\(H_{3,4,5}\)</span> ? La réponse est zéro. Si l’on applique d’abord l’opérateur ALE <span class="math inline">\(H_S\)</span> à une fonction puis appliquer <span class="math inline">\(H_U\)</span> au résultat (avec <span class="math inline">\(S \neq U\)</span>), alors le résultat est nul. En d’autres termes, le tracé ALE d’un tracé ALE est nul, sauf si vous appliquez deux fois le même tracé ALE. Ou en d’autres termes, le tracé ALE pour l’ensemble de fonctionnalités S ne contient aucun autre tracé ALE. Ou en termes mathématiques, l’opérateur ALE mappe les fonctions aux sous-espaces orthogonaux d’un espace produit interne.</p>
+<p>Comme le notent Apley et Zhu (2020), la pseudo-orthogonalité peut être plus souhaitable que l’orthogonalité hiérarchique, car elle n’enchevêtre pas les effets marginaux des caractéristiques. De plus, l’ALE ne nécessite pas d’estimation de la distribution conjointe ; les composantes peuvent être estimées de manière hiérarchique, ce qui signifie que le calcul de l’ALE 2D pour les caractéristiques 1 et 2 ne nécessite que les calculs des composantes ALE individuelles de 1 et 2 et du terme d’origine en plus.</p>
+</section>
+<section id="modèles-de-régression-statistique" class="level3">
+<h3 class="anchored" data-anchor-id="modèles-de-régression-statistique">8.4.7 - Modèles de régression statistique</h3>
+<p>Cette approche s’inscrit dans le cadre <a href="../05-interpretable_models/">de modèles interprétables</a>, notamment <a href="../05-interpretable_models/05.3-glm-gam-more.html">les modèles additifs généralisés</a>. Au lieu de décomposer une fonction complexe, nous pouvons intégrer des contraintes dans le processus de modélisation afin de pouvoir facilement lire les composants individuels. Alors que la décomposition peut être gérée de manière descendante, où nous commençons par une fonction de grande dimension et la décomposons, les modèles additifs généralisés fournissent une approche ascendante, où nous construisons le modèle à partir de composants simples. Les deux approches ont en commun que leur objectif est de fournir des composants individuels et interprétables. Dans les modèles statistiques, nous limitons le nombre de composants afin que tous ne <span class="math inline">\(2^p\)</span> les composants doivent être montés. La version la plus simple est la régression linéaire :</p>
+<p><span class="math display">\[\hat{f}(x) = \beta_0 + \beta_1 x_1 + \ldots \beta_p x_p\]</span></p>
+<p>La formule ressemble beaucoup à la décomposition fonctionnelle, mais avec deux modifications majeures. Modification 1 : Tous les effets d’interaction sont exclus et nous ne conservons que les effets d’interception et principaux. Modification 2 : Les effets principaux ne peuvent être que linéaires dans les fonctionnalités : <span class="math inline">\(\hat{f}_j(x_j)=\beta_j{}x_j\)</span>. En regardant le modèle de régression linéaire à travers le prisme de la décomposition fonctionnelle, nous voyons que le modèle lui-même représente une décomposition fonctionnelle de la vraie fonction qui mappe les caractéristiques à la cible, mais sous l’hypothèse forte que les effets sont des effets linéaires et qu’il n’y a pas d’interactions.</p>
+<p>Le modèle additif généralisé assouplit la deuxième hypothèse en autorisant des fonctions plus flexibles <span class="math inline">\(\hat{f}_j\)</span> grâce à l’utilisation de cannelures. Des interactions peuvent également être ajoutées, mais ce processus est plutôt manuel. Des approches telles que GA2M tentent d’ajouter automatiquement des interactions bidirectionnelles à un GAM<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>Considérer un modèle de régression linéaire ou un GAM comme une décomposition fonctionnelle peut également prêter à confusion. Si vous appliquez les approches de décomposition du début du chapitre (ANOVA fonctionnelle généralisée et effets locaux accumulés), vous pouvez obtenir des composants différents des composants lus directement à partir du GAM. Cela peut se produire lorsque les effets d’interaction de fonctionnalités corrélées sont modélisés dans le GAM. Cet écart se produit parce que d’autres approches de décomposition fonctionnelle répartissent les effets différemment entre les interactions et les effets principaux.</p>
+<p>Alors, quand devriez-vous utiliser des GAM au lieu d’un modèle complexe + décomposition ? Vous devez vous en tenir aux GAM lorsque la plupart des interactions sont nulles, en particulier lorsqu’il n’y a aucune interaction avec trois fonctionnalités ou plus. Si l’on sait que le nombre maximum de fonctionnalités impliquées dans les interactions est de deux (<span class="math inline">\(|S|\leq{}2\)</span>), alors nous pouvons utiliser des approches comme MARS ou GA2M. En fin de compte, les performances du modèle sur les données de test peuvent indiquer si un GAM est suffisant ou si un modèle plus complexe fonctionne bien mieux.</p>
+</section>
+<section id="bonus-tracé-de-dépendance-partielle" class="level3">
+<h3 class="anchored" data-anchor-id="bonus-tracé-de-dépendance-partielle">8.4.8 - Bonus : tracé de dépendance partielle</h3>
+<p>Le <a href="../08-global_model_agnostic_methods/08.1-pdp.html">diagramme de dépendance partielle</a> fournit-il également une décomposition fonctionnelle ? Réponse courte : non. Réponse plus longue : le graphique de dépendance partielle pour un ensemble de fonctionnalités <span class="math inline">\(S\)</span> contient toujours tous les effets de la hiérarchie – le PDP pour <span class="math inline">\(\{1,2\}\)</span> contient non seulement l’interaction, mais également les effets de fonctionnalités individuels. Par conséquent, l’ajout de tous les PDP pour tous les sous-ensembles ne donne pas la fonction d’origine et ne constitue donc pas une décomposition valide. Mais pourrions-nous ajuster le PDP, peut-être en supprimant tous les effets inférieurs ? Oui, nous pourrions, mais nous obtiendrions quelque chose de similaire à l’ANOVA fonctionnelle. Cependant, au lieu d’intégrer sur une distribution uniforme, le PDP intègre sur la distribution marginale des <span class="math inline">\(X_{-S}\)</span>, qui est estimé à l’aide d’un échantillonnage de Monte Carlo.</p>
+</section>
+<section id="avantages" class="level3">
+<h3 class="anchored" data-anchor-id="avantages">8.4.9 - Avantages</h3>
+<p>Je considère la décomposition fonctionnelle comme un <strong>concept central de l’interprétabilité de l’apprentissage automatique</strong>.</p>
+<p>La décomposition fonctionnelle nous donne une <strong>justification théorique</strong> pour décomposer des modèles d’apprentissage automatique complexes et de grande dimension en effets et interactions individuels – une étape nécessaire qui nous permet d’interpréter les effets individuels. La décomposition fonctionnelle est l’idée centrale de techniques telles que les modèles de régression statistique, l’ALE, l’ANOVA fonctionnelle (généralisée), le PDP, la statistique H et les courbes ICE.</p>
+<p>La décomposition fonctionnelle permet également de mieux comprendre d’autres méthodes . Par exemple, <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html">l’importance des fonctionnalités de permutation</a> rompt l’association entre une fonctionnalité et la cible. Vu à travers le prisme de la décomposition fonctionnelle, nous pouvons voir que la permutation « détruit » l’effet de tous les composants dans lesquels la fonctionnalité était impliquée. Cela affecte l’effet principal de la fonctionnalité, mais également toutes les interactions avec d’autres fonctionnalités. Comme autre exemple, les valeurs de Shapley décomposent une prédiction en effets additifs de la caractéristique individuelle. Mais la décomposition fonctionnelle nous dit qu’il devrait également y avoir des effets d’interaction dans la décomposition, alors où sont-ils ? Les valeurs de Shapley fournissent une attribution équitable des effets aux caractéristiques individuelles, ce qui signifie que toutes les interactions sont également attribuées équitablement aux caractéristiques et donc réparties entre les valeurs de Shapley.</p>
+<p>Lorsque l’on considère la décomposition fonctionnelle comme un outil, l’utilisation <strong>des tracés ALE offre de nombreux avantages</strong> . Les tracés ALE fournissent une décomposition fonctionnelle rapide à calculer, dotée d’implémentations logicielles (voir le chapitre ALE) et de propriétés de pseudo-orthogonalité souhaitables.</p>
+</section>
+<section id="inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="inconvénients">8.4.10 - Inconvénients</h3>
+<p>Le concept de décomposition fonctionnelle atteint rapidement ses <strong>limites pour les composants de grande dimension</strong> au-delà des interactions entre deux entités. Non seulement cette explosion exponentielle du nombre de caractéristiques limite la praticabilité, puisque nous ne pouvons pas facilement visualiser les interactions d’ordre supérieur, mais le temps de calcul est insensé si nous devions calculer toutes les interactions.</p>
+<p>Chaque méthode de décomposition fonctionnelle a ses <strong>propres inconvénients</strong>. L’approche ascendante – la construction de modèles de régression – est un processus assez manuel et impose de nombreuses contraintes sur le modèle qui peuvent affecter les performances prédictives. L’ANOVA fonctionnelle nécessite des fonctionnalités indépendantes. L’ANOVA fonctionnelle généralisée est très difficile à estimer. Les graphiques des effets locaux accumulés ne fournissent pas de décomposition de la variance.</p>
+<p>L’approche de décomposition fonctionnelle est <strong>plus appropriée pour analyser des données tabulaires que du texte ou des images</strong>.</p>
+<!-- REFERENCES -->
+
+
+</section>
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Hooker, Giles. “Discovering additive structure in black box functions.” Proceedings of the tenth ACM SIGKDD international conference on Knowledge discovery and data mining. (2004).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Hooker, Giles. “Generalized functional anova diagnostics for high-dimensional functions of dependent variables.” Journal of Computational and Graphical Statistics 16.3 (2007): 709-732.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Apley, Daniel W., and Jingyu Zhu. “Visualizing the effects of predictor variables in black box supervised learning models.” Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82.4 (2020): 1059-1086.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Caruana, Rich, et al.&nbsp;“Intelligible models for healthcare: Predicting pneumonia risk and hospital 30-day readmission.” Proceedings of the 21th ACM SIGKDD international conference on knowledge discovery and data mining. (2015).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="pagination-link  aria-label=" 8.3="" -="" interactions="" avec="" les="" fonctionnalités"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">8.3 - Interactions avec les fonctionnalités</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="pagination-link" aria-label="8.5 - Décomposition fonctionnelle">
+        <span class="nav-page-text">8.5 - Décomposition fonctionnelle</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

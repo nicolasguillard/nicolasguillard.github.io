@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apprentissage automatique interprétable</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../09-local_model_agnostic_methods/09.3-counterfactual.html" rel="next">
+<link href="../09-local_model_agnostic_methods/09.1-ice.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../09-local_model_agnostic_methods/index.html">9 - Méthodes locales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../09-local_model_agnostic_methods/09.2-lime.html">9.2 - Substitut local (LIME)</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Apprentissage automatique interprétable</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Recherche"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Résumé</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 - Préface de l’auteur</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 - Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1 - Quelques histoires</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3 - Terminologie</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 - Interprétabilité</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5 - Propriétés des Explications</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 - Jeux de données</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 - Modèles interprétables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1 - Régéression linéaire</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2 - Régéression logistique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4 - Arbre de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5 - Règles de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6 - Ajustement des règles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 - Explications basées sur des exemples</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4 - Functional Decomposition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.6 - Substitut global</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.7 - Prototypes et critiques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.2 - Attribution de pixel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.3 - Détecter les concepts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.4 - Exemples adverses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.5 - Instances Influentes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12 - Contribuer à ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">13 - Citer ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">14 - Traductions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">15 - Remerciements</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#substitut-local-lime" id="toc-substitut-local-lime" class="nav-link active" data-scroll-target="#substitut-local-lime">9.2 - Substitut local (LIME)</a></li>
+  <li><a href="#lime-pour-les-données-tabulaires" id="toc-lime-pour-les-données-tabulaires" class="nav-link" data-scroll-target="#lime-pour-les-données-tabulaires">9.2.1 - LIME pour les données tabulaires</a>
+  <ul>
+  <li><a href="#exemple" id="toc-exemple" class="nav-link" data-scroll-target="#exemple">9.2.1.1 - Exemple</a></li>
+  <li><a href="#lime-pour-le-texte" id="toc-lime-pour-le-texte" class="nav-link" data-scroll-target="#lime-pour-le-texte">9.2.2 - LIME pour le texte</a></li>
+  </ul></li>
+  <li><a href="#exemple-1" id="toc-exemple-1" class="nav-link" data-scroll-target="#exemple-1">9.2.2.1 - Exemple</a>
+  <ul>
+  <li><a href="#lime-pour-les-images" id="toc-lime-pour-les-images" class="nav-link" data-scroll-target="#lime-pour-les-images">9.2.3 - LIME pour les images</a>
+  <ul class="collapse">
+  <li><a href="#exemple-2" id="toc-exemple-2" class="nav-link" data-scroll-target="#exemple-2">9.2.3.1 - Exemple</a></li>
+  </ul></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">9.2.4 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">9.2.5 - Inconvénients</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../09-local_model_agnostic_methods/index.html">9 - Méthodes locales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../09-local_model_agnostic_methods/09.2-lime.html">9.2 - Substitut local (LIME)</a></li></ol></nav>
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modifié</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">10 mai 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="substitut-local-lime" class="level2">
+<h2 class="anchored" data-anchor-id="substitut-local-lime">9.2 - Substitut local (LIME)</h2>
+<p>Les modèles de substitution locaux sont des modèles interprétables utilisés pour expliquer les prédictions individuelles des modèles d’apprentissage automatique en boîte noire. Explications locales interprétables et indépendantes du modèle (LIME) 50 est un article dans lequel les auteurs proposent une implémentation concrète de modèles de substitution locaux. Les modèles de substitution sont formés pour se rapprocher des prédictions du modèle de boîte noire sous-jacent. Au lieu de former un modèle de substitution global, LIME se concentre sur la formation de modèles de substitution locaux pour expliquer les prédictions individuelles.</p>
+<p>L’idée est assez intuitive. Tout d’abord, oubliez les données d’entraînement et imaginez que vous n’avez que le modèle de boîte noire dans lequel vous pouvez saisir des points de données et obtenir les prédictions du modèle. Vous pouvez sonder la boîte aussi souvent que vous le souhaitez. Votre objectif est de comprendre pourquoi le modèle d’apprentissage automatique a fait une certaine prédiction. LIME teste ce qui arrive aux prédictions lorsque vous fournissez des variations de vos données dans le modèle d’apprentissage automatique. LIME génère un nouvel ensemble de données composé d’échantillons perturbés et des prédictions correspondantes du modèle de boîte noire. Sur ce nouvel ensemble de données, LIME entraîne ensuite un modèle interprétable, qui est pondéré par la proximité des instances échantillonnées par rapport à l’instance d’intérêt. Le modèle interprétable peut provenir du <a href="../05-interpretable_models/index.html">chapitre sur les modèles interprétables</a>, par exemple <a href="../05-interpretable_models/05.1-linear-regression.html">Lasso</a> ou un <a href="../05-interpretable_models/05.4-decision-tree.html">arbre de décision</a>. Le modèle appris doit être une bonne approximation locale des prédictions du modèle d’apprentissage automatique, mais il n’est pas nécessaire qu’il soit une bonne approximation globale. Ce type de précision est également appelé fidélité locale.</p>
+<p>Mathématiquement, les modèles de substitution locaux avec contrainte d’interprétabilité peuvent être exprimés comme suit :</p>
+<p><span class="math display">\[\text{explanation}(x)=\arg\min_{g\in{}G}L(f,g,\pi_x)+\Omega(g)\]</span></p>
+<p>Le modèle d’explication par exemple <span class="math inline">\(x\)</span> est le modèle <span class="math inline">\(g\)</span> (par exemple modèle de régression linéaire) qui minimise la perte <span class="math inline">\(L\)</span> (par exemple erreur quadratique moyenne), qui mesure à quel point l’explication est proche de la prédiction du modèle d’origine <span class="math inline">\(f\)</span> (par exemple un modèle xgboost), tandis que la complexité du modèle <span class="math inline">\(\Omega(g)\)</span> est maintenu faible (par exemple, préférez moins de fonctionnalités). <span class="math inline">\(G\)</span> est la famille des explications possibles, par exemple tous les modèles de régression linéaire possibles. La mesure de proximité <span class="math inline">\(\pi_x\)</span> définit la taille du voisinage autour de l’instance <span class="math inline">\(x\)</span> que nous considérons pour l’explication. En pratique, LIME optimise uniquement la partie perte. L’utilisateur doit déterminer la complexité, par exemple en sélectionnant le nombre maximum de fonctionnalités que le modèle de régression linéaire peut utiliser.</p>
+<p>La recette pour former des modèles de substitution locaux :</p>
+<ul>
+<li>Sélectionnez votre instance d’intérêt pour laquelle vous souhaitez obtenir une explication de sa prédiction de boîte noire.</li>
+<li>Perturbez votre ensemble de données et obtenez les prédictions de la boîte noire pour ces nouveaux points.</li>
+<li>Pondérez les nouveaux échantillons en fonction de leur proximité avec l’instance d’intérêt.</li>
+<li>Entraînez un modèle pondéré et interprétable sur l’ensemble de données avec les variations.</li>
+<li>Expliquez la prédiction en interprétant le modèle local.</li>
+</ul>
+<p>Dans les implémentations actuelles dans <a href="https://github.com/thomasp85/lime">R</a> et <a href="https://github.com/marcotcr/lime">Python</a> , par exemple, la régression linéaire peut être choisie comme modèle de substitution interprétable. Au préalable, vous devez sélectionner <span class="math inline">\(K\)</span>, le nombre de fonctionnalités que vous souhaitez avoir dans votre modèle interprétable. Plus <span class="math inline">\(K\)</span> est faible, plus il est facile d’interpréter le modèle. Un <span class="math inline">\(K\)</span> plus élevé produit potentiellement des modèles avec une fidélité plus élevée. Il existe plusieurs méthodes pour entraîner des modèles avec exactement <span class="math inline">\(K\)</span> fonctionnalités. Un bon choix est <a href="../05-interpretable_models/05.1-linear-regression.html#lasso">Lasso</a>. Un modèle Lasso avec un paramètre de régularisation élevé <span class="math inline">\(\lambda\)</span> donne un modèle sans aucune fonctionnalité. En recyclant les modèles Lasso avec une diminution lente <span class="math inline">\(\lambda\)</span>, l’une après l’autre, les entités obtiennent des estimations de poids différentes de zéro. S’il y a <span class="math inline">\(K\)</span> fonctionnalités dans le modèle, vous avez atteint le nombre de fonctionnalités souhaité. D’autres stratégies consistent en une sélection avant ou arrière de fonctionnalités. Cela signifie que vous commencez soit avec le modèle complet (= contenant toutes les fonctionnalités), soit avec un modèle avec uniquement l’interception, puis testez quelle fonctionnalité apporterait la plus grande amélioration une fois ajoutée ou supprimée, jusqu’à ce qu’un modèle avec <span class="math inline">\(K\)</span> fonctionnalités soit atteint.</p>
+<p>Comment obtenir les variations des données ? Cela dépend du type de données, qui peuvent être du texte, des images ou des données tabulaires. Pour le texte et les images, la solution consiste à activer ou désactiver des mots simples ou des super-pixels. Dans le cas de données tabulaires, LIME crée de nouveaux échantillons en perturbant chaque entité individuellement, en s’appuyant sur une distribution normale avec moyenne et écart type tirés de l’entité.</p>
+</section>
+<section id="lime-pour-les-données-tabulaires" class="level1">
+<h1>9.2.1 - LIME pour les données tabulaires</h1>
+<p>Les données tabulaires sont des données présentées sous forme de tableaux, chaque ligne représentant une instance et chaque colonne une fonctionnalité. Les échantillons LIME ne sont pas prélevés autour de l’instance d’intérêt, mais à partir du centre de masse des données d’entraînement, ce qui pose problème. Mais cela augmente la probabilité que le résultat de certaines prédictions de points d’échantillonnage diffère du point de données d’intérêt et que LIME puisse apprendre au moins une explication.</p>
+<p>Il est préférable d’expliquer visuellement comment fonctionnent l’échantillonnage et la formation de modèles locaux :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/9_2_1_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Algorithme LIME pour les données tabulaires. A) Prédictions de forêt aléatoires compte tenu des fonctionnalités x1 et x2. Classes prédites : 1 (sombre) ou 0 (clair). B) Instance d’intérêt (gros point) et données échantillonnées à partir d’une distribution normale (petits points). C) Attribuez un poids plus élevé aux points proches de l’instance d’intérêt. D) Les signes de la grille montrent les classifications du modèle appris localement à partir des échantillons pondérés. La ligne blanche marque la limite de décision (P(class=1) = 0,5).</figcaption>
+</figure>
+</div>
+<p>Comme toujours, le diable se cache dans les détails. Définir un voisinage significatif autour d’un point est difficile. LIME utilise actuellement un noyau de lissage exponentiel pour définir le voisinage. Un noyau de lissage est une fonction qui prend deux instances de données et renvoie une mesure de proximité. La largeur du noyau détermine la taille du voisinage : une petite largeur du noyau signifie qu’une instance doit être très proche pour influencer le modèle local, une largeur de noyau plus grande signifie que les instances plus éloignées influencent également le modèle. Si vous regardez <a href="https://github.com/marcotcr/lime/tree/ce2db6f20f47c3330beb107bb17fd25840ca4606">l’implémentation Python de LIME (fichier lime/lime_tabular.py)</a>, vous verrez qu’elle utilise un noyau de lissage exponentiel (sur les données normalisées) et que la largeur du noyau est de 0,75 fois la racine carrée du nombre de colonnes des données d’entraînement. . Cela ressemble à une innocente ligne de code, mais c’est comme un éléphant assis dans votre salon à côté de la bonne porcelaine que vous avez reçue de vos grands-parents. Le gros problème est que nous n’avons pas de bon moyen de trouver le meilleur noyau ou la meilleure largeur. Et d’où vient le 0,75 ? Dans certains scénarios, vous pouvez facilement inverser votre explication en modifiant la largeur du noyau, comme le montre la figure suivante :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/9_2_1_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Explication de la prédiction de l’instance x = 1.6. Les prédictions du modèle boîte noire en fonction d’une seule caractéristique sont représentées par une ligne épaisse et la distribution des données est représentée par des tapis. Trois modèles de substitution locaux avec différentes largeurs de noyau sont calculés. Le modèle de régression linéaire résultant dépend de la largeur du noyau : la caractéristique a-t-elle un effet négatif, positif ou nul pour x = 1,6 ?</figcaption>
+</figure>
+</div>
+<p>L’exemple montre une seule fonctionnalité. La situation empire dans les espaces de fonctionnalités de grande dimension. Il est également très difficile de savoir si la mesure de la distance doit traiter toutes les caractéristiques de la même manière. Une unité de distance pour la fonctionnalité x1 est-elle identique à une unité pour la fonctionnalité x2 ? Les mesures de distance sont assez arbitraires et les distances dans différentes dimensions (c’est-à-dire caractéristiques) peuvent ne pas être comparables du tout.</p>
+<section id="exemple" class="level4">
+<h4 class="anchored" data-anchor-id="exemple">9.2.1.1 - Exemple</h4>
+<p>Regardons un exemple concret. Nous revenons aux <a href="../04-datasets/04.1-datasets.html">données de location de vélos</a> et transformons le problème de prédiction en une classification : après avoir pris en compte la tendance selon laquelle la location de vélos est devenue plus populaire au fil du temps, nous voulons savoir un certain jour si le nombre de vélos loués sera au-dessus ou en dessous de la ligne de tendance. Vous pouvez également interpréter « au-dessus » comme étant supérieur au nombre moyen de vélos, mais ajusté en fonction de la tendance.</p>
+<p>Nous formons d’abord une forêt aléatoire de 100 arbres à la tâche de classification. Quel jour le nombre de vélos de location sera-t-il supérieur à la moyenne sans tendance, en fonction des informations météorologiques et du calendrier ?</p>
+<p>Les explications sont créées avec 2 fonctionnalités. Les résultats des modèles linéaires locaux clairsemés formés pour deux instances avec des classes prédites différentes :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/9_2_1_1_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Explications LIME pour deux instances de l’ensemble de données de location de vélos. Des températures plus chaudes et de bonnes conditions météorologiques ont un effet positif sur les prévisions. L’axe des X montre l’effet de la caractéristique : le poids multiplié par la valeur réelle de la caractéristique.</figcaption>
+</figure>
+</div>
+<p>La figure montre clairement qu’il est plus facile d’interpréter les caractéristiques catégorielles que les caractéristiques numériques. Une solution consiste à classer les caractéristiques numériques dans des catégories.</p>
+</section>
+<section id="lime-pour-le-texte" class="level3">
+<h3 class="anchored" data-anchor-id="lime-pour-le-texte">9.2.2 - LIME pour le texte</h3>
+<p>LIME pour le texte diffère de LIME pour les données tabulaires. Les variations des données sont générées différemment : à partir du texte original, de nouveaux textes sont créés en supprimant aléatoirement des mots du texte original. L’ensemble de données est représenté avec des caractéristiques binaires pour chaque mot. Une caractéristique vaut 1 si le mot correspondant est inclus et 0 s’il a été supprimé.</p>
+</section>
+</section>
+<section id="exemple-1" class="level1">
+<h1>9.2.2.1 - Exemple</h1>
+<p>Dans cet exemple, nous classons <a href="../04-datasets/04.2-datasets.html">les commentaires YouTube</a> comme spam ou normaux.</p>
+<p>Le modèle de boîte noire est un arbre de décision approfondi formé sur la matrice de mots du document. Chaque commentaire correspond à un document (= une ligne) et chaque colonne correspond au nombre d’occurrences d’un mot donné. Les arbres de décision courts sont faciles à comprendre, mais dans ce cas, l’arbre est très profond. À la place de cet arbre, il aurait également pu y avoir un réseau neuronal récurrent ou une machine à vecteurs de support entraînée aux incorporations de mots (vecteurs abstraits). Regardons les deux commentaires de cet ensemble de données et les classes correspondantes (1 pour spam, 0 pour commentaire normal) :</p>
+<p><img src="../_static/images2/9_2_2_1_fig_1.png" class="img-fluid" data-align="center"></p>
+<p>L’étape suivante consiste à créer des variantes des ensembles de données utilisés dans un modèle local. Par exemple, quelques variantes d’un des commentaires :</p>
+<p><img src="../_static/images2/9_2_2_1_fig_2.png" class="img-fluid" data-align="center"></p>
+<p>Chaque colonne correspond à un mot de la phrase. Chaque ligne est une variation, 1 signifie que le mot fait partie de cette variation et 0 signifie que le mot a été supprimé. La phrase correspondante pour l’une des variantes est «<code>Christmas Song visit my ;)</code> ». La colonne « prob » indique la probabilité prévue de spam pour chacune des variantes de phrase. La colonne « poids » indique la proximité de la variation par rapport à la phrase originale, calculée comme 1 moins la proportion de mots supprimés. Par exemple, si 1 mot sur 7 a été supprimé, la proximité est de 1 - 1/7 = 0,86.</p>
+<p>Voici les deux phrases (une spam, une non spam) avec leurs poids locaux estimés trouvés par l’algorithme LIME :</p>
+<p><img src="../_static/images2/9_2_2_1_fig_3.png" class="img-fluid" data-align="center"></p>
+<p>Le mot « canal » indique une forte probabilité de spam. Pour le commentaire non-spam, aucun poids non nul n’a été estimé, car quel que soit le mot supprimé, la classe prédite reste la même.</p>
+<section id="lime-pour-les-images" class="level3">
+<h3 class="anchored" data-anchor-id="lime-pour-les-images">9.2.3 - LIME pour les images</h3>
+<p><em>Cette section a été rédigée par Verena Haunschmid.</em></p>
+<p>LIME pour les images fonctionne différemment de LIME pour les données tabulaires et le texte. Intuitivement, cela n’aurait pas beaucoup de sens de perturber des pixels individuels, puisque plusieurs pixels contribuent à une classe. Changer aléatoirement des pixels individuels ne modifierait probablement pas beaucoup les prédictions. Par conséquent, des variations des images sont créées en segmentant l’image en « superpixels » et en activant ou désactivant les superpixels. Les superpixels sont des pixels interconnectés avec des couleurs similaires et peuvent être désactivés en remplaçant chaque pixel par une couleur définie par l’utilisateur telle que le gris. L’utilisateur peut également spécifier une probabilité de désactivation d’un superpixel dans chaque permutation.</p>
+<section id="exemple-2" class="level4">
+<h4 class="anchored" data-anchor-id="exemple-2">9.2.3.1 - Exemple</h4>
+<p>Dans cet exemple, nous examinons une classification effectuée par le réseau neuronal Inception V3. L’image utilisée montre du pain que j’ai cuit et qui se trouve dans un bol. Puisque nous pouvons avoir plusieurs étiquettes prédites par image (triées par probabilité), nous pouvons expliquer les principales étiquettes. La première prédiction est « Bagel » avec une probabilité de <span class="math inline">\(77%\)</span>, suivie de « Fraise » avec une probabilité de <span class="math inline">\(4%\)</span>. Les images suivantes montrent pour « Bagel » et « Strawberry » les explications LIME. Les explications peuvent être affichées directement sur les échantillons d’images. Le vert signifie que cette partie de l’image augmente la probabilité de l’étiquette et le rouge signifie une diminution.</p>
+<p><img src="../_static/images/lime-images-package-example-1.png" class="img-fluid" data-align="center"></p>
+<p>La prédiction et l’explication pour « Bagel » sont très raisonnables, même si la prédiction est fausse – ce ne sont clairement pas des bagels puisque le trou au milieu est manquant.</p>
+</section>
+</section>
+<section id="avantages" class="level3">
+<h3 class="anchored" data-anchor-id="avantages">9.2.4 - Avantages</h3>
+<p>Même si vous <strong>remplacez le modèle d’apprentissage automatique sous-jacent</strong>, vous pouvez toujours utiliser le même modèle local interprétable pour l’explication. Supposons que les personnes qui examinent les explications comprennent le mieux les arbres de décision. Parce que vous utilisez des modèles de substitution locaux, vous utilisez des arbres de décision comme explications sans avoir à utiliser un arbre de décision pour faire les prédictions. Par exemple, vous pouvez utiliser un SVM. Et s’il s’avère qu’un modèle xgboost fonctionne mieux, vous pouvez remplacer le SVM tout en utilisant un arbre de décision pour expliquer les prédictions.</p>
+<p>Les modèles de substitution locaux bénéficient de la littérature et de l’expérience en matière de formation et d’interprétation de modèles interprétables.</p>
+<p>Lorsque vous utilisez le Lasso ou des arbres courts, les <strong>explications résultantes sont courtes (= sélectives) et éventuellement contrastées</strong>. Par conséquent, ils donnent <a href="../03-interpretability/03.6-human_friendly_explanations.html">des explications adaptées aux humains</a>. C’est pourquoi je vois LIME davantage dans les applications où le destinataire de l’explication est un profane ou quelqu’un qui dispose de très peu de temps. Cela n’est pas suffisant pour des attributions complètes, donc je ne vois pas LIME dans les scénarios de conformité où vous pourriez être légalement tenu d’expliquer complètement une prédiction. Également pour déboguer les modèles d’apprentissage automatique, il est utile d’avoir toutes les raisons au lieu de quelques-unes.</p>
+<p>LIME est l’une des rares méthodes qui <strong>fonctionne pour les données tabulaires, le texte et les images</strong>.</p>
+<p>La <strong>mesure de la fidélité</strong> (dans quelle mesure le modèle interprétable se rapproche des prédictions de la boîte noire) nous donne une bonne idée de la fiabilité du modèle interprétable pour expliquer les prédictions de la boîte noire dans le voisinage de l’instance de données d’intérêt.</p>
+<p>LIME est implémenté en Python (bibliothèque <a href="https://github.com/marcotcr/lime">lime</a> et R (<a href="https://cran.r-project.org/web/packages/lime/index.html">package lime</a> et <a href="https://cran.r-project.org/web/packages/iml/index.html">package iml</a>) et est <strong>très simple à utiliser</strong>.</p>
+<p>Les explications créées avec des modèles de substitution locaux <strong>peuvent utiliser d’autres fonctionnalités (interprétables) que celles sur lesquelles le modèle d’origine a été formé</strong>. Bien entendu, ces fonctionnalités interprétables doivent être dérivées des instances de données. Un classificateur de texte peut s’appuyer sur des intégrations de mots abstraits comme fonctionnalités, mais l’explication peut être basée sur la présence ou l’absence de mots dans une phrase. Un modèle de régression peut s’appuyer sur une transformation non interprétable de certains attributs, mais les explications peuvent être créées avec les attributs d’origine. Par exemple, le modèle de régression pourrait être formé sur les composants d’une analyse en composantes principales (ACP) des réponses à une enquête, mais LIME pourrait être formé sur les questions d’enquête d’origine. L’utilisation de fonctionnalités interprétables pour LIME peut constituer un gros avantage par rapport aux autres méthodes, en particulier lorsque le modèle a été entraîné avec des fonctionnalités non interprétables.</p>
+</section>
+<section id="inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="inconvénients">9.2.5 - Inconvénients</h3>
+<p>La définition correcte du quartier est un très gros problème non résolu lors de l’utilisation de LIME avec des données tabulaires. À mon avis, c’est le plus gros problème de LIME et la raison pour laquelle je recommanderais de l’utiliser uniquement avec beaucoup de précautions. Pour chaque application, vous devez essayer différents paramètres du noyau et voir par vous-même si les explications ont du sens. Malheureusement, c’est le meilleur conseil que je puisse donner pour trouver de bonnes largeurs de noyau.</p>
+<p>L’échantillonnage pourrait être amélioré dans la mise en œuvre actuelle de LIME. Les points de données sont échantillonnés à partir d’une distribution gaussienne, ignorant la corrélation entre les caractéristiques. Cela peut conduire à des points de données improbables qui peuvent ensuite être utilisés pour apprendre des modèles d’explication locaux.</p>
+<p>La complexité du modèle d’explication doit être définie à l’avance. Ce n’est qu’un petit reproche, car au final c’est toujours l’utilisateur qui doit définir le compromis entre fidélité et parcimonie.</p>
+<p>Un autre très gros problème est l’instabilité des explications. Dans un article<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, les auteurs ont montré que les explications de deux points très proches variaient grandement dans un cadre simulé. De plus, d’après mon expérience, si vous répétez le processus d’échantillonnage, les explications qui en résultent peuvent être différentes. L’instabilité signifie qu’il est difficile de faire confiance aux explications et vous devez être très critique.</p>
+<p>Les explications de LIME peuvent être manipulées par le data scientist pour masquer les biais<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. La possibilité de manipulation rend plus difficile la confiance dans les explications générées avec LIME.</p>
+<p>Conclusion : Les modèles de substitution locaux, avec LIME comme implémentation concrète, sont très prometteurs. Mais la méthode est encore en phase de développement et de nombreux problèmes doivent être résolus avant de pouvoir être appliquée en toute sécurité.</p>
+<!-- REFERENCES -->
+
+
+</section>
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Alvarez-Melis, David, and Tommi S. Jaakkola. “On the robustness of interpretability methods.” arXiv preprint arXiv:1806.08049 (2018).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Slack, Dylan, et al.&nbsp;“Fooling lime and shap: Adversarial attacks on post hoc explanation methods.” Proceedings of the AAAI/ACM Conference on AI, Ethics, and Society. 2020.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="pagination-link  aria-label=" 9.1="" -="" attente="" conditionnelle="" individuelle="" (*individual="" conditional="" expectation="" ice*)"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="pagination-link" aria-label="9.3 - Explications contrefactuelles">
+        <span class="nav-page-text">9.3 - Explications contrefactuelles</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Apprentissage automatique interprétable - Résumé</title>
+<title>Apprentissage automatique interprétable</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" rel="next">
+<link href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,11 +69,40 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked fullcontent">
+<body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -80,9 +111,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      Apprentissage automatique interprétable
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/index.html">8 - Méthodes globales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html">8.6 - Substitut global</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -97,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Apprentissage automatique interprétable</a> 
+      <a href="../">Apprentissage automatique interprétable</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -109,19 +138,19 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./00-summary/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Résumé</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01-preface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">1 - Préface de l’auteur</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./02-introduction/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2 - Introduction</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -130,19 +159,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.1 - Quelques histoires</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.3 - Terminologie</span></a>
   </div>
 </li>
@@ -150,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3 - Interprétabilité</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -159,37 +188,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.5 - Propriétés des Explications</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
   </div>
 </li>
@@ -197,7 +226,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./04-datasets/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4 - Jeux de données</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -206,19 +235,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
   </div>
 </li>
@@ -226,7 +255,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5 - Modèles interprétables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -235,43 +264,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.1 - Régéression linéaire</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.2 - Régéression logistique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.4 - Arbre de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.5 - Règles de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.6 - Ajustement des règles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
   </div>
 </li>
@@ -279,19 +308,19 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07-example/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">7 - Explications basées sur des exemples</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -300,43 +329,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.4 - Functional Decomposition</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">8.6 - Substitut global</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.7 - Prototypes et critiques</span></a>
   </div>
 </li>
@@ -344,7 +373,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -353,37 +382,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
   </div>
 </li>
@@ -391,7 +420,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -400,31 +429,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.2 - Attribution de pixel</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.3 - Détecter les concepts</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.4 - Exemples adverses</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.5 - Instances Influentes</span></a>
   </div>
 </li>
@@ -432,7 +461,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./11-future/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -441,13 +470,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
   </div>
 </li>
@@ -455,25 +484,25 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-contribute/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">12 - Contribuer à ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./13-citation/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">13 - Citer ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14-translations/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">14 - Traductions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">15 - Remerciements</span></a>
   </div>
 </li>
@@ -482,13 +511,27 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#substitut-global" id="toc-substitut-global" class="nav-link active" data-scroll-target="#substitut-global">8.6 - Substitut global</a></li>
+  <li><a href="#théorie" id="toc-théorie" class="nav-link" data-scroll-target="#théorie">8.6.1 - Théorie</a>
+  <ul>
+  <li><a href="#exemple" id="toc-exemple" class="nav-link" data-scroll-target="#exemple">8.6.2 - Exemple</a></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">8.6.3 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">8.6.4 - Inconvénients</a></li>
+  <li><a href="#logiciel" id="toc-logiciel" class="nav-link" data-scroll-target="#logiciel">8.6.5 - Logiciel</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/index.html">8 - Méthodes globales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html">8.6 - Substitut global</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Résumé</h1>
 </div>
 
 
@@ -511,46 +554,73 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<blockquote class="blockquote">
-<p>Traduction du livre en ligne <a href="https://christophm.github.io/interpretable-ml-book/index.html">https://christophm.github.io/interpretable-ml-book/index.html</a></p>
-</blockquote>
+<section id="substitut-global" class="level2">
+<h2 class="anchored" data-anchor-id="substitut-global">8.6 - Substitut global</h2>
+<p>Un modèle de substitution global est un modèle interprétable qui est entraîné pour se rapprocher des prédictions d’un modèle de boîte noire. Nous pouvons tirer des conclusions sur le modèle de la boîte noire en interprétant le modèle de substitution. Résoudre l’interprétabilité du machine learning en utilisant davantage de machine learning !</p>
+</section>
+<section id="théorie" class="level2">
+<h2 class="anchored" data-anchor-id="théorie">8.6.1 - Théorie</h2>
+<p>Les modèles de substitution sont également utilisés en ingénierie : si un résultat intéressant est coûteux, prend du temps ou est difficile à mesurer (par exemple parce qu’il provient d’une simulation informatique complexe), un modèle de substitution bon marché et rapide du résultat peut être utilisé à la place. La différence entre les modèles de substitution utilisés en ingénierie et dans l’apprentissage automatique interprétable réside dans le fait que le modèle sous-jacent est un modèle d’apprentissage automatique (et non une simulation) et que le modèle de substitution doit être interprétable. Le but des modèles de substitution (interprétables) est de se rapprocher le plus précisément possible des prédictions du modèle sous-jacent tout en étant interprétables. L’idée des modèles de substitution peut se retrouver sous différents noms : modèle d’approximation, métamodèle, modèle de surface de réponse, émulateur, …</p>
+<p>À propos de la théorie : il n’y a en fait pas besoin de beaucoup de théorie pour comprendre les modèles de substitution. Nous voulons nous rapprocher le plus possible de notre fonction de prédiction de boîte noire f avec la fonction de prédiction du modèle de substitution g, sous la contrainte que g soit interprétable. Pour la fonction g n’importe quel modèle interprétable – par exemple du <a href="../05-interpretable_models/index.html">chapitre sur les modèles interprétables</a> – peut être utilisé.</p>
+<p>Par exemple un modèle linéaire : <span class="math display">\[g(x)=\beta_0+\beta_1{}x_1{}+\ldots+\beta_p{}x_p\]</span></p>
+<p>Ou un arbre de décision : <span class="math display">\[g(x)=\sum_{m=1}^Mc_m{}I\{x\in{}R_m\}\]</span></p>
+<p>La formation d’un modèle de substitution est une méthode indépendante du modèle, car elle ne nécessite aucune information sur le fonctionnement interne du modèle de boîte noire, seul l’accès aux données et à la fonction de prédiction est nécessaire. Si le modèle d’apprentissage automatique sous-jacent était remplacé par un autre, vous pouvez toujours utiliser la méthode de substitution. Le choix du type de modèle boîte noire et du type de modèle de substitution est découplé.</p>
+<p>Effectuez les étapes suivantes pour obtenir un modèle de substitution :</p>
+<ol type="1">
+<li>Sélectionnez un ensemble de données X. Il peut s’agir du même ensemble de données que celui utilisé pour entraîner le modèle de boîte noire ou d’un nouvel ensemble de données de la même distribution. Vous pouvez même sélectionner un sous-ensemble de données ou une grille de points, en fonction de votre application.</li>
+<li>Pour l’ensemble de données X sélectionné, obtenez les prédictions du modèle de boîte noire.</li>
+<li>Sélectionnez un type de modèle interprétable (modèle linéaire, arbre de décision, …)</li>
+<li>Entraînez le modèle interprétable sur l’ensemble de données X et ses prédictions.</li>
+<li>Toutes nos félicitations! Vous disposez désormais d’un modèle de substitution.</li>
+<li>Mesurez dans quelle mesure le modèle de substitution reproduit les prédictions du modèle de boîte noire.</li>
+<li>Interprétez le modèle de substitution.</li>
+</ol>
+<p>Vous pouvez trouver des approches pour les modèles de substitution qui comportent des étapes supplémentaires ou diffèrent légèrement, mais l’idée générale est généralement celle décrite ici.</p>
+<p>Une façon de mesurer dans quelle mesure le substitut reproduit le modèle de la boîte noire est la mesure du R carré : <span class="math display">\[R^2=1-\frac{SSE}{SST}=1-\frac{\sum_{i=1}^n(\hat{y}_*^{(i)}-\hat{y}^{(i)})^2}{\sum_{i=1}^n(\hat{y}^{(i)}-\bar{\hat{y}})^2}\]</span></p>
+<p>où <span class="math inline">\(\hat{y}_*^{(i)}\)</span> est la prédiction pour la i-ième instance du modèle de substitution, <span class="math inline">\(\hat{y}^{(i)}\)</span> la prédiction du modèle de la boîte noire et <span class="math inline">\(\bar{\hat{y}}\)</span> la moyenne des prédictions du modèle boîte noire. SSE signifie erreur de somme des carrés et SST pour somme des carrés total. La mesure R au carré peut être interprétée comme le pourcentage de variance capturé par le modèle de substitution. Si R-carré est proche de 1 (= SSE faible), alors le modèle interprétable se rapproche très bien du comportement du modèle boîte noire. Si le modèle interprétable est très proche, vous souhaiterez peut-être remplacer le modèle complexe par le modèle interprétable. Si le R au carré est proche de 0 (= SSE élevé), alors le modèle interprétable ne parvient pas à expliquer le modèle de la boîte noire.</p>
+<p>Notez que nous n’avons pas parlé des performances du modèle de boîte noire sous-jacent, c’est-à-dire de sa bonne ou de sa mauvaise performance dans la prédiction du résultat réel. Les performances du modèle boîte noire ne jouent aucun rôle dans la formation du modèle de substitution. L’interprétation du modèle de substitution est toujours valable car elle fait des déclarations sur le modèle et non sur le monde réel. Mais bien sûr, l’interprétation du modèle de substitution n’a plus d’importance si le modèle de la boîte noire est mauvais, car alors le modèle de la boîte noire lui-même n’est plus pertinent.</p>
+<p>Nous pourrions également créer un modèle de substitution basé sur un sous-ensemble des données d’origine ou repondérer les instances. De cette façon, nous modifions la distribution des entrées du modèle de substitution, ce qui modifie l’orientation de l’interprétation (elle n’est alors plus vraiment globale). Si nous pondérons les données localement en fonction d’une instance spécifique des données (plus les instances sont proches de l’instance sélectionnée, plus leur poids est élevé), nous obtenons un modèle de substitution local qui peut expliquer la prédiction individuelle de l’instance. Apprenez-en davantage sur les modèles locaux dans le <a href="../09-local_model_agnostic_methods/09.2-lime.html">chapitre suivant</a>.</p>
+<section id="exemple" class="level3">
+<h3 class="anchored" data-anchor-id="exemple">8.6.2 - Exemple</h3>
+<p>Pour démontrer les modèles de substitution, nous considérons un exemple de régression et de classification.</p>
+<p>Tout d’abord, nous formons une machine à vecteurs de support pour prédire le <a href="../04-datasets/04.1-datasets.html">nombre quotidien de vélos loués</a> en fonction des informations météorologiques et du calendrier. La machine à vecteurs de support n’est pas très interprétable, nous formons donc un substitut avec un arbre de décision CART comme modèle interprétable pour approximer le comportement de la machine à vecteurs de support.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/cutout.png" class="img-fluid figure-img" data-align="center" width="400"></p>
-<figcaption>Couverture</figcaption>
+<p><img src="../_static/images2/8_6_2_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Les noeuds terminaux d’un arbre de substitution qui se rapproche des prédictions d’une machine à vecteurs de support entraînée sur l’ensemble de données de location de vélos. Les distributions dans les nœuds montrent que l’arbre de substitution prédit un nombre plus élevé de vélos loués lorsque la température est supérieure à 13 degrés Celsius et lorsque le jour est plus tardif sur la période de 2 ans (point de coupure à 435 jours).</figcaption>
 </figure>
 </div>
-<p>L’apprentissage automatique représente un grand potentiel pour améliorer les produits, les processus et la recherche. Mais les <strong>ordinateurs n’expliquent généralement pas leurs prédictions</strong>, ce qui est un obstacle à l’adoption de l’apprentissage automatique. Ce livre traite de ce qui rend les modèles d’apprentissage automatique et leurs prédictions interprétables.</p>
-<p>Après avoir exploré les concepts d’interprétabilité, vous découvrirez des <strong>modèles simples et interprétables</strong> tels que les arbres de décision, les règles de décision et la régression linéaire. Le livre met l’accent sur les méthodes agnostiques aux modèles pour interpréter <strong>les boîtes noires que sont ces modèles</strong>, tels que l’importance des caractéristiques et les effets locaux accumulés, et pour expliquer les prédictions individuelles avec les valeurs de Shapley et LIME. De plus, le livre présente des méthodes spécifiques aux réseaux de neurones profonds.</p>
-<p>Toutes les méthodes d’interprétation sont expliquées en profondeur et discutées de manière critique. Comment fonctionnent-elles sous le capot ? Quelles sont leurs forces et leurs faiblesses ? Comment leurs résultats peuvent-ils être interprétés ? Ce livre vous permettra de sélectionner et d’appliquer correctement la méthode d’interprétation la plus adaptée à votre projet d’apprentissage automatique. La lecture du livre est recommandée aux praticiens de l’apprentissage automatique, aux <em>experts en mégadonnées</em>, aux statisticiens et à toute autre personne intéressée à rendre des modèles d’apprentissage automatique interprétables.</p>
-<p>Vous pouvez acheter les versions PDF ou e-book (epub, mobi) <a href="https://leanpub.com/interpretable-machine-learning">sur leanpub.com</a>.</p>
-<p>Vous pouvez acheter la version imprimée <a href="https://www.amazon.fr/dp/B09TMWHVB4">sur Amazon</a>.</p>
-<p><strong>Au sujet de l’auteur:</strong> Il s’appelle Christoph Molnar, il est statisticien et spécialiste en apprentissage machine. My goal is to make machine learning interpretable.</p>
-<p>Suivez-le sur X(ex-Twitter)! <a href="https://twitter.com/ChristophMolnar">@ChristophMolnar</a></p>
-<p>Couverture de <a href="https://twitter.com/YvonneDoinel">@YvonneDoinel</a></p>
+<p>Le modèle de substitution a un R au carré (variance expliquée) de 0,77, ce qui signifie qu’il se rapproche assez bien du comportement sous-jacent de la boîte noire, mais pas parfaitement. Si l’ajustement était parfait, nous pourrions jeter la machine à vecteurs de support et utiliser l’arbre à la place.</p>
+<p>Dans notre deuxième exemple, nous prédisons la probabilité de <a href="../04-datasets/04.3-datasets.html">cancer du col de l’utérus</a> avec une forêt aléatoire. Encore une fois, nous formons un arbre de décision avec l’ensemble de données d’origine, mais avec la prédiction de la forêt aléatoire comme résultat, au lieu des classes réelles (saines ou cancer) à partir des données.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/by-nc-sa.png" class="img-fluid figure-img"></p>
-<figcaption>licence BY-NC-SA</figcaption>
+<p><img src="../_static/images2/8_6_2_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Les nœuds terminaux d’un arbre de substitution qui se rapproche des prédictions d’une forêt aléatoire formée sur l’ensemble de données sur le cancer du col de l’utérus. Les décomptes dans les nœuds montrent la fréquence des classifications des modèles de boîte noire dans les nœuds.).</figcaption>
 </figure>
 </div>
-<p>Consultez également <a href="https://bookgoodies.com/a/B0BMGSF52B">Modeling Mindsets</a>, son second livre.</p>
-<p>Ce livre est publié sous la licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Note du traducteur">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note du traducteur
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Au sujet du traducteur (assisté de ChatGPT-4) :</strong> Mon nom est <a href="https://www.linkedin.com/in/nicolasguillard/">Nicolas Guillard</a>. De formation initiale Ingénieur en informatique, préalablement Analytiste Digital, je suis maintenant Ingénieur en Intelligence Artificielle. Dernière traduction réalisée entre les 27/12/2023 et 15/05/2024.</p>
-</div>
-</div>
+<p>Le modèle de substitution a un R au carré (variance expliquée) de 0,19, ce qui signifie qu’il ne se rapproche pas bien de la forêt aléatoire et que nous ne devons pas surinterpréter l’arbre lorsque nous tirons des conclusions sur le modèle complexe.</p>
+</section>
+<section id="avantages" class="level3">
+<h3 class="anchored" data-anchor-id="avantages">8.6.3 - Avantages</h3>
+<p>La méthode du modèle de substitution est <strong>flexible</strong> : n’importe quel modèle du <a href="../05-interpretable_models/index.html">chapitre sur les modèles interprétables</a> peut être utilisé. Cela signifie également que vous pouvez échanger non seulement le modèle interprétable, mais également le modèle de boîte noire sous-jacent. Supposons que vous créiez un modèle complexe et que vous l’expliquiez aux différentes équipes de votre entreprise. Une équipe est familiarisée avec les modèles linéaires, l’autre équipe peut comprendre les arbres de décision. Vous pouvez former deux modèles de substitution (modèle linéaire et arbre de décision) pour le modèle de boîte noire d’origine et proposer deux types d’explications. Si vous trouvez un modèle de boîte noire plus performant, vous n’êtes pas obligé de modifier votre méthode d’interprétation, car vous pouvez utiliser la même classe de modèles de substitution.</p>
+<p>Je dirais que l’approche est très <strong>intuitive</strong> et simple. Cela signifie qu’il est facile à mettre en œuvre, mais également facile à expliquer aux personnes non familiarisées avec la science des données ou l’apprentissage automatique.</p>
+<p>Avec la <strong>mesure R au carré</strong>, nous pouvons facilement mesurer la capacité de nos modèles de substitution à se rapprocher des prédictions de la boîte noire.</p>
+</section>
+<section id="inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="inconvénients">8.6.4 - Inconvénients</h3>
+<p>Vous devez être conscient que vous tirez <strong>des conclusions sur le modèle et non sur les données</strong>, puisque le modèle de substitution ne voit jamais le résultat réel.</p>
+<p>Il n’est pas clair quel est le meilleur <strong>seuil pour le R-carré</strong> afin d’être sûr que le modèle de substitution est suffisamment proche du modèle de la boîte noire. <span class="math inline">\(80%\)</span> de la variance expliquée ? <span class="math inline">\(50%\)</span> ? <span class="math inline">\(99%\)</span> ?</p>
+<p>Nous pouvons mesurer à quel point le modèle de substitution est proche du modèle de la boîte noire. Supposons que nous ne soyons pas très proches, mais suffisamment proches. Il peut arriver que le modèle interprétable soit très <strong>proche pour un sous-ensemble de l’ensemble de données, mais très divergent pour un autre sous-ensemble</strong>. Dans ce cas, l’interprétation du modèle simple ne serait pas aussi bonne pour tous les points de données.</p>
+<p>Le modèle interprétable que vous choisissez comme substitut <strong>présente tous ses avantages et ses inconvénients</strong>.</p>
+<p>Certains soutiennent qu’il n’existe, en général, <strong>pas de modèles intrinsèquement interprétables</strong> (y compris même les modèles linéaires et les arbres de décision) et qu’il serait même dangereux d’avoir une illusion d’interprétabilité. Si vous partagez cet avis, alors bien entendu cette méthode n’est pas pour vous.</p>
+</section>
+<section id="logiciel" class="level3">
+<h3 class="anchored" data-anchor-id="logiciel">8.6.5 - Logiciel</h3>
+<p>J’ai utilisé le <code>iml</code> package R pour les exemples. Si vous pouvez former un modèle d’apprentissage automatique, vous devriez alors pouvoir implémenter vous-même des modèles de substitution. Entraînez simplement un modèle interprétable pour prédire les prédictions du modèle boîte noire.</p>
 
 
+</section>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -958,6 +1028,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="pagination-link  aria-label=" 8.5="" -="" décomposition="" fonctionnelle"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">8.5 - Décomposition fonctionnelle</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="pagination-link" aria-label="8.7 - Prototypes et critiques">
+        <span class="nav-page-text">8.7 - Prototypes et critiques</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

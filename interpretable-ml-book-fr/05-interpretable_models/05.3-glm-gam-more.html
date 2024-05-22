@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apprentissage automatique interprétable</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../05-interpretable_models/05.4-decision-tree.html" rel="next">
+<link href="../05-interpretable_models/05.2-logistic-regression.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-interpretable_models/index.html">5 - Modèles interprétables</a></li><li class="breadcrumb-item"><a href="../05-interpretable_models/05.3-glm-gam-more.html">5.3 - GLM, GAM et plus</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Apprentissage automatique interprétable</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Recherche"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Résumé</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 - Préface de l’auteur</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 - Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1 - Quelques histoires</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3 - Terminologie</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 - Interprétabilité</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5 - Propriétés des Explications</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 - Jeux de données</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 - Modèles interprétables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1 - Régéression linéaire</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2 - Régéression logistique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4 - Arbre de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5 - Règles de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6 - Ajustement des règles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 - Explications basées sur des exemples</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4 - Functional Decomposition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.6 - Substitut global</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.7 - Prototypes et critiques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.2 - Attribution de pixel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.3 - Détecter les concepts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.4 - Exemples adverses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.5 - Instances Influentes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12 - Contribuer à ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">13 - Citer ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">14 - Traductions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">15 - Remerciements</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#glm-gam-et-plus" id="toc-glm-gam-et-plus" class="nav-link active" data-scroll-target="#glm-gam-et-plus">5.3 - GLM, GAM et plus</a>
+  <ul>
+  <li><a href="#glm" id="toc-glm" class="nav-link" data-scroll-target="#glm">5.3.1 - Non-Gaussian Outcomes - GLMs</a></li>
+  <li><a href="#lm-interact" id="toc-lm-interact" class="nav-link" data-scroll-target="#lm-interact">5.3.2 - Interactions</a></li>
+  <li><a href="#gam" id="toc-gam" class="nav-link" data-scroll-target="#gam">5.3.3 - Nonlinear Effects - GAMs</a></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">5.3.4 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">5.3.5 - Inconvénients</a></li>
+  <li><a href="#logiciel" id="toc-logiciel" class="nav-link" data-scroll-target="#logiciel">5.3.6 - Logiciel</a></li>
+  <li><a href="#dautres-extensions" id="toc-dautres-extensions" class="nav-link" data-scroll-target="#dautres-extensions">5.3.7 - D’autres extensions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-interpretable_models/index.html">5 - Modèles interprétables</a></li><li class="breadcrumb-item"><a href="../05-interpretable_models/05.3-glm-gam-more.html">5.3 - GLM, GAM et plus</a></li></ol></nav>
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modifié</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">10 mai 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="glm-gam-et-plus" class="level2">
+<h2 class="anchored" data-anchor-id="glm-gam-et-plus">5.3 - GLM, GAM et plus</h2>
+<p>La plus grande force mais aussi la plus grande faiblesse du <a href="#limo">modèle de régression linéaire</a> est que la prédiction est modélisée comme une somme pondérée des caractéristiques. De plus, le modèle linéaire vient avec de nombreuses autres hypothèses. La mauvaise nouvelle est (bien, ce n’est pas vraiment une nouveauté) que toutes ces hypothèses sont souvent violées dans la réalité : le résultat étant donné les caractéristiques peut avoir une distribution non gaussienne, les caractéristiques peuvent interagir et la relation entre les caractéristiques et le résultat peut être non linéaire. La bonne nouvelle est que la communauté statistique a développé une variété de modifications qui transforment le modèle de régression linéaire d’une simple lame en un couteau suisse.</p>
+<p>Ce chapitre n’est définitivement pas votre guide définitif pour étendre les modèles linéaires. Plutôt, il sert de vue d’ensemble des extensions telles que les Modèles Linéaires Généralisés (GLM) et les Modèles Additifs Généralisés (GAM) et vous donne un peu d’intuition. Après lecture, vous devriez avoir une vue d’ensemble solide de comment étendre les modèles linéaires. Si vous voulez en apprendre davantage sur le modèle de régression linéaire en premier, je vous suggère de lire le <a href="#limo">chapitre sur les modèles de régression linéaire</a>, si vous ne l’avez pas déjà fait.</p>
+<p>Rappelons-nous de la formule d’un modèle de régression linéaire :</p>
+<p><span class="math display">\[y=\beta_{0}+\beta_{1}x_{1}+\ldots+\beta_{p}x_{p}+\epsilon\]</span></p>
+<p>Le modèle de régression linéaire suppose que le résultat ( y ) d’une instance peut être exprimé par une somme pondérée de ses ( p ) caractéristiques avec une erreur individuelle ( ) qui suit une distribution gaussienne. En forçant les données dans ce corset de formule, nous obtenons beaucoup d’interprétabilité du modèle. Les effets des caractéristiques sont additifs, ce qui signifie qu’il n’y a pas d’interactions, et la relation est linéaire, ce qui signifie qu’une augmentation d’une caractéristique d’une unité peut être directement traduite en une augmentation/diminution du résultat prédit. Le modèle linéaire nous permet de compresser la relation entre une caractéristique et le résultat attendu en un seul nombre, à savoir le poids estimé.</p>
+<p>Mais une simple somme pondérée est trop restrictive pour de nombreux problèmes de prédiction du monde réel. Dans ce chapitre, nous allons apprendre trois problèmes du modèle classique de régression linéaire et comment les résoudre. Il existe de nombreux autres problèmes avec des hypothèses possiblement violées, mais nous nous concentrerons sur les trois présentés dans la figure suivante:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_charts.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Three assumptions of the linear model (left side): Gaussian distribution of the outcome given the features, additivity (= no interactions) and linear relationship. Reality usually does not adhere to those assumptions (right side): Outcomes might have non-Gaussian distributions, features might interact and the relationship might be nonlinear.</figcaption>
+</figure>
+</div>
+<p>Il existe une solution à tous ces problèmes :</p>
+<p><strong>Problème</strong> : Le résultat cible <span class="math inline">\(y\)</span> étant donné les caractéristiques ne suit pas une distribution gaussienne.<br>
+<strong>Exemple</strong> : Supposons que je veuille prédire combien de minutes je vais faire du vélo un jour donné. Comme caractéristiques, j’ai le type de journée, la météo, etc. Si j’utilise un modèle linéaire, il pourrait prédire des minutes négatives car il suppose une distribution gaussienne qui ne s’arrête pas à 0 minute. Aussi, si je veux prédire des probabilités avec un modèle linéaire, je peux obtenir des probabilités qui sont négatives ou supérieures à 1.<br>
+<strong>Solution</strong> : <a href="#glm">Modèles Linéaires Généralisés (GLMs)</a>.</p>
+<p><strong>Problème</strong> : Les caractéristiques interagissent.<br>
+<strong>Exemple</strong> : En moyenne, une légère pluie a un effet légèrement négatif sur mon envie de faire du vélo. Mais en été, pendant l’heure de pointe, j’apprécie la pluie, car alors tous les cyclistes du beau temps restent à la maison et j’ai les pistes cyclables pour moi ! C’est une interaction entre le temps et la météo que ne peut pas capturer un modèle purement additif.<br>
+<strong>Solution</strong> : <a href="#lm-interact">Ajout manuel d’interactions</a>.</p>
+<p><strong>Problème</strong> : La véritable relation entre les caractéristiques et ( y ) n’est pas linéaire.<br>
+<strong>Exemple</strong> : Entre 0 et 25 degrés Celsius, l’influence de la température sur mon envie de faire du vélo pourrait être linéaire, ce qui signifie qu’une augmentation de 0 à 1 degré provoque la même augmentation de l’envie de faire du vélo qu’une augmentation de 20 à 21. Mais à des températures plus élevées, ma motivation à faire du vélo se stabilise et diminue même - je n’aime pas faire du vélo quand il fait trop chaud.<br>
+<strong>Solutions</strong> : <a href="#gam">Modèles Additifs Généralisés (GAMs) ; transformation des caractéristiques</a>.</p>
+<p>Les solutions à ces trois problèmes sont présentées dans ce chapitre. De nombreuses autres extensions du modèle linéaire sont omises. Si je tentais de tout couvrir ici, le chapitre se transformerait rapidement en un livre dans un livre sur un sujet déjà couvert dans de nombreux autres livres. Mais puisque vous êtes déjà ici, j’ai fait un petit aperçu du problème plus solution pour les extensions de modèle linéaire, que vous pouvez trouver à la <a href="#more-lm-extension">fin du chapitre</a>. Le nom de la solution est destiné à servir de point de départ pour une recherche.</p>
+<section id="glm" class="level3">
+<h3 class="anchored" data-anchor-id="glm">5.3.1 - Non-Gaussian Outcomes - GLMs</h3>
+<p>Le modèle de régression linéaire suppose que le résultat étant donné les caractéristiques d’entrée suit une distribution gaussienne. Cette hypothèse exclut de nombreux cas : le résultat peut également être une catégorie (cancer vs.&nbsp;sain), un décompte (nombre d’enfants), le temps jusqu’à la survenue d’un événement (temps jusqu’à la défaillance d’une machine) ou un résultat très biaisé avec quelques valeurs très élevées (revenu des ménages). Le modèle de régression linéaire peut être étendu pour modéliser tous ces types de résultats. Cette extension est appelée <strong>Modèles Linéaires Généralisés</strong> ou <strong>GLMs</strong> en abrégé. Tout au long de ce chapitre, j’utiliserai le nom GLM à la fois pour le cadre général et pour les modèles particuliers de ce cadre. Le concept central de tout GLM est : Conserver la somme pondérée des caractéristiques, mais autoriser des distributions de résultat non gaussiennes et connecter la moyenne attendue de cette distribution et la somme pondérée à travers une fonction éventuellement non linéaire. Par exemple, le modèle de régression logistique suppose une distribution de Bernoulli pour le résultat et relie la moyenne attendue et la somme pondérée en utilisant la fonction logistique.</p>
+<p>Le GLM lie mathématiquement la somme pondérée des caractéristiques avec la valeur moyenne de la distribution supposée en utilisant la fonction de lien ( g ), qui peut être choisie de manière flexible en fonction du type de résultat.</p>
+<p><span class="math display">\[g(E_Y(y|x))=\beta_0+\beta_1{}x_{1}+\ldots{}\beta_p{}x_{p}\]</span></p>
+<p>Les GLMs se composent de trois composants : La fonction de lien <span class="math inline">\(g\)</span>, la somme pondérée <span class="math inline">\(X^T\beta\)</span> (parfois appelée prédicteur linéaire) et une distribution de probabilité de la famille exponentielle qui définit <span class="math inline">\(E_Y\)</span>.</p>
+<p>La famille exponentielle est un ensemble de distributions qui peuvent être écrites avec la même formule (paramétrée) incluant un exposant, la moyenne et la variance de la distribution et d’autres paramètres. Je ne vais pas entrer dans les détails mathématiques car c’est un très grand univers en soi que je ne souhaite pas aborder. Wikipedia a une <a href="https://en.wikipedia.org/wiki/Exponential_family#Table_of_distributions">liste ordonnée des distributions de la famille exponentielle</a>. N’importe quelle distribution de cette liste peut être choisie pour votre GLM. En fonction du type de résultat que vous souhaitez prédire, choisissez une distribution adaptée. Le résultat est-il un décompte de quelque chose (par exemple, le nombre d’enfants vivant dans un ménage) ? Alors la distribution de Poisson pourrait être un bon choix. Le résultat est-il toujours positif (par exemple, le temps entre deux événements) ? Alors la distribution exponentielle pourrait être un bon choix.</p>
+<p>Considérons le modèle linéaire classique comme un cas particulier d’un GLM. La fonction de lien pour la distribution gaussienne dans le modèle linéaire classique est simplement la fonction identité. La distribution gaussienne est paramétrée par les paramètres de moyenne et de variance. La moyenne décrit la valeur que nous attendons en moyenne et la variance décrit combien les valeurs varient autour de cette moyenne. Dans le modèle linéaire, la fonction de lien relie la somme pondérée des caractéristiques à la moyenne de la distribution gaussienne.</p>
+<p>Dans le cadre du GLM, ce concept se généralise à toute distribution (de la famille exponentielle) et à des fonctions de lien arbitraires. Si <span class="math inline">\(y\)</span> est un décompte de quelque chose, comme le nombre de cafés que quelqu’un boit un jour donné, nous pourrions le modéliser avec un GLM avec une distribution de Poisson et le logarithme naturel comme fonction de lien :</p>
+<p><span class="math display">\[ln(E_Y(y|x))=x^{T}\beta\]</span></p>
+<p>Le modèle de régression logistique est également un GLM qui suppose une distribution de Bernoulli et utilise la fonction logit comme fonction de lien. La moyenne de la distribution binomiale utilisée dans la régression logistique est la probabilité que <span class="math inline">\(y\)</span> soit 1.</p>
+<p><span class="math display">\[x^{T}\beta=ln\left(\frac{E_Y(y|x)}{1-E_Y(y|x)}\right)=ln\left(\frac{P(y=1|x)}{1-P(y=1|x)}\right)\]</span></p>
+<p>Et si nous résolvons cette équation pour avoir <span class="math inline">\(P(y=1)\)</span> d’un côté, nous obtenons la formule de la régression logistique :</p>
+<p><span class="math display">\[P(y=1)=\frac{1}{1+exp(-x^{T}\beta)}\]</span></p>
+<p>Chaque distribution de la famille exponentielle a une fonction de lien canonique qui peut être dérivée mathématiquement de la distribution. Le cadre GLM permet de choisir la fonction de lien indépendamment de la distribution. Comment choisir la bonne fonction de lien ? Il n’y a pas de recette parfaite. Vous prenez en compte les connaissances sur la distribution de votre cible, mais aussi des considérations théoriques et la manière dont le modèle s’adapte à vos données réelles. Pour certaines distributions, la fonction de lien canonique peut conduire à des valeurs qui sont invalides pour cette distribution. Dans le cas de la distribution exponentielle, la fonction de lien canonique est l’inverse négatif, ce qui peut conduire à des prédictions négatives qui sont en dehors du domaine de la distribution exponentielle. Puisque vous pouvez choisir n’importe quelle fonction de lien, la solution simple est de choisir une autre fonction qui respecte le domaine de la distribution.</p>
+<p><strong>Exemples</strong></p>
+<p>J’ai simulé un ensemble de données sur le comportement de consommation de café pour souligner le besoin de GLMs. Supposons que vous ayez collecté des données sur votre comportement quotidien de consommation de café. Si vous n’aimez pas le café, prétendez qu’il s’agit de thé. En plus du nombre de tasses, vous enregistrez votre niveau de stress actuel sur une échelle de 1 à 10, comment vous avez bien dormi la nuit précédente sur une échelle de 1 à 10 et si vous avez dû travailler ce jour-là. L’objectif est de prédire le nombre de cafés étant donné les caractéristiques stress, sommeil et travail. J’ai simulé des données pour 200 jours. Le stress et le sommeil ont été tirés uniformément entre 1 et 10 et le travail oui/non a été tiré avec une chance de 50/50 (quelle vie !). Pour chaque jour, le nombre de cafés a ensuite été tiré d’une distribution de Poisson, modélisant l’intensité ( ) (qui est aussi la valeur attendue de la distribution de Poisson) comme une fonction des caractéristiques sommeil, stress et travail. Vous pouvez deviner où cette histoire va mener : <em>“Hé, essayons de modéliser ces données avec un modèle linéaire … Oh ça ne fonctionne pas … Essayons un GLM avec une distribution de Poisson … SURPRISE ! Maintenant ça fonctionne !”</em>. J’espère ne pas avoir trop gâché l’histoire pour vous.</p>
+<p>Regardons la distribution de la variable cible, le nombre de cafés pour un jour donné.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_1_distribution_coffee.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Simulated distribution of number of daily coffees for 200 days.</figcaption>
+</figure>
+</div>
+<p>Sur <code>r tab[1,2]</code> des <code>r n</code> jours, vous n’avez pas bu de café du tout et le jour le plus extrême, vous avez bu <code>r tab[nrow(tab),1]</code> cafés. Utilisons naïvement un modèle linéaire pour prédire le nombre de cafés en utilisant le niveau de sommeil, le niveau de stress et le travail oui/non comme caractéristiques. Qu’est-ce qui peut mal tourner lorsque nous supposons à tort une distribution gaussienne ? Une mauvaise hypothèse peut invalider les estimations, en particulier les intervalles de confiance des poids. Un problème plus évident est que les prédictions ne correspondent pas au domaine “autorisé” du résultat réel, comme le montre la figure suivante.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_1_predicted_numbers.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Predicted number of coffees dependent on stress, sleep and work. The linear model predicts negative values.</figcaption>
+</figure>
+</div>
+<p>Le modèle linéaire n’a pas de sens, car il prédit un nombre négatif de cafés. Ce problème peut être résolu avec les Modèles Linéaires Généralisés (GLMs). Nous pouvons changer la fonction de lien et la distribution supposée. Une possibilité est de conserver la distribution gaussienne et d’utiliser une fonction de lien qui conduit toujours à des prédictions positives telles que le lien logarithmique (l’inverse est la fonction exp) au lieu de la fonction identité. Encore mieux : Nous choisissons une distribution qui correspond au processus de génération des données et une fonction de lien appropriée. Puisque le résultat est un décompte, la distribution de Poisson est un choix naturel, accompagnée du logarithme comme fonction de lien. Dans ce cas, les données ont même été générées avec la distribution de Poisson, donc le GLM de Poisson est le choix parfait. Le GLM de Poisson ajusté conduit à la distribution suivante des valeurs prédites :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_1_predicted_numbers_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Predicted number of coffees dependent on stress, sleep and work. The GLM with Poisson assumption and log link is an appropriate model for this dataset.</figcaption>
+</figure>
+</div>
+<p>Plus aucun nombre négatif de café, cela semble bien meilleur.</p>
+<p><strong>Interprétation des poids de GLM</strong></p>
+<p>La distribution supposée, combinée à la fonction de lien, détermine comment les poids des caractéristiques estimés sont interprétés. Dans l’exemple du comptage de cafés, j’ai utilisé un GLM avec une distribution de Poisson et un lien logarithmique, ce qui implique la relation suivante entre le résultat attendu et les caractéristiques stress (<span class="math inline">\(str\)</span>), sommeil (<span class="math inline">\(slp\)</span>) et travail (<span class="math inline">\(wrk\)</span>).</p>
+<p><span class="math display">\[ln(E(\text{coffee}|\text{str},\text{slp},\text{wrk}))=\beta_0+\beta_{\text{str}}x_{\text{str}}+\beta_{\text{slp}}x_{\text{slp}}+\beta_{\text{wrk}}x_{\text{wrk}}\]</span></p>
+<p>Pour interpréter les poids, nous inversons la fonction de lien afin de pouvoir interpréter l’effet des caractéristiques sur le résultat attendu et non sur le logarithme du résultat attendu.</p>
+<p><span class="math display">\[E(\text{coffee}|\text{str},\text{slp},\text{wrk})=exp(\beta_0+\beta_{\text{str}}x_{\text{str}}+\beta_{\text{slp}}x_{\text{slp}}+\beta_{\text{wrk}}x_{\text{wrk}})\]</span></p>
+<p>Puisque tous les poids sont dans la fonction exponentielle, l’interprétation de l’effet n’est pas additive, mais multiplicative, car exp(a + b) est exp(a) multiplié par exp(b). Le dernier élément pour l’interprétation est les poids réels de l’exemple jouet. Le tableau suivant répertorie les poids estimés et exp(poids) avec l’intervalle de confiance à 95 % :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_1_predicted_numbers_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Table Weights in the Poisson model</figcaption>
+</figure>
+</div>
+<p>Augmenter le niveau de stress d’un point multiplie le nombre de cafés attendu par le facteur <code>r round(cc["stress", "exp.beta"], 2)</code>. Augmenter la qualité du sommeil d’un point multiplie le nombre de cafés attendu par le facteur <code>r round(cc["sleep", "exp.beta"], 2)</code>. Le nombre prévu de cafés lors d’un jour de travail est en moyenne <code>r round(cc["workYES", "exp.beta"], 2)</code> fois le nombre de cafés lors d’un jour de repos. En résumé, plus le stress est grand, moins le sommeil est bon et plus le travail est abondant, plus la consommation de café est élevée.</p>
+<p>Dans cette section, vous avez appris un peu sur les Modèles Linéaires Généralisés qui sont utiles lorsque la cible ne suit pas une distribution gaussienne. Ensuite, nous examinerons comment intégrer les interactions entre deux caractéristiques dans le modèle de régression linéaire.</p>
+</section>
+<section id="lm-interact" class="level3">
+<h3 class="anchored" data-anchor-id="lm-interact">5.3.2 - Interactions</h3>
+<p>Le modèle de régression linéaire suppose que l’effet d’une caractéristique est le même, indépendamment des valeurs des autres caractéristiques (= pas d’interactions). Mais souvent, il existe des interactions dans les données. Pour prédire le <a href="#bike-data">nombre de vélos</a> loués, il peut y avoir une interaction entre la température et le fait qu’il s’agisse ou non d’un jour ouvrable. Peut-être que, lorsque les gens doivent travailler, la température n’influence pas beaucoup le nombre de vélos loués, car les gens vont faire du vélo pour se rendre au travail quoi qu’il arrive. Les jours de congé, beaucoup de gens font du vélo pour le plaisir, mais seulement quand il fait assez chaud. En ce qui concerne les vélos de location, on pourrait s’attendre à une interaction entre la température et les jours ouvrables.</p>
+<p>Comment pouvons-nous amener le modèle linéaire à inclure des interactions ? Avant d’ajuster le modèle linéaire, ajoutez une colonne à la matrice de caractéristiques qui représente l’interaction entre les caractéristiques et ajustez le modèle comme d’habitude. La solution est élégante d’une certaine manière, car elle ne nécessite aucun changement du modèle linéaire, seulement des colonnes supplémentaires dans les données. Dans l’exemple du jour ouvrable et de la température, nous ajouterions une nouvelle caractéristique qui a des zéros pour les jours non ouvrables, sinon elle a la valeur de la caractéristique de température, en supposant que le jour ouvrable est la catégorie de référence.</p>
+<p>Supposons que nos données ressemble à ceci :</p>
+<p><img src="../_static/images2/5_3_2_table_1.png" class="img-fluid" data-align="center"></p>
+<p>La matrice de données utilisée par le modèle linéaire semble légèrement différente. Le tableau suivant montre à quoi ressemblent les données préparées pour le modèle lorsque nous ne spécifions aucune interaction. Normalement, cette transformation est effectuée automatiquement par tout logiciel statistique.</p>
+<p><img src="../_static/images2/5_3_2_table_2.png" class="img-fluid" data-align="center"></p>
+<p>La première colonne est le terme d’interception. La deuxième colonne code la caractéristique catégorielle, avec 0 pour la catégorie de référence et 1 pour l’autre. La troisième colonne contient la température.</p>
+<p>Si nous souhaitons que le modèle linéaire prenne en compte l’interaction entre la température et la caractéristique de jour ouvrable, nous devons ajouter une colonne pour cette interaction.</p>
+<p><img src="../_static/images2/5_3_2_table_3.png" class="img-fluid" data-align="center"></p>
+<p>La nouvelle colonne “workY.temp” capture l’interaction entre les caractéristiques jour ouvrable (work) et température (temp). Cette nouvelle colonne de caractéristique est zéro pour une instance si la caractéristique travail est dans la catégorie de référence (“N” pour non jour ouvrable), sinon elle prend les valeurs de la caractéristique de température des instances. Avec ce type de codage, le modèle linéaire peut apprendre un effet linéaire différent de la température pour les deux types de jours. C’est l’effet d’interaction entre les deux caractéristiques. Sans un terme d’interaction, l’effet combiné d’une caractéristique catégorielle et d’une caractéristique numérique peut être décrit par une ligne qui est déplacée verticalement pour les différentes catégories. Si nous incluons l’interaction, nous permettons à l’effet des caractéristiques numériques (la pente) d’avoir une valeur différente dans chaque catégorie.</p>
+<p>L’interaction de deux caractéristiques catégorielles fonctionne de manière similaire. Nous créons des caractéristiques supplémentaires qui représentent des combinaisons de catégories. Voici des données artificielles contenant le jour ouvrable (work) et une caractéristique météorologique catégorielle (wthr) :</p>
+<p><img src="../_static/images2/5_3_2_table_4.png" class="img-fluid" data-align="center"></p>
+<p>Ensuite, nous incluons les termes d’interaction :</p>
+<p><img src="../_static/images2/5_3_2_table_5.png" class="img-fluid" data-align="center"></p>
+<p>La première colonne sert à estimer l’interception. La deuxième colonne est la caractéristique de travail codée. Les colonnes trois et quatre sont pour la caractéristique météorologique, qui nécessite deux colonnes car vous avez besoin de deux poids pour capturer l’effet pour trois catégories, dont l’une est la catégorie de référence. Le reste des colonnes capture les interactions. Pour chaque catégorie des deux caractéristiques (sauf pour les catégories de référence), nous créons une nouvelle colonne de caractéristique qui est 1 si les deux caractéristiques ont une certaine catégorie, sinon 0.</p>
+<p>Pour deux caractéristiques numériques, la colonne d’interaction est encore plus facile à construire : nous multiplions simplement les deux caractéristiques numériques.</p>
+<p>Il existe des approches pour détecter et ajouter automatiquement des termes d’interaction. L’une d’elles peut être trouvée dans le chapitre <a href="#rulefit">RuleFit</a>. L’algorithme RuleFit extrait d’abord les termes d’interaction puis estime un modèle de régression linéaire incluant les interactions.</p>
+<p><strong>Example</strong></p>
+<p>Revenons à la <a href="#bike-data">tâche de prédiction de location de vélos</a> que nous avons déjà modélisée dans le chapitre sur <a href="#limo">le modèle linéaire</a>. Cette fois, nous considérons également une interaction entre la température et la caractéristique du jour ouvrable. Cela aboutit aux poids estimés et aux intervalles de confiance suivants.</p>
+<p><img src="../_static/images2/5_3_2_table_example.png" class="img-fluid" data-align="center"></p>
+<p>L’effet d’interaction supplémentaire est négatif (<code>r round(lm_summary_print['workingdayWORKING DAY:temp','Estimate'], 1)</code>) et diffère significativement de zéro, comme le montre l’intervalle de confiance à 95%, qui n’inclut pas zéro. D’ailleurs, les données ne sont pas iid, car les jours proches les uns des autres ne sont pas indépendants les uns des autres. Les intervalles de confiance pourraient être trompeurs, prenez-le donc avec des pincettes. Le terme d’interaction change l’interprétation des poids des caractéristiques impliquées. La température a-t-elle un effet négatif étant donné qu’il s’agit d’un jour ouvrable ? La réponse est non, même si le tableau le suggère à un utilisateur non formé. Nous ne pouvons pas interpréter le poids de l’interaction “workingdayWORKING DAY:temp” isolément, car l’interprétation serait : “Tout en laissant inchangées toutes les autres valeurs des caractéristiques, augmenter l’effet d’interaction de la température pour un jour ouvrable diminue le nombre prévu de vélos.” Mais l’effet d’interaction ne s’ajoute qu’à l’effet principal de la température. Supposons qu’il s’agisse d’un jour ouvrable et que nous voulions savoir ce qui se passerait si la température était plus chaude de 1 degré aujourd’hui. Alors nous devons additionner à la fois les poids pour “temp” et “workingdayWORKING DAY:temp” pour déterminer de combien l’estimation augmente.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_2_workingday.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>The effect (including interaction) of temperature and working day on the predicted number of bikes for a linear model. Effectively, we get two slopes for the temperature, one for each category of the working day feature.</figcaption>
+</figure>
+</div>
+</section>
+<section id="gam" class="level3">
+<h3 class="anchored" data-anchor-id="gam">5.3.3 - Nonlinear Effects - GAMs</h3>
+<p><strong>Le monde n’est pas linéaire</strong></p>
+<p>La linéarité dans les modèles linéaires signifie que, quelle que soit la valeur qu’une instance possède dans une caractéristique particulière, augmenter la valeur d’une unité a toujours le même effet sur le résultat prédit. Est-il raisonnable de supposer qu’augmenter la température d’un degré à 10 degrés Celsius a le même effet sur le nombre de vélos de location qu’augmenter la température quand elle atteint déjà 40 degrés ? Intuitivement, on s’attend à ce qu’augmenter la température de 10 à 11 degrés Celsius ait un effet positif sur les locations de vélos et de 40 à 41 un effet négatif, ce qui est également le cas, comme vous le verrez, dans de nombreux exemples tout au long du livre. La caractéristique de la température a un effet linéaire et positif sur le nombre de vélos de location, mais à un certain point, cet effet s’aplatit et a même un effet négatif à des températures élevées. Le modèle linéaire ne s’en préoccupe pas, il trouvera consciencieusement le meilleur plan linéaire (en minimisant la distance euclidienne).</p>
+<p>Vous pouvez modéliser des relations non linéaires en utilisant l’une des techniques suivantes :</p>
+<ul>
+<li>Transformation simple de la caractéristique (par ex. logarithme)</li>
+<li>Catégorisation de la caractéristique</li>
+<li>Modèles Additifs Généralisés (GAMs)</li>
+</ul>
+<p>Avant de détailler chaque méthode, commençons par un exemple qui illustre ces trois techniques. J’ai pris le <a href="#bike-data">jeu de données de location de vélos</a> et entraîné un modèle linéaire avec uniquement la caractéristique de la température pour prédire le nombre de vélos de location. La figure suivante montre la pente estimée avec : le modèle linéaire standard, un modèle linéaire avec la température transformée (logarithme), un modèle linéaire traitant la température comme une caractéristique catégorielle et utilisant des splines de régression (GAM).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_3_temperature_charts.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Predicting the number of rented bicycles using only the temperature feature. A linear model (top left) does not fit the data well. One solution is to transform the feature with e.g.&nbsp;the logarithm (top right), categorize it (bottom left), which is usually a bad decision, or use Generalized Additive Models that can automatically fit a smooth curve for temperature (bottom right).</figcaption>
+</figure>
+</div>
+<p><strong>Transformation de caractéristique</strong></p>
+<p>Souvent, le logarithme de la caractéristique est utilisé comme transformation. Utiliser le logarithme indique que chaque augmentation de température de 10 fois a le même effet linéaire sur le nombre de vélos, donc passer de 1 degré Celsius à 10 degrés Celsius a le même effet que de passer de 0,1 à 1 (ce qui semble incorrect). D’autres exemples de transformations de caractéristiques sont la racine carrée, la fonction carrée et la fonction exponentielle. Utiliser une transformation de caractéristique signifie que vous remplacez la colonne de cette caractéristique dans les données par une fonction de la caractéristique, comme le logarithme, et ajustez le modèle linéaire comme d’habitude. Certains programmes statistiques vous permettent également de spécifier des transformations dans l’appel du modèle linéaire. Vous pouvez être créatif lorsque vous transformez la caractéristique. L’interprétation de la caractéristique change selon la transformation sélectionnée. Si vous utilisez une transformation logarithmique, l’interprétation dans un modèle linéaire devient : “Si le logarithme de la caractéristique est augmenté d’un, la prédiction est augmentée du poids correspondant.” Lorsque vous utilisez un GLM avec une fonction de lien qui n’est pas la fonction identité, alors l’interprétation devient plus compliquée, car vous devez incorporer les deux transformations dans l’interprétation (sauf quand elles se neutralisent mutuellement, comme log et exp, alors l’interprétation devient plus facile).</p>
+<p><strong>Catégorisation des caractéristiques</strong></p>
+<p>Une autre possibilité pour obtenir un effet non linéaire est de discrétiser la caractéristique ; la transformer en une caractéristique catégorielle. Par exemple, vous pourriez découper la caractéristique de température en 20 intervalles avec les niveaux <span class="math inline">\([-10, -5)\)</span>, <span class="math inline">\([-5, 0)\)</span>, … et ainsi de suite. Lorsque vous utilisez la température catégorisée au lieu de la température continue, le modèle linéaire estimerait une fonction en escalier car chaque niveau obtient sa propre estimation. Le problème avec cette approche est qu’elle nécessite plus de données, qu’elle est plus susceptible de surajuster et qu’il n’est pas clair comment discrétiser la caractéristique de manière significative (intervalle équidistant ou quantiles ? combien d’intervalles ?). Je n’utiliserais la discrétisation que s’il y a un cas très solide pour cela. Par exemple, pour rendre le modèle comparable à une autre étude.</p>
+<p><strong>Modèles Additifs Généralisés (<em>GAMs : Generalized Additive Models</em>)</strong></p>
+<p>Pourquoi ne pas ‘simplement’ permettre au modèle linéaire (généralisé) d’apprendre des relations non linéaires ? C’est la motivation derrière les GAMs. Les GAMs assouplissent la restriction selon laquelle la relation doit être une simple somme pondérée, et supposent à la place que le résultat peut être modélisé par une somme de fonctions arbitraires de chaque caractéristique. Mathématiquement, la relation dans un GAM se présente comme ceci :</p>
+<p><span class="math display">\[g(E_Y(y|x))=\beta_0+f_1(x_{1})+f_2(x_{2})+\ldots+f_p(x_{p})\]</span></p>
+<p>La formule est similaire à celle du GLM avec la différence que le terme linéaire <span class="math inline">\(\beta_j{}x_{j}\)</span> est remplacé par une fonction plus flexible <span class="math inline">\(f_j(x_{j})\)</span>. Le cœur d’un GAM est toujours une somme des effets des caractéristiques, mais vous avez la possibilité de permettre des relations non linéaires entre certaines caractéristiques et la sortie. Les effets linéaires sont également couverts par le cadre, car pour les caractéristiques à traiter de manière linéaire, vous pouvez limiter leur <span class="math inline">\(f_j(x_{j})\)</span> uniquement à prendre la forme de <span class="math inline">\(x_{j}\beta_j\)</span>.</p>
+<p>La grande question est comment apprendre des fonctions non linéaires. La réponse s’appelle “splines” ou “fonctions spline”. Les splines sont des fonctions qui sont construites à partir de fonctions de base plus simples. Les splines peuvent être utilisées pour approximer d’autres fonctions plus complexes. Un peu comme empiler des briques Lego pour construire quelque chose de plus complexe. Il existe un nombre déroutant de façons de définir ces fonctions de base spline. Si vous êtes intéressé à en savoir plus sur toutes les manières de définir les fonctions de base, je vous souhaite bonne chance dans votre voyage. Je ne vais pas entrer dans les détails ici, je vais juste construire une intuition. Ce qui m’a personnellement le plus aidé à comprendre les splines était de visualiser les fonctions de base individuelles et de regarder comment la matrice de données est modifiée. Par exemple, pour modéliser la température avec des splines, nous supprimons la caractéristique de température des données et la remplaçons par, disons, 4 colonnes, chacune représentant une fonction de base spline. Habituellement, vous auriez plus de fonctions de base spline, j’ai seulement réduit le nombre à des fins d’illustration. La valeur pour chaque instance de ces nouvelles caractéristiques de base spline dépend des valeurs de température des instances. Avec tous les effets linéaires, le GAM estime également ces poids spline. Les GAMs introduisent également un terme de pénalité pour les poids pour les garder proches de zéro. Cela réduit effectivement la flexibilité des splines et réduit le surajustement. Un paramètre de lissage couramment utilisé pour contrôler la flexibilité de la courbe est ensuite ajusté via la validation croisée. En ignorant le terme de pénalité, la modélisation non linéaire avec des splines est une ingénierie de caractéristiques sophistiquée.</p>
+<p>Dans l’exemple où nous prédisons le nombre de vélos avec un GAM en utilisant uniquement la température, la matrice des caractéristiques du modèle ressemble à ceci :</p>
+<p><img src="../_static/images2/5_3_3_table_1.png" class="img-fluid" data-align="center"></p>
+<p>Chaque ligne représente une instance individuelle des données (un jour). Chaque colonne de base spline contient la valeur de la fonction de base spline aux valeurs de température particulières. La figure suivante montre à quoi ressemblent ces fonctions de base spline :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_3_charts.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>To smoothly model the temperature effect, we use 4 spline basis functions. Each temperature value is mapped to (here) 4 spline basis values. If an instance has a temperature of 30 °C, the value for the first spline basis feature is -1, for the second 0.7, for the third -0.8 and for the 4th 1.7.</figcaption>
+</figure>
+</div>
+<p>Le modèle GAM attribue des poids à chaque caractéristique de base de spline de température :</p>
+<p><img src="../_static/images2/5_3_3_table_2.png" class="img-fluid" data-align="center"></p>
+<p>Et la courbe réelle, qui résulte de la somme des fonctions de base de spline pondérées avec les poids estimés, ressemble à ceci :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_3_3_temp_chart.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>GAM feature effect of the temperature for predicting the number of rented bikes (temperature used as the only feature).</figcaption>
+</figure>
+</div>
+<p>L’interprétation des effets lissés nécessite une vérification visuelle de la courbe ajustée. Les splines sont généralement centrées autour de la prédiction moyenne, de sorte qu’un point sur la courbe représente la différence par rapport à la prédiction moyenne. Par exemple, à 0 degré Celsius, le nombre prévu de vélos est inférieur de 3000 à la prédiction moyenne.</p>
+</section>
+<section id="avantages" class="level3">
+<h3 class="anchored" data-anchor-id="avantages">5.3.4 - Avantages</h3>
+<p>Toutes ces extensions du modèle linéaire constituent en elles-mêmes une sorte d’univers. Quels que soient les problèmes que vous rencontrez avec les modèles linéaires, <strong>vous trouverez probablement une extension qui les résout</strong>.</p>
+<p>La plupart des méthodes sont utilisées depuis des décennies. Par exemple, les GAMs ont presque 30 ans. De nombreux chercheurs et praticiens de l’industrie sont très <strong>expérimentés</strong> avec les modèles linéaires et les méthodes sont <strong>acceptées dans de nombreuses communautés comme statu quo pour la modélisation</strong>.</p>
+<p>En plus de faire des prédictions, vous pouvez utiliser les modèles pour <strong>faire de l’inférence</strong>, tirer des conclusions sur les données – à condition que les hypothèses du modèle ne soient pas violées. Vous obtenez des intervalles de confiance pour les poids, des tests de significativité, des intervalles de prédiction et bien plus encore.</p>
+<p>Les logiciels statistiques ont généralement de très bonnes interfaces pour ajuster les GLMs, les GAMs et d’autres modèles linéaires plus spéciaux.</p>
+<p>L’opacité de nombreux modèles d’apprentissage automatique provient de 1) un manque de parcimonie, ce qui signifie que de nombreuses caractéristiques sont utilisées, 2) des caractéristiques qui sont traitées de manière non linéaire, ce qui signifie que vous avez besoin de plus qu’un seul poids pour décrire l’effet, et 3) la modélisation des interactions entre les caractéristiques. En supposant que les modèles linéaires sont hautement interprétables mais souvent sous-ajustés à la réalité, les extensions décrites dans ce chapitre offrent un bon moyen d’atteindre une <strong>transition en douceur vers des modèles plus flexibles</strong>, tout en préservant une partie de l’interprétabilité.</p>
+</section>
+<section id="inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="inconvénients">5.3.5 - Inconvénients</h3>
+<p>Comme avantage, j’ai mentionné que les modèles linéaires vivent dans leur propre univers. Le <strong>nombre de façons dont vous pouvez étendre le simple modèle linéaire est écrasant</strong>, pas seulement pour les débutants. En réalité, il existe plusieurs univers parallèles, car de nombreuses communautés de chercheurs et de praticiens ont leurs propres noms pour des méthodes qui font plus ou moins la même chose, ce qui peut être très déroutant.</p>
+<p>La plupart des modifications du modèle linéaire rendent le modèle <strong>moins interprétable</strong>. Toute fonction de lien (dans un GLM) qui n’est pas la fonction identité complique l’interprétation ; les interactions compliquent également l’interprétation ; les effets non linéaires des caractéristiques sont soit moins intuitifs (comme la transformation logarithmique) soit ne peuvent plus être résumés par un seul nombre (par exemple, les fonctions spline).</p>
+<p>Les GLMs, les GAMs, etc. <strong>reposent sur des hypothèses</strong> concernant le processus de génération des données. Si celles-ci sont violées, l’interprétation des poids n’est plus valide.</p>
+<p>La performance des ensembles basés sur des arbres comme la forêt aléatoire ou le boosting d’arbres par gradient est dans de nombreux cas meilleure que celle des modèles linéaires les plus sophistiqués. Cela repose en partie sur ma propre expérience et en partie sur des observations des modèles gagnants sur des plateformes comme kaggle.com.</p>
+</section>
+<section id="logiciel" class="level3">
+<h3 class="anchored" data-anchor-id="logiciel">5.3.6 - Logiciel</h3>
+<p>Tous les exemples de ce chapitre ont été créés en utilisant le langage R. Pour les GAMs, le package <code>gam</code> a été utilisé, mais il en existe beaucoup d’autres. R possède un nombre incroyable de packages pour étendre les modèles de régression linéaire. Inégalé par aucun autre langage d’analyse, R est le foyer de toutes les extensions concevables de l’extension du modèle de régression linéaire. Vous trouverez des implémentations de GAMs en Python (comme <a href="https://github.com/dswah/pyGAM">pyGAM</a>), mais ces implémentations ne sont pas aussi matures.</p>
+</section>
+<section id="dautres-extensions" class="level3">
+<h3 class="anchored" data-anchor-id="dautres-extensions">5.3.7 - D’autres extensions</h3>
+<p>Comme promis, voici une liste de problèmes que vous pourriez rencontrer avec les modèles linéaires, accompagnée du nom d’une solution à ce problème que vous pouvez copier et coller dans votre moteur de recherche préféré.</p>
+<p>Mes données violent l’hypothèse d’être indépendantes et identiquement distribuées (iid).<br>
+Par exemple, des mesures répétées sur le même patient.<br>
+Recherchez <strong>modèles mixtes</strong> ou <strong>équations d’estimation généralisées</strong>.</p>
+<p>Mon modèle a des erreurs hétéroscédastiques.<br>
+Par exemple, lors de la prédiction de la valeur d’une maison, les erreurs du modèle sont généralement plus élevées dans les maisons coûteuses, ce qui viole l’homoscédasticité du modèle linéaire.<br>
+Recherchez <strong>régression robuste</strong>.</p>
+<p>J’ai des valeurs aberrantes qui influencent fortement mon modèle.<br>
+Recherchez <strong>régression robuste</strong>.</p>
+<p>Je veux prédire le temps jusqu’à la survenue d’un événement.<br>
+Les données de temps jusqu’à l’événement viennent généralement avec des mesures censurées, ce qui signifie que pour certaines instances, il n’y avait pas assez de temps pour observer l’événement. Par exemple, une entreprise veut prédire la défaillance de ses machines à glaçons, mais n’a des données que pour deux ans. Certaines machines sont encore intactes après deux ans, mais pourraient tomber en panne plus tard.<br>
+Recherchez <strong>modèles de survie paramétriques</strong>, <strong>régression de Cox</strong>, <strong>analyse de survie</strong>.</p>
+<p>Mon résultat à prédire est une catégorie.<br>
+Si le résultat a deux catégories, utilisez un <a href="#logistic">modèle de régression logistique</a>, qui modélise la probabilité pour les catégories.<br>
+Si vous avez plus de catégories, recherchez <strong>régression multinomiale</strong>.<br>
+La régression logistique et la régression multinomiale sont toutes deux des GLMs.</p>
+<p>Je veux prédire des catégories ordonnées.<br>
+Par exemple, les notes scolaires.<br>
+Recherchez <strong>modèle à cotes proportionnelles</strong>.</p>
+<p>Mon résultat est un décompte (comme le nombre d’enfants dans une famille).<br>
+Recherchez <strong>régression de Poisson</strong>.<br>
+Le modèle de Poisson est également un GLM.<br>
+Vous pourriez également avoir le problème que la valeur du décompte 0 est très fréquente.<br>
+Recherchez <strong>régression de Poisson à inflation de zéros</strong>, <strong>modèle à obstacle</strong>.</p>
+<p>Je ne suis pas sûr des caractéristiques à inclure dans le modèle pour tirer des conclusions causales correctes.<br>
+Par exemple, je veux connaître l’effet d’un médicament sur la pression artérielle. Le médicament a un effet direct sur certaines valeurs sanguines et cette valeur sanguine affecte le résultat.<br>
+Dois-je inclure la valeur sanguine dans le modèle de régression ?<br>
+Recherchez <strong>inférence causale</strong>, <strong>analyse de médiation</strong>.</p>
+<p>J’ai des données manquantes.<br>
+Recherchez <strong>imputation multiple</strong>.</p>
+<p>Je veux intégrer des connaissances préalables dans mes modèles.<br>
+Recherchez <strong>inférence bayésienne</strong>.</p>
+<p>Je me sens un peu déprimé dernièrement.<br>
+Recherchez <strong>“Amazon Alexa Gone Wild!!! Version complète du début à la fin”</strong>.</p>
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../05-interpretable_models/05.2-logistic-regression.html" class="pagination-link  aria-label=" 5.2="" -="" régéression="" logistique"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">5.2 - Régéression logistique</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../05-interpretable_models/05.4-decision-tree.html" class="pagination-link" aria-label="5.4 - Arbre de décision">
+        <span class="nav-page-text">5.4 - Arbre de décision</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apprentissage automatique interprétable</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../05-interpretable_models/05.2-logistic-regression.html" rel="next">
+<link href="../05-interpretable_models/index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-interpretable_models/index.html">5 - Modèles interprétables</a></li><li class="breadcrumb-item"><a href="../05-interpretable_models/05.1-linear-regression.html">5.1 - Régéression linéaire</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Apprentissage automatique interprétable</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Recherche"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Résumé</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 - Préface de l’auteur</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 - Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1 - Quelques histoires</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3 - Terminologie</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 - Interprétabilité</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5 - Propriétés des Explications</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 - Jeux de données</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 - Modèles interprétables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">5.1 - Régéression linéaire</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2 - Régéression logistique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4 - Arbre de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5 - Règles de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6 - Ajustement des règles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 - Explications basées sur des exemples</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4 - Functional Decomposition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.6 - Substitut global</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.7 - Prototypes et critiques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.2 - Attribution de pixel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.3 - Détecter les concepts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.4 - Exemples adverses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.5 - Instances Influentes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12 - Contribuer à ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">13 - Citer ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">14 - Traductions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">15 - Remerciements</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#régéression-linéaire" id="toc-régéression-linéaire" class="nav-link active" data-scroll-target="#régéression-linéaire">5.1 - Régéression linéaire</a>
+  <ul>
+  <li><a href="#interprétation" id="toc-interprétation" class="nav-link" data-scroll-target="#interprétation">5.1.1 Interprétation</a></li>
+  <li><a href="#exemple" id="toc-exemple" class="nav-link" data-scroll-target="#exemple">5.1.2 - Exemple</a></li>
+  <li><a href="#interprétation-visuelle" id="toc-interprétation-visuelle" class="nav-link" data-scroll-target="#interprétation-visuelle">5.1.3 - Interprétation visuelle</a>
+  <ul class="collapse">
+  <li><a href="#graphique-des-poids" id="toc-graphique-des-poids" class="nav-link" data-scroll-target="#graphique-des-poids">5.1.3.1 - Graphique des poids</a></li>
+  <li><a href="#graphique-de-leffet" id="toc-graphique-de-leffet" class="nav-link" data-scroll-target="#graphique-de-leffet">5.1.3.2 - Graphique de l’effet</a></li>
+  </ul></li>
+  <li><a href="#expliquer-les-prédictions-individuelles" id="toc-expliquer-les-prédictions-individuelles" class="nav-link" data-scroll-target="#expliquer-les-prédictions-individuelles">5.1.4 - Expliquer les prédictions individuelles</a></li>
+  <li><a href="#encoder-les-caractéristiques-modales" id="toc-encoder-les-caractéristiques-modales" class="nav-link" data-scroll-target="#encoder-les-caractéristiques-modales">5.1.5 - Encoder les caractéristiques modales</a></li>
+  <li><a href="#est-ce-que-les-modèles-linéaires-produisent-des-bonnes-explications" id="toc-est-ce-que-les-modèles-linéaires-produisent-des-bonnes-explications" class="nav-link" data-scroll-target="#est-ce-que-les-modèles-linéaires-produisent-des-bonnes-explications">5.1.6 - Est-ce que les modèles linéaires produisent des bonnes explications ?</a></li>
+  <li><a href="#sparse-linear" id="toc-sparse-linear" class="nav-link" data-scroll-target="#sparse-linear">5.1.7 - Modèles Linéaires Parcimonieux</a>
+  <ul class="collapse">
+  <li><a href="#lasso" id="toc-lasso" class="nav-link" data-scroll-target="#lasso">5.1.7.1 - Lasso</a></li>
+  </ul></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">5.1.8 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">5.1.9 - Inconvénients</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-interpretable_models/index.html">5 - Modèles interprétables</a></li><li class="breadcrumb-item"><a href="../05-interpretable_models/05.1-linear-regression.html">5.1 - Régéression linéaire</a></li></ol></nav>
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modifié</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">10 mai 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="régéression-linéaire" class="level2">
+<h2 class="anchored" data-anchor-id="régéression-linéaire">5.1 - Régéression linéaire</h2>
+<p>Un modèle de régression linéaire prédit la cible comme une somme pondérée des entrées de caractéristiques. La linéarité de la relation apprise facilite l’interprétation. Les modèles de régression linéaire sont utilisés depuis longtemps par les statisticiens, les informaticiens et d’autres personnes qui abordent des problèmes quantitatifs.</p>
+<p>Les modèles linéaires peuvent être utilisés pour modéliser la dépendance d’une cible de régression <span class="math inline">\(y\)</span> par rapport à certaines caractéristiques <span class="math inline">\(x\)</span>. Les relations apprises sont linéaires et peuvent être écrites pour une instance unique <span class="math inline">\(i\)</span> comme suit :</p>
+<p><span class="math display">\[y=\beta_{0}+\beta_{1}x_{1}+\ldots+\beta_{p}x_{p}+\epsilon\]</span></p>
+<p>Le résultat prédit d’une instance est une somme pondérée de ses <span class="math inline">\(p\)</span> caractéristiques. Les bêtas (<span class="math inline">\(\beta_{j}\)</span>) représentent les poids ou coefficients des caractéristiques appris. Le premier poids dans la somme (<span class="math inline">\(\beta_0\)</span>) est appelé l’ordonnée à l’origine (ou intercept) et n’est pas multiplié par une caractéristique. L’epsilon (<span class="math inline">\(\epsilon\)</span>) représente l’erreur que nous commettons encore, c’est-à-dire la différence entre la prédiction et le résultat réel. Ces erreurs sont supposées suivre une distribution gaussienne, ce qui signifie que nous commettons des erreurs dans les deux directions, négative et positive, et que nous commettons de nombreuses petites erreurs et peu de grandes erreurs.</p>
+<p>Diverses méthodes peuvent être utilisées pour estimer le poids optimal. La méthode des moindres carrés ordinaires est généralement utilisée pour trouver les poids qui minimisent les différences au carré entre les résultats réels et les résultats estimés :</p>
+<p><span class="math display">\[\hat{\boldsymbol{\beta}}=\arg\!\min_{\beta_0,\ldots,\beta_p}\sum_{i=1}^n\left(y^{(i)}-\left(\beta_0+\sum_{j=1}^p\beta_jx^{(i)}_{j}\right)\right)^{2}\]</span></p>
+<p>Nous n’entrerons pas dans le détail de la manière dont les poids optimaux peuvent être trouvés, mais si cela vous intéresse, vous pouvez lire le chapitre 3.2 du livre “The Elements of Statistical Learning” (Friedman, Hastie et Tibshirani, 2009)[^Hastie] ou l’une des autres ressources en ligne sur les modèles de régression linéaire.</p>
+<p>Le plus grand avantage des modèles de régression linéaire est leur linéarité : cela rend la procédure d’estimation simple et, surtout, ces équations linéaires ont une interprétation facile à comprendre à un niveau modulaire (c’est-à-dire les poids). C’est l’une des principales raisons pour lesquelles le modèle linéaire et tous les modèles similaires sont si répandus dans les domaines académiques tels que la médecine, la sociologie, la psychologie et de nombreux autres domaines de recherche quantitative. Par exemple, dans le domaine médical, il est non seulement important de prédire le résultat clinique d’un patient, mais aussi de quantifier l’influence du médicament et en même temps de prendre en compte le sexe, l’âge et d’autres caractéristiques de manière interprétable.</p>
+<p>Les poids estimés sont accompagnés d’intervalles de confiance. Un intervalle de confiance est une plage pour l’estimation du poids qui couvre le poids “réel” avec une certaine confiance. Par exemple, un intervalle de confiance de 95 % pour un poids de 2 pourrait aller de 1 à 3. L’interprétation de cet intervalle serait : si nous répétions l’estimation 100 fois avec des données nouvellement échantillonnées, l’intervalle de confiance inclurait le vrai poids dans 95 cas sur 100, à condition que le modèle de régression linéaire soit le modèle correct pour les données.</p>
+<p>Que le modèle soit le “bon” modèle dépend de si les relations dans les données respectent certaines hypothèses, qui sont la linéarité, la normalité, l’homoscédasticité, l’indépendance, la fixité des caractéristiques et l’absence de multicollinéarité.</p>
+<p><strong>Linéarité</strong><br>
+Le modèle de régression linéaire contraint la prédiction à être une combinaison linéaire des caractéristiques, ce qui est à la fois sa plus grande force et sa plus grande limitation. La linéarité conduit à des modèles interprétables. Les effets linéaires sont faciles à quantifier et à décrire. Ils sont additifs, donc il est facile de séparer les effets. Si vous suspectez des interactions entre caractéristiques ou une association non linéaire d’une caractéristique avec la valeur cible, vous pouvez ajouter des termes d’interaction ou utiliser des splines de régression.</p>
+<p><strong>Normalité</strong><br>
+On suppose que le résultat cible, étant donné les caractéristiques, suit une distribution normale. Si cette hypothèse est violée, les intervalles de confiance estimés des poids des caractéristiques sont invalides.</p>
+<p><strong>Homoscédasticité</strong> (variance constante)<br>
+On suppose que la variance des termes d’erreur est constante sur tout l’espace des caractéristiques. Supposons que vous voulez prédire la valeur d’une maison en fonction de sa surface habitable en mètres carrés. Vous estimez un modèle linéaire qui suppose que, quelle que soit la taille de la maison, l’erreur autour de la réponse prédite a la même variance. Cette hypothèse est souvent violée dans la réalité. Dans l’exemple de la maison, il est plausible que la variance des termes d’erreur autour du prix prédit soit plus élevée pour les grandes maisons, car les prix sont plus élevés et il y a plus de place pour les fluctuations de prix. Supposons que l’erreur moyenne (différence entre le prix prédit et le prix réel) dans votre modèle de régression linéaire soit de 50 000 euros. Si vous supposez l’homoscédasticité, vous supposez que l’erreur moyenne de 50 000 est la même pour les maisons qui coûtent 1 million et pour celles qui coûtent seulement 40 000. Ceci est déraisonnable car cela signifierait que nous pouvons nous attendre à des prix de maison négatifs.</p>
+<p><strong>Indépendance</strong><br>
+On suppose que chaque instance est indépendante de toutes les autres. Si vous effectuez des mesures répétées, telles que plusieurs analyses de sang par patient, les points de données ne sont pas indépendants. Pour des données dépendantes, vous avez besoin de modèles spéciaux de régression linéaire, tels que les modèles à effets mixtes ou les GEE (Generalized Estimating Equations). Si vous utilisez le modèle de régression linéaire “normal”, vous pourriez tirer de mauvaises conclusions du modèle.</p>
+<p><strong>Caractéristiques fixes</strong><br>
+Les caractéristiques d’entrée sont considérées comme “fixes”. Fixe signifie qu’elles sont traitées comme des “constantes données” et non comme des variables statistiques. Cela implique qu’elles sont exemptes d’erreurs de mesure. C’est une hypothèse plutôt irréaliste. Sans cette hypothèse, cependant, vous devriez adapter des modèles d’erreur de mesure très complexes qui tiennent compte des erreurs de mesure de vos caractéristiques d’entrée. Et généralement, vous ne voulez pas faire cela.</p>
+<p><strong>Absence de multicollinéarité</strong><br>
+Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe l’estimation des poids. Dans une situation où deux caractéristiques sont fortement corrélées, il devient problématique d’estimer les poids car les effets des caractéristiques sont additifs et il devient indéterminable à laquelle des caractéristiques corrélées attribuer les effets.</p>
+<section id="interprétation" class="level3">
+<h3 class="anchored" data-anchor-id="interprétation">5.1.1 Interprétation</h3>
+<p>L’interprétation d’un poids dans le modèle de régression linéaire dépend du type de la caractéristique correspondante.</p>
+<ul>
+<li>Caractéristique numérique : Augmenter la caractéristique numérique d’une unité change le résultat estimé de son poids. Un exemple de caractéristique numérique est la taille d’une maison.</li>
+<li>Caractéristique binaire : Une caractéristique qui prend l’une des deux valeurs possibles pour chaque instance. Un exemple est la caractéristique “La maison possède un jardin”. L’une des valeurs est considérée comme la catégorie de référence (dans certains langages de programmation encodée par 0), comme “Pas de jardin”. Changer la caractéristique de la catégorie de référence à l’autre catégorie change le résultat estimé du poids de la caractéristique.</li>
+<li>Caractéristique catégorielle avec plusieurs catégories : Une caractéristique avec un nombre fixe de valeurs possibles. Un exemple est la caractéristique “type de sol”, avec les catégories possibles “moquette”, “stratifié” et “parquet”. Une solution pour gérer de nombreuses catégories est le one-hot-encoding, signifiant que chaque catégorie a sa propre colonne binaire. Pour une caractéristique catégorielle avec <span class="math inline">\(L\)</span> catégories, vous n’avez besoin que de <span class="math inline">\(L-1\)</span> colonnes, car la <span class="math inline">\(L\)</span>-ème colonne aurait des informations redondantes (par exemple, lorsque les colonnes 1 à <span class="math inline">\(L-1\)</span> ont toutes une valeur de 0 pour une instance, nous savons que la caractéristique catégorielle de cette instance prend la catégorie <span class="math inline">\(L\)</span>). L’interprétation pour chaque catégorie est alors la même que l’interprétation pour les caractéristiques binaires. Certains langages, comme R, vous permettent de coder les caractéristiques catégorielles de diverses manières, comme <a href="#cat-code">décrit plus loin dans ce chapitre</a>.</li>
+<li>Intercept <span class="math inline">\(\beta_0\)</span> : L’intercept est le poids de la caractéristique pour la “caractéristique constante”, qui est toujours 1 pour toutes les instances. La plupart des logiciels ajoutent automatiquement cette caractéristique “1” pour estimer l’intercept. L’interprétation est : Pour une instance avec toutes les valeurs des caractéristiques numériques à zéro et les valeurs des caractéristiques catégorielles aux catégories de référence, la prédiction du modèle est le poids de l’intercept. L’interprétation de l’intercept n’est généralement pas pertinente car les instances avec toutes les valeurs de caractéristiques à zéro n’ont souvent pas de sens. L’interprétation n’est significative que lorsque les caractéristiques ont été standardisées (moyenne de zéro, écart-type de un). Dans ce cas, l’intercept reflète le résultat prédit d’une instance où toutes les caractéristiques sont à leur valeur moyenne.</li>
+</ul>
+<p>L’interprétation des caractéristiques dans le modèle de régression linéaire peut être automatisée en utilisant les modèles de texte suivants.</p>
+<p><strong>Interprétation d’une Caractéristique Numérique</strong></p>
+<p>Une augmentation de la caractéristique <span class="math inline">\(x_{k}\)</span> d’une unité augmente la prédiction pour <span class="math inline">\(y\)</span> de <span class="math inline">\(\beta_k\)</span> unités lorsque toutes les autres valeurs de caractéristiques restent fixes.</p>
+<p><strong>Interprétation d’une Caractéristique Catégorielle</strong></p>
+<p>Changer la caractéristique <span class="math inline">\(x_{k}\)</span> de la catégorie de référence à l’autre catégorie augmente la prédiction pour <span class="math inline">\(y\)</span> de <span class="math inline">\(\beta_{k}\)</span> lorsque toutes les autres caractéristiques restent fixes.</p>
+<p>Une autre mesure importante pour interpréter les modèles linéaires est la mesure du <span class="math inline">\(R^2\)</span>. Le <span class="math inline">\(R^2\)</span> vous indique quelle part de la variance totale de votre résultat cible est expliquée par le modèle. Plus le <span class="math inline">\(R^2\)</span> est élevé, mieux votre modèle explique les données. La formule pour calculer le <span class="math inline">\(R^2\)</span> est :</p>
+<p><span class="math display">\[R^2 = 1 - \frac{SSE}{SST}\]</span></p>
+<p>SSE est la somme des carrés des termes d’erreur :</p>
+<p><span class="math display">\[SSE = \sum_{i=1}^n (y^{(i)} - \hat{y}^{(i)})^2\]</span></p>
+<p>SST est la somme des carrés de la variance des données :</p>
+<p><span class="math display">\[SST = \sum_{i=1}^n (y^{(i)} - \bar{y})^2\]</span></p>
+<p>Le SSE vous indique combien de variance reste après avoir ajusté le modèle linéaire, mesurée par les différences au carré entre les valeurs cibles prédites et réelles. SST est la variance totale du résultat cible. Le <span class="math inline">\(R^2\)</span> vous indique quelle part de votre variance peut être expliquée par le modèle linéaire. Le <span class="math inline">\(R^2\)</span> varie généralement entre 0 pour les modèles où le modèle n’explique pas du tout les données et 1 pour les modèles qui expliquent toute la variance de vos données. Il est également possible que le <span class="math inline">\(R^2\)</span> prenne une valeur négative sans violer aucune règle mathématique. Cela se produit lorsque SSE est supérieur à SST, ce qui signifie qu’un modèle ne capture pas la tendance des données et s’ajuste aux données pire qu’en utilisant la moyenne de la cible comme prédiction.</p>
+<p>Il y a un piège, car le <span class="math inline">\(R^2\)</span> augmente avec le nombre de caractéristiques dans le modèle, même si elles ne contiennent aucune information sur la valeur cible du tout. Par conséquent, il est préférable d’utiliser le <span class="math inline">\(R^2\)</span> ajusté, qui tient compte du nombre de caractéristiques utilisées dans le modèle. Son calcul est :</p>
+<p><span class="math display">\[\bar{R}^2 = 1 - (1-R^2) \frac{n-1}{n-p-1}\]</span></p>
+<p>où <span class="math inline">\(p\)</span> est le nombre de caractéristiques et <span class="math inline">\(n\)</span> le nombre d’instances.</p>
+<p>Il n’est pas significatif d’interpréter un modèle avec un <span class="math inline">\(R^2\)</span> (ajusté) très faible, car un tel modèle n’explique en fait pas beaucoup de la variance. Toute interprétation des poids ne serait pas significative.</p>
+<p><strong>Importance des caractéristiques</strong></p>
+<p>L’importance d’une caractéristique dans un modèle de régression linéaire peut être mesurée par la valeur absolue de sa statistique t. La statistique t est le poids estimé mis à l’échelle avec son erreur standard.</p>
+<p><span class="math display">\[t_{\hat{\beta}_j} = \frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}\]</span></p>
+<p>Examinons ce que cette formule nous indique : L’importance d’une caractéristique augmente avec l’augmentation du poids. Cela a du sens. Plus le poids estimé a de variance (= moins nous sommes certains de la valeur correcte), moins la caractéristique est importante. Cela a également du sens.</p>
+</section>
+<section id="exemple" class="level3">
+<h3 class="anchored" data-anchor-id="exemple">5.1.2 - Exemple</h3>
+<p>Dans cet exemple, nous utilisons le modèle de régression linéaire pour prédire le <a href="#bike-data">nombre de vélos loués</a> un jour donné, en fonction des informations météorologiques et calendaires. Pour l’interprétation, nous examinons les poids de régression estimés. Les caractéristiques sont composées de caractéristiques numériques et catégorielles. Pour chaque caractéristique, le tableau montre le poids estimé, l’erreur standard de l’estimation (<span class="math inline">\(SE\)</span>) et la valeur absolue de la statistique t (<span class="math inline">\(|t|\)</span>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_1_2_linear_regression_example.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Interpretation of a numerical feature (temperature): An increase of the temperature by 1 degree Celsius increases the predicted number of bicycles by 110.7, when all other features remain fixed.</figcaption>
+</figure>
+</div>
+<p>Interprétation d’une caractéristique numérique (température) : Une augmentation de la température de 1 degré Celsius augmente le nombre prévu de vélos de <code>r sprintf('%.1f', lm_summary_print['temp', 'Estimate'])</code>, lorsque toutes les autres caractéristiques restent fixes.</p>
+<p>Interprétation d’une caractéristique catégorielle (“weathersit”) : Le nombre estimé de vélos est <code>r sprintf('%.1f', lm_summary_print['weathersitRAIN/SNOW/STORM', 'Estimate'])</code> inférieur lorsqu’il pleut, neige ou en cas de tempête, par rapport à un temps clément – en supposant à nouveau que toutes les autres caractéristiques restent inchangées. Lorsque le temps est brumeux, le nombre prévu de vélos est <code>r sprintf('%.1f', lm_summary_print['weathersitMISTY', 'Estimate'])</code> inférieur par rapport à un temps clément, à condition que toutes les autres caractéristiques restent les mêmes.</p>
+<p>Toutes les interprétations viennent toujours avec la note de bas de page que “toutes les autres caractéristiques restent les mêmes”. Cela est dû à la nature des modèles de régression linéaire. La cible prédite est une combinaison linéaire des caractéristiques pondérées. L’équation linéaire estimée est un hyperplan dans l’espace caractéristique/cible (une simple ligne dans le cas d’une seule caractéristique). Les poids spécifient la pente (gradient) de l’hyperplan dans chaque direction. Le bon côté est que l’additivité isole l’interprétation de l’effet d’une caractéristique individuelle de toutes les autres caractéristiques. Cela est possible parce que tous les effets des caractéristiques (= poids fois la valeur de la caractéristique) dans l’équation sont combinés avec un plus. Sur le mauvais côté des choses, l’interprétation ignore la distribution conjointe des caractéristiques. Augmenter une caractéristique, sans changer une autre, peut conduire à des points de données irréalistes ou du moins improbables. Par exemple, augmenter le nombre de pièces pourrait être irréaliste sans également augmenter la taille d’une maison.</p>
+</section>
+<section id="interprétation-visuelle" class="level3">
+<h3 class="anchored" data-anchor-id="interprétation-visuelle">5.1.3 - Interprétation visuelle</h3>
+<p>Diverses visualisations rendent le modèle de régression linéaire facile et rapide à comprendre pour les humains.</p>
+<section id="graphique-des-poids" class="level4">
+<h4 class="anchored" data-anchor-id="graphique-des-poids">5.1.3.1 - Graphique des poids</h4>
+<p>Les informations du tableau des poids (estimation des poids et de la variance) peuvent être visualisées dans un graphique des poids. Le graphique suivant montre les résultats du précédent modèle de régression linéaire.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_1_3_1_weight_plot.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Weights are displayed as points and the 95% confidence intervals as lines.</figcaption>
+</figure>
+</div>
+<p>Le graphique des poids montre que le temps pluvieux/neigeux/tempétueux a un fort effet négatif sur le nombre prévu de vélos. Le poids de la caractéristique du jour ouvrable est proche de zéro et zéro est inclus dans l’intervalle de 95 %, ce qui signifie que l’effet n’est pas statistiquement significatif. Certains intervalles de confiance sont très courts et les estimations sont proches de zéro, mais les effets des caractéristiques étaient statistiquement significatifs. La température est un tel candidat. Le problème avec le graphique des poids est que les caractéristiques sont mesurées à différentes échelles. Alors que pour le temps, le poids estimé reflète la différence entre un temps clément et pluvieux/tempétueux/neigeux, pour la température, il reflète uniquement une augmentation de 1 degré Celsius. Vous pouvez rendre les poids estimés plus comparables en mettant à l’échelle les caractéristiques (moyenne nulle et écart-type de un) avant d’ajuster le modèle linéaire.</p>
+</section>
+<section id="graphique-de-leffet" class="level4">
+<h4 class="anchored" data-anchor-id="graphique-de-leffet">5.1.3.2 - Graphique de l’effet</h4>
+<p>Les poids d’un modèle de régression linéaire peuvent être analysés de manière plus significative lorsqu’ils sont multipliés par les valeurs réelles des caractéristiques. Les poids dépendent de l’échelle des caractéristiques et seront différents si vous avez une caractéristique qui mesure, par exemple, la taille d’une personne et que vous passez de mètre à centimètre. Le poids changera, mais les effets réels dans vos données ne changeront pas. Il est également important de connaître la distribution de votre caractéristique dans les données, car si vous avez une très faible variance, cela signifie que presque toutes les instances ont une contribution similaire de cette caractéristique. Le graphique des effets peut vous aider à comprendre combien la combinaison du poids et de la caractéristique contribue aux prédictions dans vos données. Commencez par calculer les effets, qui sont le poids par caractéristique multiplié par la valeur de la caractéristique d’une instance :</p>
+<p><span class="math display">\[\text{effect}_{j}^{(i)}=w_{j}x_{j}^{(i)}\]</span></p>
+<p>Les effets peuvent être visualisés avec des <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">diagrammes à boîtes</a>. La boîte dans un diagramme à boîtes contient la plage d’effets pour la moitié des données (quantiles d’effets de 25 % à 75 %). La ligne verticale dans la boîte est l’effet médian, c’est-à-dire que 50 % des instances ont un effet inférieur et l’autre moitié un effet supérieur sur la prédiction. Les points sont des valeurs aberrantes, définies comme des points qui sont plus de 1,5 * IQR (intervalle interquartile, c’est-à-dire la différence entre le premier et le troisième quartile) au-dessus du troisième quartile ou moins de 1,5 * IQR en dessous du premier quartile. Les deux lignes horizontales, appelées moustaches inférieure et supérieure, relient les points en dessous du premier quartile et au-dessus du troisième quartile qui ne sont pas des valeurs aberrantes. S’il n’y a pas de valeurs aberrantes, les moustaches s’étendront jusqu’aux valeurs minimales et maximales.</p>
+<p>Les effets des caractéristiques catégorielles peuvent être résumés dans un seul diagramme à boîtes, par rapport au graphique des poids, où chaque catégorie a sa propre ligne.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_1_3_2_effect_plot.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>The feature effect plot shows the distribution of effects (= feature value times feature weight) across the data per feature.</figcaption>
+</figure>
+</div>
+<p>Si nous moyennons les prédictions pour les instances des données d’entraînement, nous obtenons une moyenne de <code>r round(predictions_mean, 0)</code>. En comparaison, la prédiction de l’instance <code>r i</code>-ème est faible, puisque seulement <code>r round(pred_i, 0)</code> locations de vélos sont prédites. Le graphique des effets révèle la raison. Les diagrammes à boîtes montrent les distributions des effets pour toutes les instances du jeu de données, les croix montrent les effets pour l’instance <code>r i</code>-ème. L’instance <code>r i</code>-ème a un faible effet de température car ce jour-là la température était de <code>r round(X[i, 'temp'],0)</code> degrés, ce qui est faible par rapport à la plupart des autres jours (et rappelons que le poids de la caractéristique de température est positif). De plus, l’effet de la caractéristique de tendance “jours_depuis_2011” est petit par rapport aux autres instances de données car cette instance date du début de 2011 (<code>r X[i, 'days_since_2011']</code> jours) et la caractéristique de tendance a également un poids positif.</p>
+</section>
+</section>
+<section id="expliquer-les-prédictions-individuelles" class="level3">
+<h3 class="anchored" data-anchor-id="expliquer-les-prédictions-individuelles">5.1.4 - Expliquer les prédictions individuelles</h3>
+<p>De combien chaque caractéristique d’une instance a-t-elle contribuée à la prédiction ? La contribution spécifique de chaque caractéristique d’une instance à la prédiction peut être évaluée en calculant les effets pour cette instance. Une interprétation des effets spécifiques à l’instance n’a de sens qu’en comparaison avec la distribution de l’effet pour chaque caractéristique. Nous souhaitons expliquer la prédiction du modèle linéaire pour l’instance <code>r i</code>-ème du jeu de données sur les locations de vélos. L’instance présente les valeurs de caractéristiques suivantes.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_1_4_explain_indiv_predict.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Table</figcaption>
+</figure>
+</div>
+<p>Pour obtenir les effets des caractéristiques de cette instance, nous devons multiplier ses valeurs de caractéristiques par les poids correspondants du modèle de régression linéaire. Pour la valeur “<code>r df["workingday", "value"]</code>” de la caractéristique “<code>r df["workingday", "feature"]</code>”, l’effet est <code>r round(lm_summary_print[paste(df["workingday", "feature"], df["workingday", "value"], sep = ""), "Estimate"], 1)</code>. Pour une température de <code>r round(as.numeric(as.character(df["temp", "value"])), 1)</code> degrés Celsius, l’effet est <code>r round(as.numeric(as.character(df["temp", "value"])) * lm_summary_print[as.character(df["temp", "feature"]), "Estimate"], 1)</code>. Nous ajoutons ces effets individuels sous forme de croix au graphique des effets, ce qui nous montre la distribution des effets dans les données. Cela nous permet de comparer les effets individuels à la distribution des effets dans les données.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_1_4_explain_indiv_predict_fig.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>The effect plot for one instance shows the effect distribution and highlights the effects of the instance of interest.</figcaption>
+</figure>
+</div>
+<p>Si nous moyennons les prédictions pour les instances des données d’entraînement, nous obtenons une moyenne de <code>r round(predictions_mean, 0)</code>. En comparaison, la prédiction de l’instance <code>r i</code>-ème est faible, puisque seulement <code>r round(pred_i, 0)</code> locations de vélos sont prédites. Le graphique des effets révèle la raison. Les diagrammes à boîtes montrent les distributions des effets pour toutes les instances du jeu de données, les croix montrent les effets pour l’instance <code>r i</code>-ème. L’instance <code>r i</code>-ème a un faible effet de température car ce jour-là la température était de <code>r round(X[i, 'temp'],0)</code> degrés, ce qui est faible par rapport à la plupart des autres jours (et rappelons que le poids de la caractéristique de température est positif). De plus, l’effet de la caractéristique de tendance “jours_depuis_2011” est petit par rapport aux autres instances de données car cette instance date du début de 2011 (<code>r X[i, 'days_since_2011']</code> jours) et la caractéristique de tendance a également un poids positif.</p>
+</section>
+<section id="encoder-les-caractéristiques-modales" class="level3">
+<h3 class="anchored" data-anchor-id="encoder-les-caractéristiques-modales">5.1.5 - Encoder les caractéristiques modales</h3>
+<p>Il existe plusieurs manières de coder une caractéristique catégorielle, et le choix influence l’interprétation des poids.</p>
+<p>La norme dans les modèles de régression linéaire est le codage de traitement, qui est suffisant dans la plupart des cas. Utiliser différents codages revient à créer différentes matrices (de conception) à partir d’une seule colonne avec la caractéristique catégorielle. Cette section présente trois codages différents, mais il en existe beaucoup d’autres. L’exemple utilisé comporte six instances et une caractéristique catégorielle avec trois catégories. Pour les deux premières instances, la caractéristique prend la catégorie A ; pour les instances trois et quatre, la catégorie B ; et pour les deux dernières instances, la catégorie C.</p>
+<p><strong>Codage de traitement</strong></p>
+<p>Dans le codage de traitement, le poids par catégorie est la différence estimée dans la prédiction entre la catégorie correspondante et la catégorie de référence. L’intercept du modèle linéaire est la moyenne de la catégorie de référence (lorsque toutes les autres caractéristiques restent les mêmes). La première colonne de la matrice de conception est l’intercept, qui est toujours 1. La deuxième colonne indique si l’instance i appartient à la catégorie B, la troisième colonne indique si elle appartient à la catégorie C. Il n’est pas nécessaire d’avoir une colonne pour la catégorie A, car cela surdéterminerait l’équation linéaire et il ne serait pas possible de trouver une solution unique pour les poids. Il suffit de savoir qu’une instance n’appartient ni à la catégorie B ni à la catégorie C.</p>
+<p>Matrice des caractéristiques : <span class="math display">\[\begin{pmatrix}1&amp;0&amp;0\\1&amp;0&amp;0\\1&amp;1&amp;0\\1&amp;1&amp;0\\1&amp;0&amp;1\\1&amp;0&amp;1\\\end{pmatrix}\]</span></p>
+<p><strong>Codage des effets</strong></p>
+<p>Le poids par catégorie est la différence estimée de y entre la catégorie correspondante et la moyenne globale (à condition que toutes les autres caractéristiques soient zéro ou la catégorie de référence). La première colonne est utilisée pour estimer l’intercept. Le poids <span class="math inline">\(\beta_{0}\)</span> associé à l’intercept représente la moyenne globale et <span class="math inline">\(\beta_{1}\)</span>, le poids pour la deuxième colonne, est la différence entre la moyenne globale et la catégorie B. L’effet total de la catégorie B est <span class="math inline">\(\beta_{0}+\beta_{1}\)</span>. L’interprétation pour la catégorie C est équivalente. Pour la catégorie de référence A, <span class="math inline">\(-(\beta_{1}+\beta_{2})\)</span> est la différence par rapport à la moyenne globale et <span class="math inline">\(\beta_{0}-(\beta_{1}+\beta_{2})\)</span> l’effet global.</p>
+<p>Matrice des caractéristiques : <span class="math display">\[\begin{pmatrix}1&amp;-1&amp;-1\\1&amp;-1&amp;-1\\1&amp;1&amp;0\\1&amp;1&amp;0\\1&amp;0&amp;1\\1&amp;0&amp;1\\\end{pmatrix}\]</span></p>
+<p><strong>Codage indicateur (Dummy coding)</strong></p>
+<p>Le <span class="math inline">\(\beta\)</span> par catégorie est la valeur moyenne estimée de <span class="math inline">\(y\)</span> pour chaque catégorie (à condition que toutes les autres valeurs de caractéristiques soient zéro ou la catégorie de référence). Notez que l’intercept a été omis ici afin qu’une solution unique puisse être trouvée pour les poids du modèle linéaire. Une autre manière de pallier ce problème de multicollinéarité est d’exclure l’une des catégories.</p>
+<p>Matrice des caractéristiques : <span class="math display">\[\begin{pmatrix}1&amp;0&amp;0\\1&amp;0&amp;0\\0&amp;1&amp;0\\0&amp;1&amp;0\\0&amp;0&amp;1\\0&amp;0&amp;1\\\end{pmatrix}\]</span></p>
+<p>Si vous souhaitez approfondir les différents codages des caractéristiques catégorielles, consultez <a href="http://stats.idre.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/">cette page de vue d’ensemble</a> et <a href="http://heidiseibold.github.io/page7/">ce billet de blog</a>.</p>
+</section>
+<section id="est-ce-que-les-modèles-linéaires-produisent-des-bonnes-explications" class="level3">
+<h3 class="anchored" data-anchor-id="est-ce-que-les-modèles-linéaires-produisent-des-bonnes-explications">5.1.6 - Est-ce que les modèles linéaires produisent des bonnes explications ?</h3>
+<p>Au regard des attributs qui constituent une bonne explication, tels que présentés dans le chapitre sur les <a href="../03-interpretability/03.6-human_friendly_explanations.html#good-explanation">explications conviviales pour l’être humain</a>, les modèles linéaires ne créent pas les meilleures explications. Ils sont contrastifs, mais l’instance de référence est un point de données où toutes les caractéristiques numériques sont à zéro et les caractéristiques catégorielles sont à leurs catégories de référence. Il s’agit généralement d’une instance artificielle et dénuée de sens, peu susceptible de se produire dans vos données ou dans la réalité. Il y a une exception : si toutes les caractéristiques numériques sont centrées sur la moyenne (caractéristique moins la moyenne de la caractéristique) et que toutes les caractéristiques catégorielles sont codées par effet, l’instance de référence est le point de données où toutes les caractéristiques prennent la valeur moyenne de la caractéristique. Cela peut aussi être un point de données inexistant, mais il peut au moins être plus probable ou plus significatif. Dans ce cas, les poids multipliés par les valeurs des caractéristiques (effets des caractéristiques) expliquent la contribution au résultat prédit en contraste avec l’“instance moyenne”. Un autre aspect d’une bonne explication est la sélectivité, qui peut être atteinte dans les modèles linéaires en utilisant moins de caractéristiques ou en entraînant des modèles linéaires parcimonieux. Mais par défaut, les modèles linéaires ne créent pas d’explications sélectives. Les modèles linéaires créent des explications véridiques, tant que l’équation linéaire est un modèle approprié pour la relation entre les caractéristiques et le résultat. Plus il y a de non-linéarités et d’interactions, moins le modèle linéaire sera précis et moins les explications seront véridiques. La linéarité rend les explications plus générales et plus simples. La nature linéaire du modèle, je crois, est le principal facteur pour lequel les gens utilisent des modèles linéaires pour expliquer les relations.</p>
+</section>
+<section id="sparse-linear" class="level3">
+<h3 class="anchored" data-anchor-id="sparse-linear">5.1.7 - Modèles Linéaires Parcimonieux</h3>
+<p>Les exemples de modèles linéaires que j’ai choisis semblent tous bien ordonnés, n’est-ce pas ? Mais dans la réalité, vous pourriez ne pas avoir juste une poignée de caractéristiques, mais des centaines ou des milliers. Et vos modèles de régression linéaire ? L’interprétabilité se dégrade. Vous pourriez même vous retrouver dans une situation où il y a plus de caractéristiques que d’instances, et vous ne pourriez pas du tout ajuster un modèle linéaire standard. La bonne nouvelle est qu’il existe des moyens d’introduire de la parcimonie (= peu de caractéristiques) dans les modèles linéaires.</p>
+<section id="lasso" class="level4">
+<h4 class="anchored" data-anchor-id="lasso">5.1.7.1 - Lasso</h4>
+<p>Le Lasso est une manière automatique et pratique d’introduire de la parcimonie dans le modèle de régression linéaire. Lasso signifie “Least Absolute Shrinkage and Selection Operator” (opérateur de réduction et de sélection absolue minimale) et, lorsqu’il est appliqué dans un modèle de régression linéaire, effectue une sélection de caractéristiques et une régularisation des poids des caractéristiques sélectionnées. Considérons le problème de minimisation que les poids optimisent :</p>
+<p><span class="math display">\[min_{\boldsymbol{\beta}}\left(\frac{1}{n}\sum_{i=1}^n(y^{(i)}-x_i^T\boldsymbol{\beta})^2\right)\]</span></p>
+<p>Lasso ajoute un terme à ce problem d’optimisation.</p>
+<p><span class="math display">\[min_{\boldsymbol{\beta}}\left(\frac{1}{n}\sum_{i=1}^n(y^{(i)}-x_{i}^T\boldsymbol{\beta})^2+\lambda||\boldsymbol{\beta}||_1\right)\]</span></p>
+<p>Le terme <span class="math inline">\(\|\boldsymbol{\beta}\|_1\)</span>, la norme L1 du vecteur de caractéristiques, conduit à une pénalisation des poids importants. Comme la norme L1 est utilisée, de nombreux poids reçoivent une estimation de 0 et les autres sont réduits. Le paramètre lambda <span class="math inline">\((\lambda)\)</span> contrôle la force de l’effet de régularisation et est généralement ajusté par validation croisée. Surtout lorsque lambda est grand, de nombreux poids deviennent 0. Les poids des caractéristiques peuvent être visualisés en fonction du terme de pénalité lambda. Chaque poids de caractéristique est représenté par une courbe dans la figure suivante.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_1_7_1_lasso.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>With increasing penalty of the weights, fewer and fewer features receive a non-zero weight estimate. These curves are also called regularization paths. The number above the plot is the number of non-zero weights.</figcaption>
+</figure>
+</div>
+<p>Quelle valeur devrions-nous choisir pour lambda ? Si vous voyez le terme de pénalisation comme un paramètre de réglage, alors vous pouvez trouver le lambda qui minimise l’erreur du modèle avec une validation croisée. Vous pouvez également considérer lambda comme un paramètre pour contrôler l’interprétabilité du modèle. Plus la pénalisation est grande, moins il y a de caractéristiques présentes dans le modèle (car leurs poids sont nuls) et mieux le modèle peut être interprété.</p>
+<p><strong>Exemple avec Lasso</strong></p>
+<p>Nous allons prédire les locations de vélos en utilisant Lasso. Nous fixons le nombre de caractéristiques que nous voulons avoir dans le modèle à l’avance. Commençons d’abord par fixer le nombre à 2 caractéristiques :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_1_7_1_lasso_table_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Table</figcaption>
+</figure>
+</div>
+<p>Les deux premières caractéristiques avec des poids non nuls dans le chemin Lasso sont la température (“temp”) et la tendance temporelle (“days_since_2011”).</p>
+<p>Maintenant, sélectionnons 5 caractéristiques :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_1_7_1_lasso_table_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Table</figcaption>
+</figure>
+</div>
+<p>Notez que les poids pour “temp” et “days_since_2011” diffèrent du modèle avec deux caractéristiques. La raison en est qu’en diminuant lambda, même les caractéristiques qui sont déjà “dans” le modèle sont moins pénalisées et peuvent obtenir un poids absolu plus grand. L’interprétation des poids Lasso correspond à l’interprétation des poids dans le modèle de régression linéaire. Vous devez seulement faire attention à savoir si les caractéristiques sont standardisées ou non, car cela affecte les poids. Dans cet exemple, les caractéristiques ont été standardisées par le logiciel, mais les poids ont été automatiquement retransformés pour nous afin de correspondre aux échelles des caractéristiques originales.</p>
+<p><strong>Autres méthodes pour la parcimonie dans les modèles linéaires</strong></p>
+<p>Un large éventail de méthodes peut être utilisé pour réduire le nombre de caractéristiques dans un modèle linéaire.</p>
+<p>Méthodes de prétraitement :</p>
+<ul>
+<li>Sélection manuelle des caractéristiques : Vous pouvez toujours utiliser des connaissances expertes pour sélectionner ou écarter certaines caractéristiques. Le grand inconvénient est que cela ne peut pas être automatisé et vous devez avoir accès à quelqu’un qui comprend les données.</li>
+<li>Sélection univariée : Un exemple est le coefficient de corrélation. Vous ne considérez que les caractéristiques qui dépassent un certain seuil de corrélation entre la caractéristique et la cible. L’inconvénient est qu’il ne considère que les caractéristiques individuellement. Certaines caractéristiques peuvent ne pas montrer de corrélation avant que le modèle linéaire n’ait pris en compte d’autres caractéristiques. Vous manquerez celles-ci avec les méthodes de sélection univariée.</li>
+</ul>
+<p>Méthodes séquentielles :</p>
+<ul>
+<li>Sélection progressive (<em>Forward selection</em>) : Ajustez le modèle linéaire avec une caractéristique. Faites cela avec chaque caractéristique. Sélectionnez le modèle qui fonctionne le mieux (par exemple, R-carré le plus élevé). Maintenant, à nouveau, pour les caractéristiques restantes, ajustez différentes versions de votre modèle en ajoutant chaque caractéristique à votre modèle actuel le meilleur. Sélectionnez celui qui offre les meilleures performances. Continuez jusqu’à ce qu’un critère soit atteint, comme le nombre maximum de caractéristiques dans le modèle.</li>
+<li>Sélection régressive (<em>Backward selection</em>) : Similaire à la sélection progressive. Mais au lieu d’ajouter des caractéristiques, commencez avec le modèle qui contient toutes les caractéristiques et essayez de déterminer quelle caractéristique vous devez retirer pour obtenir l’augmentation de performance la plus élevée. Répétez cela jusqu’à ce qu’un critère d’arrêt soit atteint.</li>
+</ul>
+<p>Je recommande d’utiliser Lasso, car il peut être automatisé, prend en compte toutes les caractéristiques simultanément et peut être contrôlé via lambda. Il fonctionne également pour le <a href="../05-interpretable_models/05.2-logistic-regression.html">modèle de régression logistique</a> pour la classification.</p>
+</section>
+</section>
+<section id="avantages" class="level3">
+<h3 class="anchored" data-anchor-id="avantages">5.1.8 - Avantages</h3>
+<p>La modélisation des prédictions comme une <strong>somme pondérée</strong> rend transparente la manière dont les prédictions sont produites. Et avec Lasso, nous pouvons nous assurer que le nombre de caractéristiques utilisées reste petit.</p>
+<p>De nombreuses personnes utilisent des modèles de régression linéaire. Cela signifie que dans de nombreux endroits, ils sont <strong>acceptés</strong> pour la modélisation prédictive et l’inférence. Il existe un <strong>haut niveau d’expérience et d’expertise collective</strong>, y compris des matériaux pédagogiques sur les modèles de régression linéaire et des implémentations logicielles. La régression linéaire peut être trouvée dans R, Python, Java, Julia, Scala, Javascript, …</p>
+<p>Mathématiquement, il est simple d’estimer les poids et vous avez une <strong>garantie de trouver des poids optimaux</strong> (à condition que toutes les hypothèses du modèle de régression linéaire soient satisfaites par les données).</p>
+<p>Avec les poids, vous obtenez également des intervalles de confiance, des tests et une théorie statistique solide. Il existe également de nombreuses extensions du modèle de régression linéaire (voir <a href="../05-interpretable_models/05.3-glm-gam-more.html">chapitre sur GLM, GAM et plus</a>).</p>
+</section>
+<section id="inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="inconvénients">5.1.9 - Inconvénients</h3>
+<p>Les modèles de régression linéaire ne peuvent représenter que des relations linéaires, c’est-à-dire une somme pondérée des caractéristiques d’entrée. Chaque <strong>non-linéarité ou interaction doit être créée manuellement</strong> et explicitement fournie au modèle comme une caractéristique d’entrée.</p>
+<p>Les modèles linéaires sont également souvent <strong>moins performants en termes de prédiction</strong>, car les relations qui peuvent être apprises sont très limitées et simplifient généralement de manière excessive la complexité de la réalité.</p>
+<p>L’interprétation d’un poids <strong>peut être contre-intuitive</strong> car elle dépend de toutes les autres caractéristiques. Une caractéristique ayant une forte corrélation positive avec le résultat <span class="math inline">\(y\)</span> et une autre caractéristique peut obtenir un poids négatif dans le modèle linéaire, car, étant donné l’autre caractéristique corrélée, elle est négativement corrélée avec <span class="math inline">\(y\)</span> dans l’espace multidimensionnel. Des caractéristiques complètement corrélées rendent même impossible de trouver une solution unique pour l’équation linéaire. Un exemple : Vous avez un modèle pour prédire la valeur d’une maison et vous avez des caractéristiques comme le nombre de pièces et la taille de la maison. La taille de la maison et le nombre de pièces sont fortement corrélés : plus une maison est grande, plus elle a de pièces. Si vous prenez ces deux caractéristiques dans un modèle linéaire, il se peut que la taille de la maison soit le meilleur prédicteur et obtienne un poids positif important. Le nombre de pièces peut finir par obtenir un poids négatif, car, à taille de maison égale, augmenter le nombre de pièces pourrait la rendre moins précieuse ou l’équation linéaire devient moins stable lorsque la corrélation est trop forte.</p>
+<!-- REFERENCES -->
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a 5="" href="../05-interpretable_models/index.html" class="pagination-link  aria-label=" -="" modèles="" interprétables"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">5 - Modèles interprétables</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../05-interpretable_models/05.2-logistic-regression.html" class="pagination-link" aria-label="5.2 - Régéression logistique">
+        <span class="nav-page-text">5.2 - Régéression logistique</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

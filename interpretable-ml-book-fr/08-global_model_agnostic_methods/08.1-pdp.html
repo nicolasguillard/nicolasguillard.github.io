@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Apprentissage automatique interprétable - Résumé</title>
+<title>Apprentissage automatique interprétable</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../08-global_model_agnostic_methods/08.2-ale.html" rel="next">
+<link href="../08-global_model_agnostic_methods/index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,11 +69,40 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked fullcontent">
+<body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -80,9 +111,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      Apprentissage automatique interprétable
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/index.html">8 - Méthodes globales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/08.1-pdp.html">8.1 - Diagramme de dépendance partielle (PDP)</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -97,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Apprentissage automatique interprétable</a> 
+      <a href="../">Apprentissage automatique interprétable</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -109,19 +138,19 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./00-summary/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Résumé</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01-preface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">1 - Préface de l’auteur</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./02-introduction/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2 - Introduction</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -130,19 +159,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.1 - Quelques histoires</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.3 - Terminologie</span></a>
   </div>
 </li>
@@ -150,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3 - Interprétabilité</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -159,37 +188,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.5 - Propriétés des Explications</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
   </div>
 </li>
@@ -197,7 +226,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./04-datasets/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4 - Jeux de données</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -206,19 +235,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
   </div>
 </li>
@@ -226,7 +255,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5 - Modèles interprétables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -235,43 +264,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.1 - Régéression linéaire</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.2 - Régéression logistique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.4 - Arbre de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.5 - Règles de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.6 - Ajustement des règles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
   </div>
 </li>
@@ -279,19 +308,19 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07-example/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">7 - Explications basées sur des exemples</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -300,43 +329,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.4 - Functional Decomposition</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.6 - Substitut global</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.7 - Prototypes et critiques</span></a>
   </div>
 </li>
@@ -344,7 +373,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -353,37 +382,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
   </div>
 </li>
@@ -391,7 +420,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -400,31 +429,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.2 - Attribution de pixel</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.3 - Détecter les concepts</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.4 - Exemples adverses</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.5 - Instances Influentes</span></a>
   </div>
 </li>
@@ -432,7 +461,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./11-future/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -441,13 +470,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
   </div>
 </li>
@@ -455,25 +484,25 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-contribute/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">12 - Contribuer à ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./13-citation/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">13 - Citer ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14-translations/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">14 - Traductions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">15 - Remerciements</span></a>
   </div>
 </li>
@@ -482,13 +511,27 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#diagramme-de-dépendance-partielle-pdp" id="toc-diagramme-de-dépendance-partielle-pdp" class="nav-link active" data-scroll-target="#diagramme-de-dépendance-partielle-pdp">8.1 - Diagramme de dépendance partielle (PDP)</a>
+  <ul>
+  <li><a href="#importance-des-fonctionnalités-basées-sur-pdp" id="toc-importance-des-fonctionnalités-basées-sur-pdp" class="nav-link" data-scroll-target="#importance-des-fonctionnalités-basées-sur-pdp">8.1.1 - Importance des fonctionnalités basées sur PDP</a></li>
+  <li><a href="#exemples" id="toc-exemples" class="nav-link" data-scroll-target="#exemples">8.1.2 - Exemples</a></li>
+  </ul></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">8.1.3 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">8.1.4 - Inconvénients</a></li>
+  <li><a href="#logiciels-et-alternatives" id="toc-logiciels-et-alternatives" class="nav-link" data-scroll-target="#logiciels-et-alternatives">8.1.5 - Logiciels et alternatives</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/index.html">8 - Méthodes globales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/08.1-pdp.html">8.1 - Diagramme de dépendance partielle (PDP)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Résumé</h1>
 </div>
 
 
@@ -511,48 +554,94 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<blockquote class="blockquote">
-<p>Traduction du livre en ligne <a href="https://christophm.github.io/interpretable-ml-book/index.html">https://christophm.github.io/interpretable-ml-book/index.html</a></p>
-</blockquote>
+<section id="diagramme-de-dépendance-partielle-pdp" class="level2">
+<h2 class="anchored" data-anchor-id="diagramme-de-dépendance-partielle-pdp">8.1 - Diagramme de dépendance partielle (PDP)</h2>
+<p>Le tracé de dépendance partielle (court PDP ou PD plot) montre l’effet marginal d’une ou deux caractéristiques sur le résultat prédit d’un modèle d’apprentissage automatique (JH Friedman 2001<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>). Un diagramme de dépendance partielle peut montrer si la relation entre la cible et une entité est linéaire, monotone ou plus complexe. Par exemple, lorsqu’ils sont appliqués à un modèle de régression linéaire, les diagrammes de dépendance partielle montrent toujours une relation linéaire.</p>
+<p>La fonction de dépendance partielle pour la régression est définie comme :</p>
+<p><span class="math display">\[\hat{f}_S(x_S)=E_{X_C}\left[\hat{f}(x_S,X_C)\right]=\int\hat{f}(x_S,X_C)d\mathbb{P}(X_C)\]</span></p>
+<p>Le <span class="math inline">\(x_S\)</span> sont les caractéristiques pour lesquelles la fonction de dépendance partielle doit être tracée et <span class="math inline">\(X_C\)</span> sont les autres fonctionnalités utilisées dans le modèle d’apprentissage automatique <span class="math inline">\(\hat{f}\)</span>, qui sont ici traitées comme des variables aléatoires. Habituellement, il n’y a qu’une ou deux fonctionnalités dans l’ensemble S. La ou les fonctionnalités dans S sont celles dont nous voulons connaître l’effet sur la prédiction. Les vecteurs de caractéristiques <span class="math inline">\(x_S\)</span> et <span class="math inline">\(x_C\)</span> combinés constituent l’espace total des fonctionnalités x. La dépendance partielle fonctionne en marginalisant la sortie du modèle d’apprentissage automatique sur la distribution des caractéristiques de l’ensemble C, de sorte que la fonction montre la relation entre les caractéristiques de l’ensemble S qui nous intéressent et le résultat prédit. En marginalisant les autres fonctionnalités, nous obtenons une fonction qui dépend uniquement des fonctionnalités de S, interactions avec d’autres fonctionnalités incluses.</p>
+<p>La fonction partielle <span class="math inline">\(\hat{f}_S\)</span> est estimé en calculant des moyennes dans les données d’entraînement, également appelée méthode de Monte Carlo :</p>
+<p><span class="math display">\[\hat{f}_S(x_S)=\frac{1}{n}\sum_{i=1}^n\hat{f}(x_S,x^{(i)}_{C})\]</span></p>
+<p>La fonction partielle nous indique pour une ou plusieurs valeurs données de caractéristiques S quel est l’effet marginal moyen sur la prédiction. Dans cette formule, <span class="math inline">\(x^{(i)}_{C}\)</span> sont les valeurs réelles des fonctionnalités de l’ensemble de données pour les fonctionnalités qui ne nous intéressent pas, et n est le nombre d’instances dans l’ensemble de données. Une hypothèse du PDP est que les caractéristiques de C ne sont pas corrélées avec les caractéristiques de S. Si cette hypothèse n’est pas respectée, les moyennes calculées pour le diagramme de dépendance partielle incluront des points de données très improbables, voire impossibles (voir inconvénients).</p>
+<p>Pour la classification où le modèle d’apprentissage automatique génère des probabilités, le tracé de dépendance partielle affiche la probabilité pour une certaine classe en fonction de différentes valeurs pour les caractéristiques de S. Un moyen simple de gérer plusieurs classes consiste à tracer une ligne ou un tracé par classe.</p>
+<p>Le tracé de dépendance partielle est une méthode globale : la méthode prend en compte toutes les instances et donne une déclaration sur la relation globale d’une caractéristique avec le résultat prédit.</p>
+<p><strong>Caractéristiques catégorielles</strong></p>
+<p>Jusqu’à présent, nous n’avons considéré que les caractéristiques numériques. Pour les caractéristiques catégorielles, la dépendance partielle est très facile à calculer. Pour chacune des catégories, nous obtenons une estimation PDP en forçant toutes les instances de données à avoir la même catégorie. Par exemple, si nous examinons l’ensemble de données de location de vélos et que nous nous intéressons au graphique de dépendance partielle pour la saison, nous obtenons quatre nombres, un pour chaque saison. Pour calculer la valeur de « été », nous remplaçons la saison de toutes les instances de données par « été » et faisons la moyenne des prédictions.</p>
+<section id="importance-des-fonctionnalités-basées-sur-pdp" class="level3">
+<h3 class="anchored" data-anchor-id="importance-des-fonctionnalités-basées-sur-pdp">8.1.1 - Importance des fonctionnalités basées sur PDP</h3>
+<p>Greenwell et coll. (2018)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> ont proposé une mesure simple de l’importance des caractéristiques basée sur la dépendance partielle. La motivation de base est qu’un PDP plat indique que la fonctionnalité n’est pas importante, et plus le PDP varie, plus la fonctionnalité est importante. Pour les caractéristiques numériques, l’importance est définie comme l’écart de chaque valeur de caractéristique unique par rapport à la courbe moyenne :</p>
+<p><span class="math display">\[I(x_S) =  \sqrt{\frac{1}{K-1}\sum_{k=1}^K(\hat{f}_S(x^{(k)}_S) - \frac{1}{K}\sum_{k=1}^K \hat{f}_S({x^{(k)}_S))^2}}\]</span></p>
+<p>Notez qu’ici le <span class="math inline">\(x^{(k)}_S\)</span> sont les K valeurs uniques de la caractéristique <span class="math inline">\(X_S\)</span>. Pour les fonctionnalités catégorielles, nous avons :</p>
+<p><span class="math display">\[I(x_S) = (max_k(\hat{f}_S(x^{(k)}_S)) - min_k(\hat{f}_S(x^{(k)}_S)))/4\]</span></p>
+<p>Il s’agit de la plage des valeurs PDP pour les catégories uniques divisée par quatre. Cette étrange façon de calculer l’écart s’appelle la règle de plage. Il est utile d’obtenir une estimation approximative de l’écart lorsque vous ne connaissez que la plage. Et le dénominateur quatre vient de la distribution normale standard : dans la distribution normale, 95% des données sont moins deux et plus deux écarts types autour de la moyenne. Ainsi, la fourchette divisée par quatre donne une estimation approximative qui sous-estime probablement la variance réelle.</p>
+<p>Cette importance des fonctionnalités basées sur PDP doit être interprétée avec prudence. Il capture uniquement l’effet principal de la fonctionnalité et ignore les interactions possibles entre les fonctionnalités. Une fonctionnalité pourrait être très importante sur la base d’autres méthodes telles que <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html">l’importance des fonctionnalités de permutation</a>, mais le PDP pourrait être plat car la fonctionnalité affecte la prédiction principalement via des interactions avec d’autres fonctionnalités. Un autre inconvénient de cette mesure est qu’elle est définie sur des valeurs uniques. Une valeur de caractéristique unique avec une seule instance reçoit le même poids dans le calcul de l’importance qu’une valeur avec plusieurs instances.</p>
+</section>
+<section id="exemples" class="level3">
+<h3 class="anchored" data-anchor-id="exemples">8.1.2 - Exemples</h3>
+<p>En pratique, l’ensemble de fonctionnalités S ne contient généralement qu’une seule fonctionnalité ou au maximum deux, car une fonctionnalité produit des tracés 2D et deux fonctionnalités produisent des tracés 3D. Au-delà, tout est assez délicat. Même la 3D sur un papier ou un moniteur 2D est déjà un défi.</p>
+<p>Revenons à l’exemple de régression, dans lequel on prédit le nombre de <a href="../04-datasets/04.1-datasets.html">vélos qui seront loués un jour donné</a>. Nous ajustons d’abord un modèle d’apprentissage automatique, puis nous analysons les dépendances partielles. Dans ce cas, nous avons ajusté une forêt aléatoire pour prédire le nombre de vélos et utilisé le diagramme de dépendance partielle pour visualiser les relations apprises par le modèle. L’influence des caractéristiques météorologiques sur le nombre de vélos prévu est visualisée dans la figure suivante.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/cutout.png" class="img-fluid figure-img" data-align="center" width="400"></p>
-<figcaption>Couverture</figcaption>
+<p><img src="../_static/images2/8_1_2_figure_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>PDP pour le modèle de prévision du nombre de vélos et la température, l’humidité et la vitesse du vent. Les plus grandes différences peuvent être observées au niveau de la température. Plus il fait chaud, plus on loue de vélos. Cette tendance monte jusqu’à 20 degrés Celsius, puis s’aplatit et diminue légèrement à 30. Les marques sur l’axe des X indiquent la distribution des données.</figcaption>
 </figure>
 </div>
-<p>L’apprentissage automatique représente un grand potentiel pour améliorer les produits, les processus et la recherche. Mais les <strong>ordinateurs n’expliquent généralement pas leurs prédictions</strong>, ce qui est un obstacle à l’adoption de l’apprentissage automatique. Ce livre traite de ce qui rend les modèles d’apprentissage automatique et leurs prédictions interprétables.</p>
-<p>Après avoir exploré les concepts d’interprétabilité, vous découvrirez des <strong>modèles simples et interprétables</strong> tels que les arbres de décision, les règles de décision et la régression linéaire. Le livre met l’accent sur les méthodes agnostiques aux modèles pour interpréter <strong>les boîtes noires que sont ces modèles</strong>, tels que l’importance des caractéristiques et les effets locaux accumulés, et pour expliquer les prédictions individuelles avec les valeurs de Shapley et LIME. De plus, le livre présente des méthodes spécifiques aux réseaux de neurones profonds.</p>
-<p>Toutes les méthodes d’interprétation sont expliquées en profondeur et discutées de manière critique. Comment fonctionnent-elles sous le capot ? Quelles sont leurs forces et leurs faiblesses ? Comment leurs résultats peuvent-ils être interprétés ? Ce livre vous permettra de sélectionner et d’appliquer correctement la méthode d’interprétation la plus adaptée à votre projet d’apprentissage automatique. La lecture du livre est recommandée aux praticiens de l’apprentissage automatique, aux <em>experts en mégadonnées</em>, aux statisticiens et à toute autre personne intéressée à rendre des modèles d’apprentissage automatique interprétables.</p>
-<p>Vous pouvez acheter les versions PDF ou e-book (epub, mobi) <a href="https://leanpub.com/interpretable-machine-learning">sur leanpub.com</a>.</p>
-<p>Vous pouvez acheter la version imprimée <a href="https://www.amazon.fr/dp/B09TMWHVB4">sur Amazon</a>.</p>
-<p><strong>Au sujet de l’auteur:</strong> Il s’appelle Christoph Molnar, il est statisticien et spécialiste en apprentissage machine. My goal is to make machine learning interpretable.</p>
-<p>Suivez-le sur X(ex-Twitter)! <a href="https://twitter.com/ChristophMolnar">@ChristophMolnar</a></p>
-<p>Couverture de <a href="https://twitter.com/YvonneDoinel">@YvonneDoinel</a></p>
+<p>Par temps chaud mais pas trop chaud, le modèle prévoit en moyenne un nombre élevé de vélos loués. Les motards potentiels sont de plus en plus réticents à louer un vélo lorsque l’humidité dépasse 60 %. De plus, plus il y a de vent, moins les gens aiment faire du vélo, ce qui est logique. Il est intéressant de noter que le nombre prévu de locations de vélos ne diminue pas lorsque la vitesse du vent augmente de 25 à 35 km/h, mais il n’existe pas beaucoup de données d’entraînement, de sorte que le modèle d’apprentissage automatique ne pourrait probablement pas apprendre une prédiction significative pour cette plage. Au moins intuitivement, je m’attendrais à ce que le nombre de vélos diminue avec l’augmentation de la vitesse du vent, surtout lorsque la vitesse du vent est très élevée.</p>
+<p>Pour illustrer un graphique de dépendance partielle avec une caractéristique catégorielle, nous examinons l’effet de la caractéristique saisonnière sur les locations de vélos prévues.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/by-nc-sa.png" class="img-fluid figure-img"></p>
-<figcaption>licence BY-NC-SA</figcaption>
+<p><img src="../_static/images2/8_1_2_figure_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>PDP pour le modèle de prédiction du comptage de vélos et la saison. De manière inattendue, toutes les saisons montrent un effet similaire sur les prévisions du modèle, mais pour l’hiver seulement, le modèle prédit moins de locations de vélos.</figcaption>
 </figure>
 </div>
-<p>Consultez également <a href="https://bookgoodies.com/a/B0BMGSF52B">Modeling Mindsets</a>, son second livre.</p>
-<p>Ce livre est publié sous la licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Note du traducteur">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<p>Nous calculons également la dépendance partielle pour <a href="../04-datasets/04.3-datasets.html">la classification du cancer du col de l’utérus</a>. Cette fois, nous avons ajusté une forêt aléatoire pour prédire si une femme pourrait souffrir d’un cancer du col de l’utérus en fonction de facteurs de risque. Nous calculons et visualisons la dépendance partielle de la probabilité de cancer sur différentes caractéristiques de la forêt aléatoire :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/8_1_2_figure_3.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>PDP de probabilité de cancer en fonction de l’âge et du nombre d’années d’utilisation de contraceptifs hormonaux. Pour l’âge, le PDP montre que la probabilité est faible jusqu’à 40 ans et augmente après. Plus le nombre d’années passées sous contraceptifs hormonaux est élevé, plus le risque de cancer est élevé, surtout après 10 ans. Pour les deux caractéristiques, peu de points de données avec des valeurs élevées étaient disponibles, de sorte que les estimations de PD sont moins fiables dans ces régions.</figcaption>
+</figure>
 </div>
-<div class="callout-title-container flex-fill">
-Note du traducteur
+<p>Nous pouvons également visualiser la dépendance partielle de deux caractéristiques à la fois :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/8_1_2_figure_4.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>PDP de la probabilité de cancer et interaction entre l’âge et le nombre de grossesses. Le graphique montre l’augmentation de la probabilité de cancer à 45 ans. Pour les âges inférieurs à 25 ans, les femmes qui ont eu 1 ou 2 grossesses ont un risque de cancer prédit plus faible, par rapport aux femmes qui ont eu 0 ou plus de 2 grossesses. Mais soyez prudent lorsque vous tirez des conclusions : il pourrait s’agir simplement d’une corrélation et non d’une causalité !</figcaption>
+</figure>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Au sujet du traducteur (assisté de ChatGPT-4) :</strong> Mon nom est <a href="https://www.linkedin.com/in/nicolasguillard/">Nicolas Guillard</a>. De formation initiale Ingénieur en informatique, préalablement Analytiste Digital, je suis maintenant Ingénieur en Intelligence Artificielle. Dernière traduction réalisée entre les 27/12/2023 et 15/05/2024.</p>
-</div>
-</div>
+</section>
+</section>
+<section id="avantages" class="level2">
+<h2 class="anchored" data-anchor-id="avantages">8.1.3 - Avantages</h2>
+<p>Le calcul des tracés de dépendance partielle est <strong>intuitif</strong> : la fonction de dépendance partielle à une valeur de caractéristique particulière représente la prédiction moyenne si nous forçons tous les points de données à assumer cette valeur de caractéristique. D’après mon expérience, les profanes comprennent généralement rapidement le concept des PDP.</p>
+<p>Si la fonctionnalité pour laquelle vous avez calculé le PDP n’est pas corrélée aux autres fonctionnalités, alors les PDP représentent parfaitement la manière dont la fonctionnalité influence la prédiction en moyenne. Dans le cas non corrélé, l’<strong>interprétation est claire</strong>: le diagramme de dépendance partielle montre comment la prédiction moyenne de votre ensemble de données change lorsque la j-ème entité est modifiée. C’est plus compliqué lorsque les caractéristiques sont corrélées, voir aussi les inconvénients.</p>
+<p>Les parcelles de dépendance partielle sont <strong>faciles à mettre en oeuvre</strong>.</p>
+<p>Le calcul des tracés de dépendance partielle a une <strong>interprétation causale</strong>. Nous intervenons sur une fonctionnalité et mesurons les changements dans les prédictions. Ce faisant, nous analysons la relation causale entre la caractéristique et la prédiction<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. La relation est causale pour le modèle – car nous modélisons explicitement le résultat en fonction des caractéristiques – mais pas nécessairement pour le monde réel !</p>
+</section>
+<section id="inconvénients" class="level2">
+<h2 class="anchored" data-anchor-id="inconvénients">8.1.4 - Inconvénients</h2>
+<p>Le nombre maximum réaliste <strong>d’entités</strong> dans une fonction de dépendance partielle est de deux. Ce n’est pas la faute des PDP, mais de la représentation en 2 dimensions (papier ou écran) et aussi de notre incapacité à imaginer plus de 3 dimensions.</p>
+<p>Certains tracés PD ne montrent pas la <strong>distribution des caractéristiques</strong>. Omettre la distribution peut être trompeur, car vous risquez de surinterpréter des régions ne comportant pratiquement aucune donnée. Ce problème est facilement résolu en affichant un tapis (indicateurs pour les points de données sur l’axe des x) ou un histogramme.</p>
+<p>L’<strong>hypothèse d’indépendance</strong> est le plus gros problème des tracés PD. On suppose que la ou les caractéristiques pour lesquelles la dépendance partielle est calculée ne sont pas corrélées avec d’autres caractéristiques. Par exemple, supposons que vous souhaitiez prédire la vitesse à laquelle une personne marche, en fonction de son poids et de sa taille. Pour la dépendance partielle d’une des caractéristiques, par exemple la taille, nous supposons que les autres caractéristiques (le poids) ne sont pas corrélées à la taille, ce qui est évidemment une fausse hypothèse. Pour le calcul du PDP à une certaine hauteur (par exemple 200 cm), nous faisons la moyenne sur la distribution marginale du poids, qui peut inclure un poids inférieur à 50 kg, ce qui est irréaliste pour une personne de 2 mètres. En d’autres termes : lorsque les caractéristiques sont corrélées, nous créons de nouveaux points de données dans les zones de la distribution des caractéristiques où la probabilité réelle est très faible (par exemple, il est peu probable qu’une personne mesure 2 mètres mais pèse moins de 50 kg). Une solution à ce problème consiste à <a href="../08-global_model_agnostic_methods/08.2-ale.html">utiliser les tracés d’effet local accumulé</a> ou les tracés ALE courts qui fonctionnent avec la distribution conditionnelle plutôt qu’avec la distribution marginale.</p>
+<p><strong>Les effets hétérogènes peuvent être masqués</strong> car les graphiques PD ne montrent que les effets marginaux moyens. Supposons que pour une caractéristique, la moitié de vos points de données ont une association positive avec la prédiction – plus la valeur de la caractéristique est grande, plus la prédiction est grande – et l’autre moitié a une association négative – plus la valeur de la caractéristique est petite, plus la prédiction est grande. La courbe PD pourrait être une ligne horizontale, puisque les effets des deux moitiés de l’ensemble de données pourraient s’annuler. Vous concluez alors que la fonctionnalité n’a aucun effet sur la prédiction. En traçant les <a href="../09-local_model_agnostic_methods/09.1-ice.html">courbes d’espérances conditionnelles individuelles</a> au lieu de la ligne agrégée, nous pouvons découvrir des effets hétérogènes.</p>
+</section>
+<section id="logiciels-et-alternatives" class="level2">
+<h2 class="anchored" data-anchor-id="logiciels-et-alternatives">8.1.5 - Logiciels et alternatives</h2>
+<p>Il existe un certain nombre de packages R qui implémentent des PDP. J’ai utilisé le package <code>iml</code> pour les exemples, mais il existe également <code>pdp</code> or <code>DALEX</code>. En Python, des tracés de dépendance partielle sont intégrés <code>scikit-learnet</code> vous pouvez utiliser <code>PDPBox</code>.</p>
+<p>Les alternatives aux PDP présentées dans ce livre sont <a href="../08-global_model_agnostic_methods/08.2-ale.html">les tracés ALE</a> et les courbes <a href="../09-local_model_agnostic_methods/09.1-ice.html">ICE</a>.</p>
+<!--  REFERENCES -->
 
 
+</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Friedman, Jerome H. “Greedy function approximation: A gradient boosting machine.” Annals of statistics (2001): 1189-1232.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Greenwell, Brandon M., Bradley C. Boehmke, and Andrew J. McCarthy. “A simple and effective model-based variable importance measure.” arXiv preprint arXiv:1805.04755 (2018).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Zhao, Qingyuan, and Trevor Hastie. “Causal interpretations of black-box models.” Journal of Business &amp; Economic Statistics, to appear. (2017).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -958,6 +1047,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a 8="" href="../08-global_model_agnostic_methods/index.html" class="pagination-link  aria-label=" -="" méthodes="" globales="" indépendantes="" du="" modèle"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">8 - Méthodes globales indépendantes du modèle</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="pagination-link" aria-label="8.2 - Graphique des effets locaux accumulés (ALE)">
+        <span class="nav-page-text">8.2 - Graphique des effets locaux accumulés (ALE)</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

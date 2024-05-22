@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Apprentissage automatique interprétable - Résumé</title>
+<title>Apprentissage automatique interprétable</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../09-local_model_agnostic_methods/09.2-lime.html" rel="next">
+<link href="../09-local_model_agnostic_methods/index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,11 +69,40 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked fullcontent">
+<body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -80,9 +111,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      Apprentissage automatique interprétable
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../09-local_model_agnostic_methods/index.html">9 - Méthodes locales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../09-local_model_agnostic_methods/09.1-ice.html">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -97,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Apprentissage automatique interprétable</a> 
+      <a href="../">Apprentissage automatique interprétable</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -109,19 +138,19 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./00-summary/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Résumé</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01-preface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">1 - Préface de l’auteur</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./02-introduction/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2 - Introduction</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -130,19 +159,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.1 - Quelques histoires</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.3 - Terminologie</span></a>
   </div>
 </li>
@@ -150,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3 - Interprétabilité</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -159,37 +188,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.5 - Propriétés des Explications</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
   </div>
 </li>
@@ -197,7 +226,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./04-datasets/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4 - Jeux de données</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -206,19 +235,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
   </div>
 </li>
@@ -226,7 +255,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5 - Modèles interprétables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -235,43 +264,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.1 - Régéression linéaire</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.2 - Régéression logistique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.4 - Arbre de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.5 - Règles de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.6 - Ajustement des règles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
   </div>
 </li>
@@ -279,19 +308,19 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07-example/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">7 - Explications basées sur des exemples</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -300,43 +329,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.4 - Functional Decomposition</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.6 - Substitut global</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.7 - Prototypes et critiques</span></a>
   </div>
 </li>
@@ -344,7 +373,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -353,37 +382,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
   </div>
 </li>
@@ -391,7 +420,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -400,31 +429,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.2 - Attribution de pixel</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.3 - Détecter les concepts</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.4 - Exemples adverses</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.5 - Instances Influentes</span></a>
   </div>
 </li>
@@ -432,7 +461,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./11-future/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -441,13 +470,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
   </div>
 </li>
@@ -455,25 +484,25 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-contribute/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">12 - Contribuer à ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./13-citation/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">13 - Citer ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14-translations/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">14 - Traductions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">15 - Remerciements</span></a>
   </div>
 </li>
@@ -482,13 +511,29 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#attente-conditionnelle-individuelle-individual-conditional-expectation---ice" id="toc-attente-conditionnelle-individuelle-individual-conditional-expectation---ice" class="nav-link active" data-scroll-target="#attente-conditionnelle-individuelle-individual-conditional-expectation---ice">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</a></li>
+  <li><a href="#exemples" id="toc-exemples" class="nav-link" data-scroll-target="#exemples">9.1.1 - Exemples</a>
+  <ul>
+  <li><a href="#tracé-ice-centré" id="toc-tracé-ice-centré" class="nav-link" data-scroll-target="#tracé-ice-centré">9.1.1.1 - Tracé ICE centré</a></li>
+  <li><a href="#exemple" id="toc-exemple" class="nav-link" data-scroll-target="#exemple">9.1.1.2 - Exemple</a></li>
+  <li><a href="#graphique-ice-dérivé" id="toc-graphique-ice-dérivé" class="nav-link" data-scroll-target="#graphique-ice-dérivé">9.1.1.3 - Graphique ICE dérivé</a></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">9.1.2 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">9.1.3 - Inconvénients</a></li>
+  <li><a href="#logiciels-et-alternatives" id="toc-logiciels-et-alternatives" class="nav-link" data-scroll-target="#logiciels-et-alternatives">9.1.4 - Logiciels et alternatives</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../09-local_model_agnostic_methods/index.html">9 - Méthodes locales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../09-local_model_agnostic_methods/09.1-ice.html">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Résumé</h1>
 </div>
 
 
@@ -511,48 +556,89 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<blockquote class="blockquote">
-<p>Traduction du livre en ligne <a href="https://christophm.github.io/interpretable-ml-book/index.html">https://christophm.github.io/interpretable-ml-book/index.html</a></p>
-</blockquote>
+<section id="attente-conditionnelle-individuelle-individual-conditional-expectation---ice" class="level2">
+<h2 class="anchored" data-anchor-id="attente-conditionnelle-individuelle-individual-conditional-expectation---ice">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</h2>
+<p>Les tracés ICE (Individual Conditional Expectation) affichent une ligne par instance qui montre comment la prédiction de l’instance change lorsqu’une fonctionnalité change.</p>
+<p>Le diagramme de dépendance partielle pour l’effet moyen d’une caractéristique est une méthode globale car elle ne se concentre pas sur des instances spécifiques, mais sur une moyenne globale. L’équivalent d’un PDP pour les instances de données individuelles est appelé tracé des attentes conditionnelles individuelles (ICE) (Goldstein et al.&nbsp;2017)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Un tracé ICE visualise la dépendance de la prédiction sur une caractéristique pour chaque instance séparément, ce qui donne une ligne par instance, contre une ligne globale dans les tracés de dépendance partielle. Un PDP est la moyenne des lignes d’un tracé ICE. Les valeurs d’une ligne (et d’une instance) peuvent être calculées en conservant toutes les autres entités identiques, en créant des variantes de cette instance en remplaçant la valeur de l’entité par les valeurs d’une grille et en effectuant des prédictions avec le modèle de boîte noire pour ces instances nouvellement créées. Le résultat est un ensemble de points pour une instance avec la valeur de caractéristique de la grille et les prédictions respectives.</p>
+<p>Quel est l’intérêt de s’intéresser aux attentes individuelles plutôt qu’aux dépendances partielles ? Les diagrammes de dépendance partielle peuvent masquer une relation hétérogène créée par les interactions. Les PDP peuvent vous montrer à quoi ressemble la relation moyenne entre une fonctionnalité et la prédiction. Cela ne fonctionne bien que si les interactions entre les fonctionnalités pour lesquelles le PDP est calculé et les autres fonctionnalités sont faibles. En cas d’interactions, le tracé ICE fournira beaucoup plus d’informations.</p>
+<p>Une définition plus formelle : dans les tracés ICE, pour chaque instance de <span class="math inline">\(\{(x_{S}^{(i)},x_{C}^{(i)})\}_{i=1}^N\)</span> la courbe <span class="math inline">\(\hat{f}_S^{(i)}\)</span> est comploté contre <span class="math inline">\(x^{(i)}_{S}\)</span>, alors que <span class="math inline">\(x^{(i)}_{C}\)</span> reste fixe.</p>
+</section>
+<section id="exemples" class="level2">
+<h2 class="anchored" data-anchor-id="exemples">9.1.1 - Exemples</h2>
+<p>Revenons à l’<a href="../04-datasets/04.3-datasets.html">ensemble de données sur le cancer du col de l’utérus</a> et voyons comment la prédiction de chaque instance est associée à la fonctionnalité « Âge ». Nous analyserons une forêt aléatoire qui prédit la probabilité de cancer pour une femme compte tenu des facteurs de risque. Dans le <a href="../08-global_model_agnostic_methods/08.1-pdp.html">graphique de dépendance partielle</a>, nous avons vu que la probabilité de cancer augmente vers l’âge de 50 ans, mais est-ce vrai pour chaque femme de l’ensemble de données ? Le graphique ICE révèle que pour la plupart des femmes, l’effet de l’âge suit la tendance moyenne d’augmentation à 50 ans, à quelques exceptions près : pour les quelques femmes qui ont une probabilité prédite élevée à un jeune âge, la probabilité prédite de cancer ne change pas. beaucoup avec l’âge.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/cutout.png" class="img-fluid figure-img" data-align="center" width="400"></p>
-<figcaption>Couverture</figcaption>
+<p><img src="../_static/images2/9_1_1_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Graphique ICE de la probabilité de cancer du col de l’utérus par âge. Chaque ligne représente une femme. Pour la plupart des femmes, la probabilité prévue de cancer augmente avec l’âge. Pour certaines femmes dont la probabilité prédite de cancer est supérieure à 0,4, la prédiction ne change pas beaucoup à un âge plus avancé.</figcaption>
 </figure>
 </div>
-<p>L’apprentissage automatique représente un grand potentiel pour améliorer les produits, les processus et la recherche. Mais les <strong>ordinateurs n’expliquent généralement pas leurs prédictions</strong>, ce qui est un obstacle à l’adoption de l’apprentissage automatique. Ce livre traite de ce qui rend les modèles d’apprentissage automatique et leurs prédictions interprétables.</p>
-<p>Après avoir exploré les concepts d’interprétabilité, vous découvrirez des <strong>modèles simples et interprétables</strong> tels que les arbres de décision, les règles de décision et la régression linéaire. Le livre met l’accent sur les méthodes agnostiques aux modèles pour interpréter <strong>les boîtes noires que sont ces modèles</strong>, tels que l’importance des caractéristiques et les effets locaux accumulés, et pour expliquer les prédictions individuelles avec les valeurs de Shapley et LIME. De plus, le livre présente des méthodes spécifiques aux réseaux de neurones profonds.</p>
-<p>Toutes les méthodes d’interprétation sont expliquées en profondeur et discutées de manière critique. Comment fonctionnent-elles sous le capot ? Quelles sont leurs forces et leurs faiblesses ? Comment leurs résultats peuvent-ils être interprétés ? Ce livre vous permettra de sélectionner et d’appliquer correctement la méthode d’interprétation la plus adaptée à votre projet d’apprentissage automatique. La lecture du livre est recommandée aux praticiens de l’apprentissage automatique, aux <em>experts en mégadonnées</em>, aux statisticiens et à toute autre personne intéressée à rendre des modèles d’apprentissage automatique interprétables.</p>
-<p>Vous pouvez acheter les versions PDF ou e-book (epub, mobi) <a href="https://leanpub.com/interpretable-machine-learning">sur leanpub.com</a>.</p>
-<p>Vous pouvez acheter la version imprimée <a href="https://www.amazon.fr/dp/B09TMWHVB4">sur Amazon</a>.</p>
-<p><strong>Au sujet de l’auteur:</strong> Il s’appelle Christoph Molnar, il est statisticien et spécialiste en apprentissage machine. My goal is to make machine learning interpretable.</p>
-<p>Suivez-le sur X(ex-Twitter)! <a href="https://twitter.com/ChristophMolnar">@ChristophMolnar</a></p>
-<p>Couverture de <a href="https://twitter.com/YvonneDoinel">@YvonneDoinel</a></p>
+<p>La figure suivante montre les tracés ICE pour la <a href="../04-datasets/04.1-datasets.html">prévision de la location de vélos</a>. Le modèle de prédiction sous-jacent est une forêt aléatoire.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/by-nc-sa.png" class="img-fluid figure-img"></p>
-<figcaption>licence BY-NC-SA</figcaption>
+<p><img src="../_static/images2/9_1_1_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Graphiques ICE des locations de vélos prévues en fonction des conditions météorologiques. Les mêmes effets peuvent être observés que dans les diagrammes de dépendance partielle.</figcaption>
 </figure>
 </div>
-<p>Consultez également <a href="https://bookgoodies.com/a/B0BMGSF52B">Modeling Mindsets</a>, son second livre.</p>
-<p>Ce livre est publié sous la licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Note du traducteur">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<p>Toutes les courbes semblent suivre le même parcours, il n’y a donc pas d’interactions évidentes. Cela signifie que le PDP est déjà un bon résumé des relations entre les caractéristiques affichées et le nombre prévu de vélos.</p>
+<section id="tracé-ice-centré" class="level4">
+<h4 class="anchored" data-anchor-id="tracé-ice-centré">9.1.1.1 - Tracé ICE centré</h4>
+<p>Il y a un problème avec les tracés ICE : il peut parfois être difficile de déterminer si les courbes ICE diffèrent d’un individu à l’autre, car elles partent de prédictions différentes. Une solution simple consiste à centrer les courbes en un certain point de l’entité et à afficher uniquement la différence de prédiction jusqu’à ce point. Le tracé résultant est appelé tracé ICE centré (c-ICE). Ancrer les courbes à l’extrémité inférieure de l’entité est un bon choix. Les nouvelles courbes sont définies comme :</p>
+<p><span class="math display">\[\hat{f}_{cent}^{(i)}=\hat{f}^{(i)}-\mathbf{1}\hat{f}(x^{a},x^{(i)}_{C})\]</span></p>
+<p>où <span class="math inline">\(\mathbf{1}\)</span> est un vecteur de 1 avec le nombre approprié de dimensions (généralement une ou deux), <span class="math inline">\(\hat{f}\)</span> est le modèle ajusté et <span class="math inline">\(x^a\)</span> est le point d’ancrage.</p>
+</section>
+<section id="exemple" class="level4">
+<h4 class="anchored" data-anchor-id="exemple">9.1.1.2 - Exemple</h4>
+<p>Par exemple, prenons le tracé ICE du cancer du col de l’utérus pour l’âge et centrez les lignes sur l’âge observé le plus jeune :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/9_1_1_2_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Graphique ICE centré pour la probabilité prévue de cancer par âge. Les lignes sont fixées à 0 à 14 ans. Par rapport à 14 ans, les prédictions pour la plupart des femmes restent inchangées jusqu’à l’âge de 45 ans, où la probabilité prédite augmente.</figcaption>
+</figure>
 </div>
-<div class="callout-title-container flex-fill">
-Note du traducteur
+<p>Les tracés ICE centrés facilitent la comparaison des courbes d’instances individuelles. Cela peut être utile si nous ne voulons pas voir le changement absolu d’une valeur prédite, mais la différence dans la prédiction par rapport à un point fixe de la plage de caractéristiques.</p>
+<p>Jetons un coup d’œil aux tracés ICE centrés pour la prédiction de la location de vélos :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/9_1_1_2_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Graphiques ICE centrés du nombre prévu de vélos selon les conditions météorologiques. Les lignes montrent la différence de prédiction par rapport à la prédiction avec la valeur de la caractéristique respective à son minimum observé.</figcaption>
+</figure>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Au sujet du traducteur (assisté de ChatGPT-4) :</strong> Mon nom est <a href="https://www.linkedin.com/in/nicolasguillard/">Nicolas Guillard</a>. De formation initiale Ingénieur en informatique, préalablement Analytiste Digital, je suis maintenant Ingénieur en Intelligence Artificielle. Dernière traduction réalisée entre les 27/12/2023 et 15/05/2024.</p>
-</div>
-</div>
+</section>
+<section id="graphique-ice-dérivé" class="level4">
+<h4 class="anchored" data-anchor-id="graphique-ice-dérivé">9.1.1.3 - Graphique ICE dérivé</h4>
+<p>Une autre façon de faciliter visuellement la détection de l’hétérogénéité consiste à examiner les dérivées individuelles de la fonction de prédiction par rapport à une caractéristique. Le tracé résultant est appelé tracé ICE dérivé (d-ICE). Les dérivées d’une fonction (ou d’une courbe) vous indiquent si des changements se produisent et dans quelle direction ils se produisent. Avec le tracé ICE dérivé, il est facile de repérer les plages de valeurs de caractéristiques où les prédictions de la boîte noire changent pour (au moins certaines) instances. S’il n’y a pas d’interaction entre la fonctionnalité analysée <span class="math inline">\(x_S\)</span> et les autres fonctionnalités <span class="math inline">\(x_C\)</span>, alors la fonction de prédiction peut être exprimée comme suit :</p>
+<p><span class="math display">\[\hat{f}(x)=\hat{f}(x_S,x_C)=g(x_S)+h(x_C),\quad\text{with}\quad\frac{\delta\hat{f}(x)}{\delta{}x_S}=g'(x_S)\]</span></p>
+<p>Sans interactions, les dérivées partielles individuelles devraient être les mêmes pour toutes les instances. S’ils diffèrent, cela est dû à des interactions et cela devient visible sur le tracé d-ICE. En plus d’afficher les courbes individuelles de la dérivée de la fonction de prédiction par rapport à la caractéristique dans <span class="math inline">\(S\)</span>, l’affichage de l’écart type de la dérivée permet de mettre en évidence les régions de la caractéristique dans <span class="math inline">\(S\)</span> présentant une hétérogénéité dans les dérivées estimées. Le tracé ICE dérivé prend beaucoup de temps à calculer et est plutôt peu pratique.</p>
+</section>
+<section id="avantages" class="level3">
+<h3 class="anchored" data-anchor-id="avantages">9.1.2 - Avantages</h3>
+<p>Les courbes d’espérances conditionnelles individuelles <strong>sont encore plus intuitives à comprendre</strong> que les diagrammes de dépendance partielle. Une ligne représente les prédictions pour une instance si nous faisons varier la caractéristique d’intérêt.</p>
+<p>Contrairement aux diagrammes de dépendance partielle, les courbes ICE peuvent <strong>révéler des relations hétérogènes</strong>.</p>
+</section>
+<section id="inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="inconvénients">9.1.3 - Inconvénients</h3>
+<p>Les courbes ICE <strong>ne peuvent afficher qu’une seule entité</strong> de manière significative, car deux entités nécessiteraient le dessin de plusieurs surfaces superposées et vous ne verriez rien dans le tracé.</p>
+<p>Les courbes ICE souffrent du même problème que les PDP : si la caractéristique d’intérêt est corrélée aux autres caractéristiques, alors <strong>certains points des lignes peuvent être des points de données invalides</strong> selon la distribution commune des caractéristiques.</p>
+<p>Si de nombreuses courbes ICE sont tracées, le <strong>tracé peut devenir surpeuplé</strong> et vous ne verrez rien. La solution : soit ajoutez un peu de transparence aux lignes, soit dessinez uniquement un échantillon des lignes.</p>
+<p>Dans les graphiques ICE, il n’est peut-être pas facile de <strong>voir la moyenne</strong>. Il existe une solution simple : combiner les courbes d’espérances conditionnelles individuelles avec le tracé de dépendance partielle.</p>
+</section>
+<section id="logiciels-et-alternatives" class="level3">
+<h3 class="anchored" data-anchor-id="logiciels-et-alternatives">9.1.4 - Logiciels et alternatives</h3>
+<p>Les tracés ICE sont implémentés dans les packages R <code>iml</code> (utilisés pour ces exemples), <code>ICEbox</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> et <code>pdp</code>. Un autre package R qui fait quelque chose de très similaire à ICE est <code>condvis</code>. En Python, les tracés de dépendance partielle sont intégrés à scikit-learn à partir de la version 0.24.0.</p>
+<!-- REFERENCES -->
 
 
+</section>
+</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Goldstein, Alex, Adam Kapelner, Justin Bleich, and Emil Pitkin. “Peeking inside the black box: Visualizing statistical learning with plots of individual conditional expectation.” journal of Computational and Graphical Statistics 24, no. 1 (2015): 44-65.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Goldstein, Alex, Adam Kapelner, Justin Bleich, and Maintainer Adam Kapelner. “Package ‘ICEbox’.” (2017).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -958,6 +1044,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a 9="" href="../09-local_model_agnostic_methods/index.html" class="pagination-link  aria-label=" -="" méthodes="" locales="" indépendantes="" du="" modèle"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">9 - Méthodes locales indépendantes du modèle</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="pagination-link" aria-label="9.2 - Substitut local (LIME)">
+        <span class="nav-page-text">9.2 - Substitut local (LIME)</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

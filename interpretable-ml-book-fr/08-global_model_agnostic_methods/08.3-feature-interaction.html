@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apprentissage automatique interprétable</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" rel="next">
+<link href="../08-global_model_agnostic_methods/08.2-ale.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/index.html">8 - Méthodes globales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html">8.3 - Interactions avec les fonctionnalités</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Apprentissage automatique interprétable</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Recherche"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Résumé</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 - Préface de l’auteur</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 - Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1 - Quelques histoires</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3 - Terminologie</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 - Interprétabilité</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5 - Propriétés des Explications</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 - Jeux de données</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 - Modèles interprétables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1 - Régéression linéaire</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2 - Régéression logistique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4 - Arbre de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5 - Règles de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6 - Ajustement des règles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 - Explications basées sur des exemples</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4 - Functional Decomposition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.6 - Substitut global</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.7 - Prototypes et critiques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.2 - Attribution de pixel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.3 - Détecter les concepts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.4 - Exemples adverses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.5 - Instances Influentes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12 - Contribuer à ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">13 - Citer ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">14 - Traductions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">15 - Remerciements</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#interactions-avec-les-fonctionnalités" id="toc-interactions-avec-les-fonctionnalités" class="nav-link active" data-scroll-target="#interactions-avec-les-fonctionnalités">8.3 - Interactions avec les fonctionnalités</a>
+  <ul>
+  <li><a href="#interaction-des-fonctionnalités" id="toc-interaction-des-fonctionnalités" class="nav-link" data-scroll-target="#interaction-des-fonctionnalités">8.3.1 Interaction des fonctionnalités ?</a></li>
+  <li><a href="#théorie-statistique-h-de-friedman" id="toc-théorie-statistique-h-de-friedman" class="nav-link" data-scroll-target="#théorie-statistique-h-de-friedman">8.3.2 - Théorie : statistique H de Friedman</a></li>
+  <li><a href="#exemples" id="toc-exemples" class="nav-link" data-scroll-target="#exemples">8.3.3 - Exemples</a></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">8.3.4 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">8.3.5 - Inconvénients</a></li>
+  <li><a href="#implémentations" id="toc-implémentations" class="nav-link" data-scroll-target="#implémentations">8.3.6 - Implémentations</a></li>
+  <li><a href="#alternatives" id="toc-alternatives" class="nav-link" data-scroll-target="#alternatives">8.3.7 - Alternatives</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/index.html">8 - Méthodes globales indépendantes du modèle</a></li><li class="breadcrumb-item"><a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html">8.3 - Interactions avec les fonctionnalités</a></li></ol></nav>
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modifié</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">10 mai 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="interactions-avec-les-fonctionnalités" class="level2">
+<h2 class="anchored" data-anchor-id="interactions-avec-les-fonctionnalités">8.3 - Interactions avec les fonctionnalités</h2>
+<p>Lorsque des fonctionnalités interagissent les unes avec les autres dans un modèle de prédiction, la prédiction ne peut pas être exprimée comme la somme des effets des fonctionnalités, car l’effet d’une fonctionnalité dépend de la valeur de l’autre fonctionnalité. Le prédicat d’Aristote « Le tout est plus grand que la somme de ses parties » s’applique en présence d’interactions.</p>
+<section id="interaction-des-fonctionnalités" class="level3">
+<h3 class="anchored" data-anchor-id="interaction-des-fonctionnalités">8.3.1 Interaction des fonctionnalités ?</h3>
+<p>Si un modèle d’apprentissage automatique effectue une prédiction basée sur deux fonctionnalités, nous pouvons décomposer la prédiction en quatre termes : un terme constant, un terme pour la première fonctionnalité, un terme pour la deuxième fonctionnalité et un terme pour l’interaction entre les deux fonctionnalités. L’interaction entre deux caractéristiques est le changement dans la prédiction qui se produit en faisant varier les caractéristiques après avoir pris en compte les effets des caractéristiques individuelles.</p>
+<p>Par exemple, un modèle prédit la valeur d’une maison, en utilisant comme caractéristiques sa taille (grande ou petite) et son emplacement (bon ou mauvais), ce qui donne quatre prédictions possibles :</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Location</th>
+<th style="text-align: right;">Size</th>
+<th style="text-align: right;">Prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">good</td>
+<td style="text-align: right;">big</td>
+<td style="text-align: right;">300,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">good</td>
+<td style="text-align: right;">small</td>
+<td style="text-align: right;">200,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">bad</td>
+<td style="text-align: right;">big</td>
+<td style="text-align: right;">250,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">bad</td>
+<td style="text-align: right;">small</td>
+<td style="text-align: right;">150,000</td>
+</tr>
+</tbody>
+</table>
+<p>Nous décomposons la prédiction du modèle en parties suivantes : un terme constant (150 000), un effet pour la caractéristique de taille (+100 000 si grande ; +0 si petite) et un effet pour l’emplacement (+50 000 si bon ; +0 si mauvais). Cette décomposition explique pleinement les prédictions du modèle. Il n’y a pas d’effet d’interaction, car la prédiction du modèle est une somme des effets de caractéristiques uniques pour la taille et l’emplacement. Lorsque vous agrandissez une petite maison, la prédiction augmente toujours de 100 000, quel que soit l’emplacement. En outre, la différence de prédiction entre un bon et un mauvais emplacement est de 50 000, quelle que soit sa taille.</p>
+<p>Regardons maintenant un exemple avec interaction :</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Location</th>
+<th style="text-align: right;">Size</th>
+<th style="text-align: right;">Prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">good</td>
+<td style="text-align: right;">big</td>
+<td style="text-align: right;">400,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">good</td>
+<td style="text-align: right;">small</td>
+<td style="text-align: right;">200,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">bad</td>
+<td style="text-align: right;">big</td>
+<td style="text-align: right;">250,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">bad</td>
+<td style="text-align: right;">small</td>
+<td style="text-align: right;">150,000</td>
+</tr>
+</tbody>
+</table>
+<p>Nous décomposons le tableau de prédiction en parties suivantes : un terme constant (150 000), un effet pour la caractéristique de taille (+100 000 si grande, +0 si petite) et un effet pour l’emplacement (+50 000 si bon, +0 si mauvais). Pour ce tableau, nous avons besoin d’un terme supplémentaire pour l’interaction : +100 000 si la maison est grande et bien située. Il s’agit d’une interaction entre la taille et l’emplacement, car dans ce cas, la différence de prédiction entre une grande et une petite maison dépend de l’emplacement.</p>
+<p>Une façon d’estimer la force de l’interaction consiste à mesurer dans quelle mesure la variation de la prédiction dépend de l’interaction des caractéristiques. Cette mesure est appelée statistique H, introduite par Friedman et Popescu (2008)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+</section>
+<section id="théorie-statistique-h-de-friedman" class="level3">
+<h3 class="anchored" data-anchor-id="théorie-statistique-h-de-friedman">8.3.2 - Théorie : statistique H de Friedman</h3>
+<p>Nous allons traiter deux cas : premièrement, une mesure d’interaction bidirectionnelle qui nous indique si et dans quelle mesure deux caractéristiques du modèle interagissent entre elles ; deuxièmement, une mesure d’interaction totale qui nous indique si et dans quelle mesure une fonctionnalité interagit dans le modèle avec toutes les autres fonctionnalités. En théorie, des interactions arbitraires entre un nombre quelconque de caractéristiques peuvent être mesurées, mais ces deux cas sont les plus intéressants.</p>
+<p>Si deux caractéristiques n’interagissent pas, nous pouvons décomposer la <a href="../08-global_model_agnostic_methods/08.1-pdp.html">fonction de dépendance partielle</a> comme suit (en supposant que les fonctions de dépendance partielles sont centrées sur zéro) :</p>
+<p><span class="math display">\[PD_{jk}(x_j,x_k)=PD_j(x_j)+PD_k(x_k)\]</span></p>
+<p>où <span class="math inline">\(PD_{jk}(x_j,x_k)\)</span> est la fonction de dépendance partielle bidirectionnelle des deux caractéristiques et <span class="math inline">\(PD_j(x_j)\)</span> et <span class="math inline">\(PD_k(x_k)\)</span> les fonctions de dépendance partielle des caractéristiques uniques.</p>
+<p>De même, si une fonctionnalité n’a aucune interaction avec aucune des autres fonctionnalités, nous pouvons exprimer la fonction de prédiction <span class="math inline">\(\hat{f}(x)\)</span> comme somme de fonctions de dépendance partielles, où la première somme dépend uniquement de j et la seconde de toutes les autres caractéristiques sauf j :</p>
+<p><span class="math display">\[\hat{f}(x)=PD_j(x_j)+PD_{-j}(x_{-j})\]</span></p>
+<p>où <span class="math inline">\(PD_{-j}(x_{-j})\)</span> est la fonction de dépendance partielle qui dépend de toutes les fonctionnalités à l’exception de la j-ème fonctionnalité.</p>
+<p>Cette décomposition exprime la fonction de dépendance partielle (ou de prédiction complète) sans interactions (entre les caractéristiques j et k, ou respectivement j et toutes les autres caractéristiques). Dans une étape suivante, nous mesurons la différence entre la fonction de dépendance partielle observée et la fonction décomposée sans interactions. Nous calculons la variance de la sortie de la dépendance partielle (pour mesurer l’interaction entre deux fonctionnalités) ou de la fonction entière (pour mesurer l’interaction entre une fonctionnalité et toutes les autres fonctionnalités). L’ampleur de la variance expliquée par l’interaction (différence entre la PD observée et sans interaction) est utilisée comme statistique de force d’interaction. La statistique est 0 s’il n’y a aucune interaction et 1 si toute la variance du <span class="math inline">\(PD_{jk}\)</span> ou <span class="math inline">\(\hat{f}\)</span> s’explique par la somme des fonctions de dépendance partielles. Une statistique d’interaction de 1 entre deux caractéristiques signifie que chaque fonction PD est constante et que l’effet sur la prédiction ne résulte que de l’interaction. La statistique H peut également être supérieure à 1, ce qui est plus difficile à interpréter. Cela peut se produire lorsque la variance de l’interaction bidirectionnelle est supérieure à la variance du tracé de dépendance partielle bidimensionnel.</p>
+<p>Mathématiquement, la statistique H proposée par Friedman et Popescu pour l’interaction entre les caractéristiques j et k est :</p>
+<p><span class="math display">\[H^2_{jk} = \frac{\sum_{i=1}^n\left[PD_{jk}(x_{j}^{(i)},x_k^{(i)})-PD_j(x_j^{(i)}) - PD_k(x_{k}^{(i)})\right]^2}{\sum_{i=1}^n{PD}^2_{jk}(x_j^{(i)},x_k^{(i)})}\]</span></p>
+<p>Il en va de même pour mesurer si une fonctionnalité j interagit avec une autre fonctionnalité :</p>
+<p><span class="math display">\[H^2_{j}=\frac{\sum_{i=1}^n\left[\hat{f}(x^{(i)})-PD_j(x_j^{(i)})-PD_{-j}(x_{-j}^{(i)})\right]^2}{\sum_{i=1}^n\hat{f}^2(x^{(i)})}\]</span></p>
+<p>La statistique H est coûteuse à évaluer, car elle itère sur tous les points de données et à chaque point, la dépendance partielle doit être évaluée, ce qui à son tour est effectué avec les n points de données. Dans le pire des cas, nous avons besoin de 2n 2 appels à la fonction de prédiction des modèles d’apprentissage automatique pour calculer la statistique H bidirectionnelle (j contre k) et de <span class="math inline">\(3n^2\)</span> pour la statistique H totale (j contre tous). Pour accélérer le calcul, nous pouvons échantillonner à partir des n points de données. Cela présente l’inconvénient d’augmenter la variance des estimations de dépendance partielle, ce qui rend la statistique H instable. Donc, si vous utilisez l’échantillonnage pour réduire la charge de calcul, assurez-vous d’échantillonner suffisamment de points de données.</p>
+<p>Friedman et Popescu proposent également une statistique de test pour évaluer si la statistique H diffère significativement de zéro. L’hypothèse nulle est l’absence d’interaction. Pour générer la statistique d’interaction sous l’hypothèse nulle, vous devez être capable d’ajuster le modèle afin qu’il n’y ait aucune interaction entre les caractéristiques j et k ou toutes les autres. Cela n’est pas possible pour tous les types de modèles. Par conséquent, ce test est spécifique au modèle, et non indépendant du modèle, et n’est donc pas abordé ici.</p>
+<p>La statistique de force d’interaction peut également être appliquée dans un cadre de classification si la prédiction est une probabilité.</p>
+</section>
+<section id="exemples" class="level3">
+<h3 class="anchored" data-anchor-id="exemples">8.3.3 - Exemples</h3>
+<p>Voyons à quoi ressemblent les interactions entre fonctionnalités dans la pratique ! Nous mesurons la force d’interaction des caractéristiques dans une machine à vecteurs de support qui prédit le nombre de <a href="../04-datasets/04.1-datasets.html">vélos loués</a> en fonction des caractéristiques météorologiques et calendaires. Le graphique suivant montre la statistique H de l’interaction des fonctionnalités :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/8_3_3_figure_1.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>La force d’interaction (statistique H) pour chaque caractéristique avec toutes les autres caractéristiques pour une machine à vecteurs de support prédisant la location de vélos. Globalement, les effets d’interaction entre les caractéristiques sont très faibles (inférieurs à 10 % de variance expliquée par caractéristique).</figcaption>
+</figure>
+</div>
+<p>Dans l’exemple suivant, nous calculons la statistique d’interaction pour un problème de classification. Nous analysons les interactions entre les caractéristiques d’une forêt aléatoire formée pour prédire <a href="../04-datasets/04.3-datasets.html">le cancer du col de l’utérus</a>, compte tenu de certains facteurs de risque.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/8_3_3_figure_2.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Force d’interaction (statistique H) pour chaque caractéristique avec toutes les autres caractéristiques pour une forêt aléatoire prédisant la probabilité de cancer du col de l’utérus. Les années sous contraceptifs hormonaux ont l’effet d’interaction relatif le plus élevé avec toutes les autres caractéristiques, suivies par le nombre de grossesses.</figcaption>
+</figure>
+</div>
+<p>Après avoir examiné les interactions de chaque fonctionnalité avec toutes les autres fonctionnalités, nous pouvons sélectionner l’une des fonctionnalités et approfondir toutes les interactions bidirectionnelles entre la fonctionnalité sélectionnée et les autres fonctionnalités.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/8_3_3_figure_3.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Les forces d’interaction bidirectionnelle (statistique H) entre le nombre de grossesses et chaque autre caractéristique. Il existe une forte interaction entre le nombre de grossesses et l’âge.</figcaption>
+</figure>
+</div>
+</section>
+<section id="avantages" class="level3">
+<h3 class="anchored" data-anchor-id="avantages">8.3.4 - Avantages</h3>
+<p>La statistique H d’interaction a une <strong>théorie sous-jacente</strong> à travers la décomposition de dépendance partielle.</p>
+<p>La statistique H a une <strong>interprétation significative</strong> : l’interaction est définie comme la part de variance expliquée par l’interaction.</p>
+<p>Étant donné que la statistique est sans dimension, elle est comparable entre les fonctionnalités et même entre les modèles.</p>
+<p>La statistique <strong>détecte toutes sortes d’interactions</strong>, quelle que soit leur forme particulière.</p>
+<p>Avec la statistique H, il est également possible d’analyser <strong>des interactions arbitraires plus élevées</strong> telles que la force d’interaction entre 3 caractéristiques ou plus.</p>
+</section>
+<section id="inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="inconvénients">8.3.5 - Inconvénients</h3>
+<p>La première chose que vous remarquerez : la statistique H d’interaction prend beaucoup de temps à calculer, car elle est <strong>coûteuse en calcul</strong>.</p>
+<p>Le calcul implique l’estimation des distributions marginales. Ces <strong>estimations présentent également une certaine variance</strong> si nous n’utilisons pas tous les points de données. Cela signifie que lorsque nous échantillonnons des points, les estimations varient également d’une exécution à l’autre et les <strong>résultats peuvent être instables</strong>. Je recommande de répéter le calcul de la statistique H plusieurs fois pour voir si vous disposez de suffisamment de données pour obtenir un résultat stable.</p>
+<p>Il n’est pas clair si une interaction est significativement supérieure à 0. Il faudrait effectuer un test statistique, mais <strong>ce test n’est pas (encore) disponible dans une version indépendante du modèle</strong>.</p>
+<p>Concernant le problème de test, il est difficile de dire quand la statistique H est suffisamment grande pour que l’on considère une interaction « forte ».</p>
+<p>De plus, la statistique H peut être supérieure à 1, ce qui rend l’interprétation difficile.</p>
+<p>Lorsque l’effet total de deux caractéristiques est faible, mais consiste principalement en interactions, la statistique H sera très grande. Ces interactions parasites nécessitent un petit dénominateur de la statistique H et sont aggravées lorsque les caractéristiques sont corrélées. Une interaction parasite peut être facilement surinterprétée comme un effet d’interaction fort, alors qu’en réalité les deux caractéristiques jouent un rôle mineur dans le modèle. Une solution possible consiste à visualiser la version non normalisée de la statistique H<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, qui est la racine carrée du numérateur de la statistique H 36 . Cela met la statistique H au même niveau que la réponse, au moins pour la régression, et met moins l’accent sur les interactions parasites.</p>
+<p><span class="math display">\[H^{*}_{jk} = \sqrt{\sum_{i=1}^n\left[PD_{jk}(x_{j}^{(i)},x_k^{(i)})-PD_j(x_j^{(i)}) - PD_k(x_{k}^{(i)})\right]^2}\]</span></p>
+<p>La statistique H nous indique la force des interactions, mais elle ne nous dit pas à quoi ressemblent ces interactions. C’est à cela que servent les <a href="../08-global_model_agnostic_methods/08.1-pdp.html">parcelles de dépendance partielle</a>. Un flux de travail significatif consiste à mesurer les forces d’interaction, puis à créer des tracés de dépendance partielle en 2D pour les interactions qui vous intéressent.</p>
+<p>La statistique H ne peut pas être utilisée de manière significative si les entrées sont des pixels. La technique n’est donc pas utile pour le classificateur d’images.</p>
+<p>La statistique d’interaction fonctionne sous l’hypothèse que nous pouvons mélanger les fonctionnalités indépendamment. Si les caractéristiques sont fortement corrélées, l’hypothèse est violée et <strong>nous intégrons des combinaisons de caractéristiques qui sont très improbables en réalité</strong>. C’est le même problème que rencontrent les parcelles de dépendance partielle. Les caractéristiques corrélées peuvent conduire à des valeurs élevées de la statistique H.</p>
+<p>Parfois, les résultats sont étranges et pour de petites simulations, <strong>ils ne donnent pas les résultats escomptés</strong>. Mais il s’agit là plutôt d’une observation anecdotique.</p>
+</section>
+<section id="implémentations" class="level3">
+<h3 class="anchored" data-anchor-id="implémentations">8.3.6 - Implémentations</h3>
+<p>Pour les exemples de ce livre, j’ai utilisé le package R <code>iml</code>, disponible sur <a href="https://cran.r-project.org/web/packages/iml">CRAN</a> et la version de développement sur <a href="https://github.com/christophM/iml">GitHub</a>. Il existe d’autres implémentations, qui se concentrent sur des modèles spécifiques : Le package R <a href="https://cran.r-project.org/web/packages/pre/index.html"><code>pre</code></a> implémente <a href="../05-interpretable_models/05.6-rulefit.html">RuleFit</a> et H-statistic. Le package R <a href="https://github.com/gbm-developers/gbm3">gbm</a> implémente des modèles améliorés par gradient et la statistique H.</p>
+</section>
+<section id="alternatives" class="level3">
+<h3 class="anchored" data-anchor-id="alternatives">8.3.7 - Alternatives</h3>
+<p>La statistique H n’est pas le seul moyen de mesurer les interactions :</p>
+<p>Les réseaux d’interaction variable (VIN) de Hooker (2004)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> 37 sont une approche qui décompose la fonction de prédiction en effets principaux et interactions de fonctionnalités. Les interactions entre les fonctionnalités sont ensuite visualisées sous forme de réseau. Malheureusement, aucun logiciel n’est encore disponible.</p>
+<p>Interaction de fonctionnalités basée sur une dépendance partielle par Greenwell et al.&nbsp;(2018)<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> 38 mesure l’interaction entre deux fonctionnalités. Cette approche mesure l’importance des caractéristiques (définie comme la variance de la fonction de dépendance partielle) d’une caractéristique en fonction de points fixes différents de l’autre caractéristique. Si la variance est élevée, alors les caractéristiques interagissent les unes avec les autres, si elle est nulle, elles n’interagissent pas. Le package R correspondant <code>vip</code> est disponible sur <a href="https://github.com/koalaverse/vip">GitHub</a>. Le package couvre également les tracés de dépendance partielle et l’importance des fonctionnalités.</p>
+<!-- REFERENCES -->
+
+
+</section>
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Friedman, Jerome H, and Bogdan E Popescu. “Predictive learning via rule ensembles.” The Annals of Applied Statistics. JSTOR, 916–54. (2008).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Inglis, Alan, Andrew Parnell, and Catherine Hurley. “Visualizing Variable Importance and Variable Interaction Effects in Machine Learning Models.” arXiv preprint arXiv:2108.04310 (2021)[^Friedman2008].<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Hooker, Giles. “Discovering additive structure in black box functions.” Proceedings of the tenth ACM SIGKDD international conference on Knowledge discovery and data mining. (2004).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Greenwell, Brandon M., Bradley C. Boehmke, and Andrew J. McCarthy. “A simple and effective model-based variable importance measure.” arXiv preprint arXiv:1805.04755 (2018).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="pagination-link  aria-label=" 8.2="" -="" graphique="" des="" effets="" locaux="" accumulés="" (ale)"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">8.2 - Graphique des effets locaux accumulés (ALE)</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="pagination-link" aria-label="8.4 - Functional Decomposition">
+        <span class="nav-page-text">8.4 - Functional Decomposition</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

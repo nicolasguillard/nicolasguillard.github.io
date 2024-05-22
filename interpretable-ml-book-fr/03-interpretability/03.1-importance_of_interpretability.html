@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Apprentissage automatique interprétable - Résumé</title>
+<title>Apprentissage automatique interprétable</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" rel="next">
+<link href="../03-interpretability/index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -68,7 +70,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar docked fullcontent">
@@ -80,9 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      Apprentissage automatique interprétable
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-interpretability/index.html">3 - Interprétabilité</a></li><li class="breadcrumb-item"><a href="../03-interpretability/03.1-importance_of_interpretability.html">3.1 - Importance de l’Interprétabilité</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -97,7 +97,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Apprentissage automatique interprétable</a> 
+      <a href="../">Apprentissage automatique interprétable</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -109,19 +109,19 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./00-summary/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Résumé</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01-preface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">1 - Préface de l’auteur</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./02-introduction/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2 - Introduction</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -130,19 +130,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.1 - Quelques histoires</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.3 - Terminologie</span></a>
   </div>
 </li>
@@ -150,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3 - Interprétabilité</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -159,37 +159,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.5 - Propriétés des Explications</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
   </div>
 </li>
@@ -197,7 +197,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./04-datasets/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4 - Jeux de données</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -206,19 +206,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
   </div>
 </li>
@@ -226,7 +226,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5 - Modèles interprétables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -235,43 +235,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.1 - Régéression linéaire</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.2 - Régéression logistique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.4 - Arbre de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.5 - Règles de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.6 - Ajustement des règles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
   </div>
 </li>
@@ -279,19 +279,19 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07-example/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">7 - Explications basées sur des exemples</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -300,43 +300,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.4 - Functional Decomposition</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.6 - Substitut global</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.7 - Prototypes et critiques</span></a>
   </div>
 </li>
@@ -344,7 +344,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -353,37 +353,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
   </div>
 </li>
@@ -391,7 +391,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -400,31 +400,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.2 - Attribution de pixel</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.3 - Détecter les concepts</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.4 - Exemples adverses</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.5 - Instances Influentes</span></a>
   </div>
 </li>
@@ -432,7 +432,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./11-future/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -441,13 +441,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
   </div>
 </li>
@@ -455,25 +455,25 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-contribute/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">12 - Contribuer à ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./13-citation/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">13 - Citer ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14-translations/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">14 - Traductions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">15 - Remerciements</span></a>
   </div>
 </li>
@@ -486,9 +486,8 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-interpretability/index.html">3 - Interprétabilité</a></li><li class="breadcrumb-item"><a href="../03-interpretability/03.1-importance_of_interpretability.html">3.1 - Importance de l’Interprétabilité</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Résumé</h1>
 </div>
 
 
@@ -511,48 +510,57 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<blockquote class="blockquote">
-<p>Traduction du livre en ligne <a href="https://christophm.github.io/interpretable-ml-book/index.html">https://christophm.github.io/interpretable-ml-book/index.html</a></p>
-</blockquote>
+<section id="sec-interpretability_importance" class="level2">
+<h2 class="anchored" data-anchor-id="sec-interpretability_importance">3.1 - Importance de l’Interprétabilité</h2>
+<p>Si un modèle d’apprentissage automatique fonctionne bien, <strong>pourquoi ne pas simplement faire confiance au modèle</strong> et ignorer <strong>pourquoi</strong> il a pris une certaine décision ? “Le problème est qu’une seule métrique, comme la précision de classification, est une description incomplète de la plupart des tâches dans le monde réel.” (Doshi-Velez et Kim 2017<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>)</p>
+<p>Plongeons plus profondément dans les raisons pour lesquelles l’interprétabilité est si importante. Lorsqu’il s’agit de modélisation prédictive, vous devez faire un compromis : Voulez-vous simplement savoir <strong>ce qui</strong> est prédit ? Par exemple, la probabilité qu’un client résilie son contrat ou l’efficacité d’un médicament pour un patient. Ou voulez-vous savoir <strong>pourquoi</strong> la prédiction a été faite et éventuellement payer pour l’interprétabilité par une baisse de la performance prédictive ? Dans certains cas, vous ne vous souciez pas de savoir pourquoi une décision a été prise, il suffit de savoir que la performance prédictive sur un ensemble de test était bonne. Mais dans d’autres cas, connaître le ‘pourquoi’ peut vous aider à en apprendre davantage sur le problème, les données et la raison pour laquelle un modèle pourrait échouer. Certains modèles peuvent ne pas nécessiter d’explications car ils sont utilisés dans un environnement à faible risque, signifiant qu’une erreur n’aura pas de conséquences graves, (par exemple, un système de recommandation de films) ou la méthode a déjà été largement étudiée et évaluée (par exemple, la reconnaissance optique de caractères). Le besoin d’interprétabilité découle d’une incomplétude dans la formalisation du problème (Doshi-Velez et Kim 2017), ce qui signifie que pour certains problèmes ou tâches, il ne suffit pas d’obtenir la prédiction (le <strong>quoi</strong>). Le modèle doit également expliquer comment il est arrivé à la prédiction (le <strong>pourquoi</strong>), car une prédiction correcte ne résout que partiellement votre problème initial. Les raisons suivantes motivent la demande d’interprétabilité et d’explications (Doshi-Velez et Kim 2017 et Miller 2017<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>).</p>
+<p><strong>Curiosité humaine et apprentissage</strong> : Les humains ont un modèle mental de leur environnement qui est mis à jour lorsqu’un événement inattendu se produit. Cette mise à jour est effectuée en trouvant une explication à l’événement inattendu. Par exemple, un humain se sent inopinément malade et demande : “Pourquoi me sens-je si mal ?”. Il apprend qu’il tombe malade chaque fois qu’il mange ces baies rouges. Il met à jour son modèle mental et décide que les baies sont la cause de la maladie et doivent donc être évitées. Lorsque des modèles d’apprentissage automatique opaques sont utilisés dans la recherche, les découvertes scientifiques restent complètement cachées si le modèle ne fournit que des prédictions sans explications. Pour faciliter l’apprentissage et satisfaire la curiosité quant aux raisons pour lesquelles certaines prédictions ou comportements sont créés par les machines, l’interprétabilité et les explications sont cruciales. Bien sûr, les humains n’ont pas besoin d’explications pour tout ce qui se passe. Pour la plupart des gens, il est acceptable de ne pas comprendre comment fonctionne un ordinateur. Les événements inattendus nous rendent curieux. Par exemple : Pourquoi mon ordinateur s’éteint-il de manière inattendue ?</p>
+<p>Étroitement liée à l’apprentissage est le désir humain de trouver un sens dans le monde. Nous voulons harmoniser les contradictions ou les incohérences entre les éléments de nos structures de connaissances. “Pourquoi mon chien m’a-t-il mordu alors qu’il ne l’avait jamais fait auparavant ?” pourrait se demander un humain. Il y a une contradiction entre la connaissance du comportement passé du chien et la nouvelle expérience désagréable de la morsure. L’explication du vétérinaire réconcilie la contradiction du propriétaire du chien : “Le chien était sous stress et a mordu.” Plus une décision de machine affecte la vie d’une personne, plus il est important que la machine explique son comportement. Si un modèle d’apprentissage automatique rejette une demande de prêt, cela peut être complètement inattendu pour les demandeurs. Ils ne peuvent réconcilier cette incohérence entre l’attente et la réalité qu’avec une sorte d’explication. Les explications n’ont pas réellement besoin de tout expliquer, mais devraient aborder une cause principale. Un autre exemple est la recommandation de produits algorithmique. Personnellement, je pense toujours à pourquoi certains produits ou films m’ont été recommandés algorithmiquement. Souvent, c’est assez clair : la publicité me suit sur Internet parce que j’ai récemment acheté une machine à laver, et je sais que dans les prochains jours, je serai suivi par des publicités pour des machines à laver. Oui, il est logique de suggérer des gants si j’ai déjà un bonnet d’hiver dans mon panier. L’algorithme recommande ce film, car les utilisateurs qui ont aimé d’autres films que j’ai appréciés ont également aimé le film recommandé. De plus en plus, les entreprises Internet ajoutent des explications à leurs recommandations. Un bon exemple en sont les recommandations de produits, qui sont basées sur des combinaisons de produits fréquemment achetées :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/cutout.png" class="img-fluid figure-img" data-align="center" width="400"></p>
-<figcaption>Couverture</figcaption>
+<p><img src="../_static/images/amazon-freq-bought-together.png" class="img-fluid figure-img" data-fig.cap="Recommended products that are frequently bought together."></p>
+<figcaption>amazon-recommendation</figcaption>
 </figure>
 </div>
-<p>L’apprentissage automatique représente un grand potentiel pour améliorer les produits, les processus et la recherche. Mais les <strong>ordinateurs n’expliquent généralement pas leurs prédictions</strong>, ce qui est un obstacle à l’adoption de l’apprentissage automatique. Ce livre traite de ce qui rend les modèles d’apprentissage automatique et leurs prédictions interprétables.</p>
-<p>Après avoir exploré les concepts d’interprétabilité, vous découvrirez des <strong>modèles simples et interprétables</strong> tels que les arbres de décision, les règles de décision et la régression linéaire. Le livre met l’accent sur les méthodes agnostiques aux modèles pour interpréter <strong>les boîtes noires que sont ces modèles</strong>, tels que l’importance des caractéristiques et les effets locaux accumulés, et pour expliquer les prédictions individuelles avec les valeurs de Shapley et LIME. De plus, le livre présente des méthodes spécifiques aux réseaux de neurones profonds.</p>
-<p>Toutes les méthodes d’interprétation sont expliquées en profondeur et discutées de manière critique. Comment fonctionnent-elles sous le capot ? Quelles sont leurs forces et leurs faiblesses ? Comment leurs résultats peuvent-ils être interprétés ? Ce livre vous permettra de sélectionner et d’appliquer correctement la méthode d’interprétation la plus adaptée à votre projet d’apprentissage automatique. La lecture du livre est recommandée aux praticiens de l’apprentissage automatique, aux <em>experts en mégadonnées</em>, aux statisticiens et à toute autre personne intéressée à rendre des modèles d’apprentissage automatique interprétables.</p>
-<p>Vous pouvez acheter les versions PDF ou e-book (epub, mobi) <a href="https://leanpub.com/interpretable-machine-learning">sur leanpub.com</a>.</p>
-<p>Vous pouvez acheter la version imprimée <a href="https://www.amazon.fr/dp/B09TMWHVB4">sur Amazon</a>.</p>
-<p><strong>Au sujet de l’auteur:</strong> Il s’appelle Christoph Molnar, il est statisticien et spécialiste en apprentissage machine. My goal is to make machine learning interpretable.</p>
-<p>Suivez-le sur X(ex-Twitter)! <a href="https://twitter.com/ChristophMolnar">@ChristophMolnar</a></p>
-<p>Couverture de <a href="https://twitter.com/YvonneDoinel">@YvonneDoinel</a></p>
+<p>Dans de nombreuses disciplines scientifiques, on observe un passage de méthodes qualitatives à quantitatives (par exemple en sociologie, psychologie), ainsi qu’une orientation vers l’apprentissage automatique (en biologie, génomique). L’<strong>objectif de la science</strong> est d’acquérir des connaissances, mais de nombreux problèmes sont résolus avec de grands ensembles de données et des modèles d’apprentissage automatique boîte noire. Le modèle lui-même devient la source de connaissance au lieu des données. L’interprétabilité rend possible l’extraction de ces connaissances supplémentaires capturées par le modèle.</p>
+<p>Les modèles d’apprentissage automatique prennent en charge des tâches réelles qui nécessitent des <strong>mesures de sécurité</strong> et des tests. Imaginez une voiture autonome détectant automatiquement les cyclistes grâce à un système d’apprentissage profond. Vous voulez être sûr à 100% que l’abstraction apprise par le système est exempte d’erreurs, car renverser des cyclistes est assez grave. Une explication pourrait révéler que la caractéristique la plus importante apprise est de reconnaître les deux roues d’un vélo, et cette explication vous aide à réfléchir à des cas limites comme des vélos avec des sacoches latérales qui couvrent partiellement les roues.</p>
+<p>Par défaut, les modèles d’apprentissage automatique absorbent les biais des données d’entraînement. Cela peut transformer vos modèles d’apprentissage automatique en racistes qui discriminent contre les groupes sous-représentés. L’interprétabilité est un outil de débogage utile pour <strong>détecter les biais</strong> dans les modèles d’apprentissage automatique. Il se peut que le modèle d’apprentissage automatique que vous avez entraîné pour l’approbation ou le rejet automatique des demandes de crédit discrimine contre une minorité qui a été historiquement privée de droits. Votre objectif principal est d’accorder des prêts uniquement aux personnes qui les rembourseront finalement. L’incomplétude de la formulation du problème dans ce cas réside dans le fait que vous ne voulez pas seulement minimiser les défauts de paiement, mais êtes également obligé de ne pas discriminer sur la base de certaines démographies. C’est une contrainte supplémentaire qui fait partie de votre formulation de problème (octroi de prêts de manière à faible risque et conforme) qui n’est pas couverte par la fonction de perte pour laquelle le modèle d’apprentissage automatique a été optimisé.</p>
+<p>Le processus d’intégration des machines et des algorithmes dans notre vie quotidienne nécessite de l’interprétabilité pour augmenter l’<strong>acceptation sociale</strong>. Les gens attribuent des croyances, des désirs, des intentions, etc., à des objets. Dans une expérience célèbre, Heider et Simmel (1944)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> ont montré aux participants des vidéos de formes où un cercle ouvrait une “porte” pour entrer dans une “pièce” (qui était simplement un rectangle). Les participants décrivaient les actions des formes comme ils décriraient les actions d’un agent humain, attribuant des intentions et même des émotions et des traits de personnalité aux formes. Les robots sont un bon exemple, comme mon aspirateur, que j’ai nommé “Doge”. Si Doge se coince, je pense : “Doge veut continuer à nettoyer, mais me demande de l’aide car il est coincé.” Plus tard, lorsque Doge termine le nettoyage et cherche la base pour se recharger, je pense : “Doge a le désir de se recharger et a l’intention de trouver la base.” J’attribue aussi des traits de personnalité : “Doge est un peu bête, mais de manière mignonne.” Ce sont mes pensées, surtout lorsque je découvre que Doge a renversé une plante en aspirant consciencieusement la maison. Une machine ou un algorithme qui explique ses prédictions trouvera plus d’acceptation. Voir aussi le <a href="../03-interpretability/03.6-human_friendly_explanations.html">chapitre sur les explications</a>, qui soutient que les explications sont un processus social.</p>
+<p>Les explications sont utilisées pour <strong>gérer les interactions sociales</strong>. En créant une signification partagée de quelque chose, l’explicateur influence les actions, les émotions et les croyances du destinataire de l’explication. Pour qu’une machine interagisse avec nous, elle peut avoir besoin de façonner nos émotions et croyances. Les machines doivent nous “persuader” afin qu’elles puissent atteindre leur objectif prévu. Je n’accepterais pas complètement mon aspirateur robot s’il n’expliquait pas son comportement à un certain degré. L’aspirateur crée une signification partagée, par exemple, d’un “accident” (comme se coincer sur le tapis de la salle de bain… encore) en expliquant qu’il s’est coincé au lieu de simplement s’arrêter de fonctionner sans commentaire. Intéressant, il peut y avoir un désalignement entre l’objectif de la machine expliquatrice (créer de la confiance) et l’objectif du destinataire (comprendre la prédiction ou le comportement). Peut-être que l’explication complète de pourquoi Doge s’est coincé pourrait être que la batterie était très faible, que l’une des roues ne fonctionne pas correctement et qu’il y a un bug qui fait que le robot retourne au même endroit encore et encore même s’il y avait un obstacle. Ces raisons (et quelques autres) ont causé le coincement du robot, mais il n’a expliqué que quelque chose bloquait le chemin, et cela suffisait pour que je fasse confiance à son comportement et que je partage la signification de cet accident. D’ailleurs, Doge s’est coincé dans la salle de bain à nouveau. Nous devons enlever les tapis chaque fois avant de laisser Doge aspirer.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/by-nc-sa.png" class="img-fluid figure-img"></p>
-<figcaption>licence BY-NC-SA</figcaption>
+<p><img src="../_static/images/doge-stuck.jpg" class="img-fluid figure-img" data-fig.cap="Doge, our vacuum cleaner, got stuck. As an explanation for the accident, Doge told us that it needs to be on an even surface."></p>
+<figcaption>doge-stuck</figcaption>
 </figure>
 </div>
-<p>Consultez également <a href="https://bookgoodies.com/a/B0BMGSF52B">Modeling Mindsets</a>, son second livre.</p>
-<p>Ce livre est publié sous la licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Note du traducteur">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note du traducteur
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Au sujet du traducteur (assisté de ChatGPT-4) :</strong> Mon nom est <a href="https://www.linkedin.com/in/nicolasguillard/">Nicolas Guillard</a>. De formation initiale Ingénieur en informatique, préalablement Analytiste Digital, je suis maintenant Ingénieur en Intelligence Artificielle. Dernière traduction réalisée entre les 27/12/2023 et 15/05/2024.</p>
-</div>
-</div>
+<p>Les modèles d’apprentissage automatique ne peuvent être <strong>débogués et audités</strong> que lorsqu’ils peuvent être interprétés. Même dans des environnements à faible risque, tels que les recommandations de films, la capacité à interpréter est précieuse tant dans la phase de recherche et développement qu’après le déploiement. Plus tard, lorsqu’un modèle est utilisé dans un produit, des problèmes peuvent survenir. Une interprétation d’une prédiction erronée aide à comprendre la cause de l’erreur. Elle fournit une direction sur comment réparer le système. Considérez l’exemple d’un classificateur husky contre loup qui classe mal certains huskies comme loups. En utilisant des méthodes d’apprentissage automatique interprétables, vous trouveriez que la mauvaise classification était due à la neige sur l’image. Le classificateur a appris à utiliser la neige comme caractéristique pour classifier les images comme “loup”, ce qui pourrait avoir du sens en termes de séparation des loups des huskies dans l’ensemble de données d’entraînement, mais pas dans une utilisation réelle.</p>
+<p>Si vous pouvez garantir que le modèle d’apprentissage automatique peut expliquer ses décisions, vous pouvez également vérifier plus facilement les caractéristiques suivantes (Doshi-Velez et Kim 2017) :</p>
+<ul>
+<li>Équité : Assurer que les prédictions sont impartiales et ne discriminent pas implicitement ou explicitement contre les groupes sous-représentés. Un modèle interprétable peut vous dire pourquoi il a décidé qu’une certaine personne ne devrait pas obtenir un prêt, et il devient plus facile pour un humain de juger si la décision est basée sur un biais démographique appris (par exemple, racial).</li>
+<li>Confidentialité : Assurer que les informations sensibles dans les données sont protégées.</li>
+<li>Fiabilité ou Robustesse : Assurer que de petits changements dans l’entrée ne conduisent pas à de grands changements dans la prédiction.</li>
+<li>Causalité : Vérifier que seules les relations causales sont prises en compte.</li>
+<li>Confiance : Il est plus facile pour les humains de faire confiance à un système qui explique ses décisions par rapport à une boîte noire.</li>
+</ul>
+<p><strong>Quand nous n’avons pas besoin d’interprétabilité.</strong></p>
+<p>Les scénarios suivants illustrent quand nous n’avons pas besoin ou même ne voulons pas d’interprétabilité des modèles d’apprentissage automatique.</p>
+<p>L’interprétabilité n’est pas nécessaire si le modèle <strong>n’a pas d’impact significatif</strong>. Imaginez quelqu’un nommé Mike travaillant sur un projet d’apprentissage automatique pour prédire où ses amis iront pour leurs prochaines vacances en se basant sur des données Facebook. Mike aime juste surprendre ses amis avec des suppositions éclairées sur leur destination de vacances. Il n’y a pas de vrai problème si le modèle se trompe (au pire juste un peu embarrassant pour Mike), ni s’il ne peut pas expliquer la sortie de son modèle. Il est parfaitement acceptable de ne pas avoir d’interprétabilité dans ce cas. La situation changerait si Mike commençait à construire une entreprise autour de ces prédictions de destinations de vacances. Si le modèle est erroné, l’entreprise pourrait perdre de l’argent, ou le modèle pourrait fonctionner moins bien pour certaines personnes à cause d’un biais racial appris. Dès que le modèle a un impact significatif, qu’il soit financier ou social, l’interprétabilité devient pertinente.</p>
+<p>L’interprétabilité n’est pas nécessaire lorsque le <strong>problème est bien étudié</strong>. Certaines applications ont été suffisamment bien étudiées de sorte qu’il y a assez d’expérience pratique avec le modèle et les problèmes liés au modèle ont été résolus au fil du temps. Un bon exemple est un modèle d’apprentissage automatique pour la reconnaissance optique de caractères qui traite des images d’enveloppes et extrait les adresses. Il y a des années d’expérience avec ces systèmes et il est clair qu’ils fonctionnent. De plus, nous ne sommes pas vraiment intéressés par l’acquisition de connaissances supplémentaires sur la tâche en question.</p>
+<p>L’interprétabilité pourrait permettre à des personnes ou à des programmes de <strong>manipuler le système</strong>. Les problèmes avec les utilisateurs qui trompent un système résultent d’un décalage entre les objectifs du créateur et de l’utilisateur d’un modèle. Le scoring de crédit est un tel système parce que les banques veulent s’assurer que les prêts ne sont accordés qu’aux demandeurs susceptibles de les rembourser, et les demandeurs visent à obtenir le prêt même si la banque ne souhaite pas leur accorder. Ce décalage entre les objectifs introduit des incitations pour les demandeurs à manipuler le système pour augmenter leurs chances d’obtenir un prêt. Si un demandeur sait que le fait d’avoir plus de deux cartes de crédit affecte négativement son score, il rend simplement sa troisième carte de crédit pour améliorer son score, et organise une nouvelle carte après l’approbation du prêt. Bien que son score se soit amélioré, la probabilité réelle de rembourser le prêt est restée inchangée. Le système ne peut être manipulé que si les entrées sont des substituts d’une caractéristique causale, mais ne causent pas réellement le résultat. Dans la mesure du possible, les caractéristiques substituts devraient être évitées car elles rendent les modèles manipulables. Par exemple, Google a développé un système appelé Google Flu Trends pour prédire les épidémies de grippe. Le système corrélait les recherches Google avec les épidémies de grippe - et il a mal performé. La distribution des requêtes de recherche a changé et Google Flu Trends a manqué de nombreuses épidémies de grippe. Les recherches Google ne causent pas la grippe. Lorsque les gens recherchent des symptômes comme “fièvre”, c’est simplement une corrélation avec les épidémies de grippe réelles. Idéalement, les modèles n’utiliseraient que des caractéristiques causales car elles ne seraient pas manipulables.</p>
+<!-- REFERENCES -->
 
 
+</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Doshi-Velez, Finale, and Been Kim. “Towards a rigorous science of interpretable machine learning,” no. Ml: 1–13. http://arxiv.org/abs/1702.08608 (2017).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Miller, Tim. “Explanation in artificial intelligence: Insights from the social sciences.” arXiv Preprint arXiv:1706.07269. (2017).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Heider, Fritz, and Marianne Simmel. “An experimental study of apparent behavior.” The American Journal of Psychology 57 (2). JSTOR: 243–59. (1944).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -958,6 +966,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a 3="" href="../03-interpretability/index.html" class="pagination-link  aria-label=" -="" interprétabilité"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3 - Interprétabilité</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="pagination-link" aria-label="3.2 - Taxonomie des Méthodes d'Interprétabilité">
+        <span class="nav-page-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

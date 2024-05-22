@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Apprentissage automatique interprétable - Résumé</title>
+<title>Apprentissage automatique interprétable</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../05-interpretable_models/05.3-glm-gam-more.html" rel="next">
+<link href="../05-interpretable_models/05.1-linear-regression.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,11 +69,40 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked fullcontent">
+<body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -80,9 +111,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      Apprentissage automatique interprétable
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-interpretable_models/index.html">5 - Modèles interprétables</a></li><li class="breadcrumb-item"><a href="../05-interpretable_models/05.2-logistic-regression.html">5.2 - Régéression logistique</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -97,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Apprentissage automatique interprétable</a> 
+      <a href="../">Apprentissage automatique interprétable</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -109,19 +138,19 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./00-summary/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Résumé</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01-preface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">1 - Préface de l’auteur</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./02-introduction/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2 - Introduction</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -130,19 +159,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.1 - Quelques histoires</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2.3 - Terminologie</span></a>
   </div>
 </li>
@@ -150,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3 - Interprétabilité</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -159,37 +188,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.5 - Propriétés des Explications</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
   </div>
 </li>
@@ -197,7 +226,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./04-datasets/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4 - Jeux de données</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -206,19 +235,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
   </div>
 </li>
@@ -226,7 +255,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5 - Modèles interprétables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -235,43 +264,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.1 - Régéression linéaire</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">5.2 - Régéression logistique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.4 - Arbre de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.5 - Règles de décision</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.6 - Ajustement des règles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
   </div>
 </li>
@@ -279,19 +308,19 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07-example/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">7 - Explications basées sur des exemples</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -300,43 +329,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.4 - Functional Decomposition</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.6 - Substitut global</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">8.7 - Prototypes et critiques</span></a>
   </div>
 </li>
@@ -344,7 +373,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -353,37 +382,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
   </div>
 </li>
@@ -391,7 +420,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -400,31 +429,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.2 - Attribution de pixel</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.3 - Détecter les concepts</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.4 - Exemples adverses</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10.5 - Instances Influentes</span></a>
   </div>
 </li>
@@ -432,7 +461,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./11-future/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -441,13 +470,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
   </div>
 </li>
@@ -455,25 +484,25 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-contribute/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">12 - Contribuer à ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./13-citation/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">13 - Citer ce livre</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14-translations/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">14 - Traductions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">15 - Remerciements</span></a>
   </div>
 </li>
@@ -482,13 +511,28 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#régéression-logistique" id="toc-régéression-logistique" class="nav-link active" data-scroll-target="#régéression-logistique">5.2 - Régéression logistique</a>
+  <ul>
+  <li><a href="#quest-ce-qui-ne-va-pas-avec-la-régression-linéaire-pour-la-classification" id="toc-quest-ce-qui-ne-va-pas-avec-la-régression-linéaire-pour-la-classification" class="nav-link" data-scroll-target="#quest-ce-qui-ne-va-pas-avec-la-régression-linéaire-pour-la-classification">5.2.1 - Qu’est-ce qui ne va pas avec la régression linéaire pour la classification ?</a></li>
+  <li><a href="#théorie" id="toc-théorie" class="nav-link" data-scroll-target="#théorie">5.2.2 - Théorie</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">5.2.3 - Interpretation</a></li>
+  <li><a href="#exemple" id="toc-exemple" class="nav-link" data-scroll-target="#exemple">5.2.4 - Exemple</a></li>
+  <li><a href="#avantages-et-inconvénients" id="toc-avantages-et-inconvénients" class="nav-link" data-scroll-target="#avantages-et-inconvénients">5.2.5 - Avantages et inconvénients</a></li>
+  <li><a href="#logiciel" id="toc-logiciel" class="nav-link" data-scroll-target="#logiciel">5.2.6 - Logiciel</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-interpretable_models/index.html">5 - Modèles interprétables</a></li><li class="breadcrumb-item"><a href="../05-interpretable_models/05.2-logistic-regression.html">5.2 - Régéression logistique</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Résumé</h1>
 </div>
 
 
@@ -511,46 +555,113 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<blockquote class="blockquote">
-<p>Traduction du livre en ligne <a href="https://christophm.github.io/interpretable-ml-book/index.html">https://christophm.github.io/interpretable-ml-book/index.html</a></p>
-</blockquote>
+<section id="régéression-logistique" class="level2">
+<h2 class="anchored" data-anchor-id="régéression-logistique">5.2 - Régéression logistique</h2>
+<p>La régression logistique modélise les probabilités pour les problèmes de classification avec deux issues possibles. C’est une extension du modèle de régression linéaire pour les problèmes de classification.</p>
+<div class="callout-xarning" data-icon="false">
+<p>Vous cherchez simplement l’interprétation correcte des modèles de régression logistique ? Économisez-vous du temps et des maux de tête (les log odds, ça vous dit quelque chose ?) et consultez ma <a href="https://christophmolnar.gumroad.com/l/logistic-regression">feuille de triche pour l’interprétation de la régression logistique</a>.</p>
+</div>
+<section id="quest-ce-qui-ne-va-pas-avec-la-régression-linéaire-pour-la-classification" class="level3">
+<h3 class="anchored" data-anchor-id="quest-ce-qui-ne-va-pas-avec-la-régression-linéaire-pour-la-classification">5.2.1 - Qu’est-ce qui ne va pas avec la régression linéaire pour la classification ?</h3>
+<p>Le modèle de régression linéaire peut bien fonctionner pour la régression, mais échoue pour la classification. Pourquoi est-ce le cas ? Dans le cas de deux classes, vous pourriez étiqueter l’une des classes avec 0 et l’autre avec 1 et utiliser la régression linéaire. Techniquement, cela fonctionne et la plupart des programmes de modèle linéaire vous donneront des poids. Mais il y a quelques problèmes avec cette approche :</p>
+<p>Un modèle linéaire ne produit pas de probabilités, mais il traite les classes comme des nombres (0 et 1) et ajuste le meilleur hyperplan (pour une seule caractéristique, c’est une ligne) qui minimise les distances entre les points et l’hyperplan. Il interpole donc simplement entre les points, et vous ne pouvez pas l’interpréter comme des probabilités.</p>
+<p>Un modèle linéaire extrapole également et vous donne des valeurs en dessous de zéro et au-dessus de un. C’est un bon signe qu’il pourrait y avoir une approche plus intelligente pour la classification.</p>
+<p>Étant donné que le résultat prédit n’est pas une probabilité, mais une interpolation linéaire entre les points, il n’y a pas de seuil significatif auquel vous pouvez distinguer une classe de l’autre. Une bonne illustration de ce problème a été donnée sur <a href="https://stats.stackexchange.com/questions/22381/why-not-approach-classification-through-regression">Stackoverflow</a>.</p>
+<p>Les modèles linéaires ne s’étendent pas aux problèmes de classification avec plusieurs classes. Vous devriez commencer à étiqueter la classe suivante avec 2, puis 3, et ainsi de suite. Les classes pourraient ne pas avoir d’ordre significatif, mais le modèle linéaire forcerait une structure étrange sur la relation entre les caractéristiques et vos prédictions de classe. Plus la valeur d’une caractéristique avec un poids positif est élevée, plus elle contribue à la prédiction d’une classe avec un numéro plus élevé, même si les classes qui se trouvent avoir un numéro similaire ne sont pas plus proches que d’autres classes.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/cutout.png" class="img-fluid figure-img" data-align="center" width="400"></p>
-<figcaption>Couverture</figcaption>
+<p><img src="../_static/images2/5_2_1_logistic_regression.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>A linear model classifies tumors as malignant (1) or benign (0) given their size. The lines show the prediction of the linear model. For the data on the left, we can use 0.5 as classification threshold. After introducing a few more malignant tumor cases, the regression line shifts and a threshold of 0.5 no longer separates the classes. Points are slightly jittered to reduce over-plotting.</figcaption>
 </figure>
 </div>
-<p>L’apprentissage automatique représente un grand potentiel pour améliorer les produits, les processus et la recherche. Mais les <strong>ordinateurs n’expliquent généralement pas leurs prédictions</strong>, ce qui est un obstacle à l’adoption de l’apprentissage automatique. Ce livre traite de ce qui rend les modèles d’apprentissage automatique et leurs prédictions interprétables.</p>
-<p>Après avoir exploré les concepts d’interprétabilité, vous découvrirez des <strong>modèles simples et interprétables</strong> tels que les arbres de décision, les règles de décision et la régression linéaire. Le livre met l’accent sur les méthodes agnostiques aux modèles pour interpréter <strong>les boîtes noires que sont ces modèles</strong>, tels que l’importance des caractéristiques et les effets locaux accumulés, et pour expliquer les prédictions individuelles avec les valeurs de Shapley et LIME. De plus, le livre présente des méthodes spécifiques aux réseaux de neurones profonds.</p>
-<p>Toutes les méthodes d’interprétation sont expliquées en profondeur et discutées de manière critique. Comment fonctionnent-elles sous le capot ? Quelles sont leurs forces et leurs faiblesses ? Comment leurs résultats peuvent-ils être interprétés ? Ce livre vous permettra de sélectionner et d’appliquer correctement la méthode d’interprétation la plus adaptée à votre projet d’apprentissage automatique. La lecture du livre est recommandée aux praticiens de l’apprentissage automatique, aux <em>experts en mégadonnées</em>, aux statisticiens et à toute autre personne intéressée à rendre des modèles d’apprentissage automatique interprétables.</p>
-<p>Vous pouvez acheter les versions PDF ou e-book (epub, mobi) <a href="https://leanpub.com/interpretable-machine-learning">sur leanpub.com</a>.</p>
-<p>Vous pouvez acheter la version imprimée <a href="https://www.amazon.fr/dp/B09TMWHVB4">sur Amazon</a>.</p>
-<p><strong>Au sujet de l’auteur:</strong> Il s’appelle Christoph Molnar, il est statisticien et spécialiste en apprentissage machine. My goal is to make machine learning interpretable.</p>
-<p>Suivez-le sur X(ex-Twitter)! <a href="https://twitter.com/ChristophMolnar">@ChristophMolnar</a></p>
-<p>Couverture de <a href="https://twitter.com/YvonneDoinel">@YvonneDoinel</a></p>
+</section>
+<section id="théorie" class="level3">
+<h3 class="anchored" data-anchor-id="théorie">5.2.2 - Théorie</h3>
+<p>Une solution pour la classification est la régression logistique. Au lieu d’ajuster une ligne droite ou un hyperplan, le modèle de régression logistique utilise la fonction logistique pour compresser la sortie d’une équation linéaire entre 0 et 1. La fonction logistique est définie comme :</p>
+<p><span class="math display">\[\text{logistic}(\eta)=\frac{1}{1+exp(-\eta)}\]</span></p>
+<p>Et cela ressemble à :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/by-nc-sa.png" class="img-fluid figure-img"></p>
-<figcaption>licence BY-NC-SA</figcaption>
+<p><img src="../_static/images2/5_2_2_logistic_function.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>The logistic function. It outputs numbers between 0 and 1. At input 0, it outputs 0.5.</figcaption>
 </figure>
 </div>
-<p>Consultez également <a href="https://bookgoodies.com/a/B0BMGSF52B">Modeling Mindsets</a>, son second livre.</p>
-<p>Ce livre est publié sous la licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Note du traducteur">
+<p>Le passage de la régression linéaire à la régression logistique est assez direct. Dans le modèle de régression linéaire, nous avons modélisé la relation entre le résultat et les caractéristiques par une équation linéaire :</p>
+<p><span class="math display">\[\hat{y}^{(i)} = \beta_{0} + \beta_{1}x^{(i)}_{1} + \ldots + \beta_{p}x^{(i)}_{p}\]</span></p>
+<p>Pour la classification, nous préférons des probabilités entre 0 et 1, donc nous enveloppons le côté droit de l’équation dans la fonction logistique. Cela force la sortie à n’assumer que des valeurs entre 0 et 1.</p>
+<p><span class="math display">\[P(y^{(i)} = 1) = \frac{1}{1 + \exp(-(\beta_{0} + \beta_{1}x^{(i)}_{1} + \ldots + \beta_{p}x^{(i)}_{p}))}\]</span></p>
+<p>Revenons à l’exemple de la taille de la tumeur. Mais au lieu du modèle de régression linéaire, utilisons le modèle de régression logistique :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_2_2_tumor_size.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>The logistic regression model finds the correct decision boundary between malignant and benign depending on tumor size. The line is the logistic function shifted and squeezed to fit the data.</figcaption>
+</figure>
+</div>
+<p>La classification fonctionne mieux avec la régression logistique et nous pouvons utiliser 0,5 comme seuil dans les deux cas. L’ajout de points supplémentaires n’affecte pas vraiment la courbe estimée de manière significative.</p>
+</section>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">5.2.3 - Interpretation</h3>
+<p>L’interprétation des poids dans la régression logistique diffère de celle des poids dans la régression linéaire, car le résultat dans la régression logistique est une probabilité comprise entre 0 et 1. Les poids n’influencent plus la probabilité de manière linéaire. La somme pondérée est transformée par la fonction logistique en une probabilité. Par conséquent, nous devons reformuler l’équation pour l’interprétation de sorte que seul le terme linéaire se trouve du côté droit de la formule.</p>
+<p><span class="math display">\[ln\left(\frac{P(y=1)}{1-P(y=1)}\right)=log\left(\frac{P(y=1)}{P(y=0)}\right)=\beta_{0}+\beta_{1}x_{1}+\ldots+\beta_{p}x_{p}\]</span></p>
+<p>Nous appelons le terme dans la fonction ln() les “odds” (probabilité de l’événement divisée par la probabilité de non-événement) et enveloppé dans le logarithme, cela s’appelle log odds (logarithme des odds).</p>
+<p>Cette formule montre que le modèle de régression logistique est un modèle linéaire pour les log odds. Super ! Cela ne semble pas utile ! Avec un peu de réarrangement des termes, vous pouvez déterminer comment la prédiction change lorsqu’une des caractéristiques (x_j) est modifiée d’une unité. Pour ce faire, nous pouvons d’abord appliquer la fonction exp() des deux côtés de l’équation :</p>
+<p><span class="math display">\[\frac{P(y=1)}{1-P(y=1)}=odds=exp\left(\beta_{0}+\beta_{1}x_{1}+\ldots+\beta_{p}x_{p}\right)\]</span></p>
+<p>Ensuite, nous comparons ce qui se passe lorsque nous augmentons l’une des valeurs des caractéristiques de 1. Mais au lieu de regarder la différence, nous examinons le rapport des deux prédictions :</p>
+<p><span class="math display">\[\frac{odds_{x_j+1}}{odds{x_j}}=\frac{exp\left(\beta_{0}+\beta_{1}x_{1}+\ldots+\beta_{j}(x_{j}+1)+\ldots+\beta_{p}x_{p}\right)}{exp\left(\beta_{0}+\beta_{1}x_{1}+\ldots+\beta_{j}x_{j}+\ldots+\beta_{p}x_{p}\right)}\]</span></p>
+<p>Nous appliquons la règle suivante :</p>
+<p><span class="math display">\[\frac{exp(a)}{exp(b)}=exp(a-b)\]</span></p>
+<p>Et nous supprimons quelques termes :</p>
+<p><span class="math display">\[\frac{odds_{x_j+1}}{odds{x_j}}=exp\left(\beta_{j}(x_{j}+1)-\beta_{j}x_{j}\right)=exp\left(\beta_j\right)\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled" title="Note du traducteur">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Note du traducteur
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Au sujet du traducteur (assisté de ChatGPT-4) :</strong> Mon nom est <a href="https://www.linkedin.com/in/nicolasguillard/">Nicolas Guillard</a>. De formation initiale Ingénieur en informatique, préalablement Analytiste Digital, je suis maintenant Ingénieur en Intelligence Artificielle. Dernière traduction réalisée entre les 27/12/2023 et 15/05/2024.</p>
+<p>Revoir les formules</p>
 </div>
 </div>
+<p>En fin de compte, nous avons quelque chose d’aussi simple que <span class="math inline">\(\exp()\)</span> d’un poids de caractéristique. Un changement dans une caractéristique d’une unité change le rapport des odds (de manière multiplicative) par un facteur de <span class="math inline">\(\exp(\beta_j)\)</span>. Nous pourrions également l’interpréter de cette manière : Un changement dans <span class="math inline">\(x_j\)</span> d’une unité augmente le rapport des log odds de la valeur du poids correspondant. La plupart des gens interprètent le rapport des odds parce que penser au ln() de quelque chose est connu pour être difficile pour le cerveau. Interpréter le rapport des odds nécessite déjà une certaine habitude. Par exemple, si vous avez des odds de 2, cela signifie que la probabilité pour y=1 est deux fois plus élevée que y=0. Si vous avez un poids (= rapport des log odds) de 0,7, alors augmenter la caractéristique respective d’une unité multiplie les odds par <span class="math inline">\(\exp(0.7)\)</span> (environ 2) et les odds changent à 4. Mais généralement, vous ne traitez pas avec les odds et interprétez les poids uniquement comme les rapports des odds. Car pour calculer réellement les odds, vous auriez besoin de définir une valeur pour chaque caractéristique, ce qui n’a de sens que si vous voulez regarder une instance spécifique de votre jeu de données.</p>
+<p>Voici les interprétations pour le modèle de régression logistique avec différents types de caractéristiques :</p>
+<ul>
+<li>Caractéristique numérique : Si vous augmentez la valeur de la caractéristique <span class="math inline">\(x_{j}\)</span> d’une unité, les odds estimés changent d’un facteur de <span class="math inline">\(\exp(\beta_{j})\)</span></li>
+<li>Caractéristique catégorielle binaire : L’une des deux valeurs de la caractéristique est la catégorie de référence (dans certains langages, celle codée en 0). Changer la caractéristique <span class="math inline">\(x_{j}\)</span> de la catégorie de référence à l’autre catégorie change les odds estimés d’un facteur de <span class="math inline">\(\exp(\beta_{j})\)</span>.</li>
+<li>Caractéristique catégorielle avec plus de deux catégories : Une solution pour gérer plusieurs catégories est le one-hot-encoding, signifiant que chaque catégorie a sa propre colonne. Vous avez besoin de seulement L-1 colonnes pour une caractéristique catégorielle avec L catégories, sinon c’est sur-paramétré. La L-ème catégorie est alors la catégorie de référence. Vous pouvez utiliser n’importe quel autre codage qui peut être utilisé dans la régression linéaire. L’interprétation pour chaque catégorie est alors équivalente à l’interprétation des caractéristiques binaires.</li>
+<li>Intercept <span class="math inline">\(\beta_{0}\)</span> : Lorsque toutes les caractéristiques numériques sont à zéro et les caractéristiques catégorielles sont à la catégorie de référence, les odds estimés sont <span class="math inline">\(\exp(\beta_{0})\)</span>. L’interprétation du poids de l’intercept n’est généralement pas pertinente.</li>
+</ul>
+</section>
+<section id="exemple" class="level3">
+<h3 class="anchored" data-anchor-id="exemple">5.2.4 - Exemple</h3>
+<p>Nous utilisons le modèle de régression logistique pour prédire le <a href="#cervical">cancer du col de l’utérus</a> en fonction de certains facteurs de risque. Le tableau suivant montre les poids estimés, les rapports des odds associés et l’erreur standard des estimations.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images2/5_2_4_example_table.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>The results of fitting a logistic regression model on the cervical cancer dataset. Shown are the features used in the model, their estimated weights and corresponding odds ratios, and the standard errors of the estimated weights.</figcaption>
+</figure>
+</div>
+<p>Interprétation d’une caractéristique numérique (« Nombre de MST diagnostiquées ») : Une augmentation du nombre de MST (maladies sexuellement transmissibles) diagnostiquées change (augmente) les odds de cancer par rapport à l’absence de cancer par un facteur de <code>r sprintf('%.2f', coef.table['Num. of diagnosed STDs', 'Odds ratio'])</code>, lorsque toutes les autres caractéristiques restent les mêmes. Gardez à l’esprit que la corrélation n’implique pas la causalité.</p>
+<p>Interprétation d’une caractéristique catégorielle (« Contraceptifs hormonaux oui/non ») : Pour les femmes utilisant des contraceptifs hormonaux, les odds pour le cancer par rapport à l’absence de cancer sont inférieurs d’un facteur de <code>r sprintf('%.2f', coef.table['Hormonal contraceptives y/n', 'Odds ratio'])</code> par rapport aux femmes sans contraceptifs hormonaux, à condition que toutes les autres caractéristiques restent les mêmes.</p>
+<p>Comme dans le modèle linéaire, les interprétations viennent toujours avec la clause que ‘toutes les autres caractéristiques restent les mêmes’.</p>
+</section>
+<section id="avantages-et-inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="avantages-et-inconvénients">5.2.5 - Avantages et inconvénients</h3>
+<p>Many of the pros and cons of the <a href="../05-interpretable_models/05.1-linear-regression.html">linear regression model</a> also apply to the logistic regression model. Logistic regression has been widely used by many different people, but it struggles with its restrictive expressiveness (e.g.&nbsp;interactions must be added manually) and other models may have better predictive performance.</p>
+<p>Another disadvantage of the logistic regression model is that the interpretation is more difficult because the interpretation of the weights is multiplicative and not additive.</p>
+<p>Logistic regression can suffer from <strong>complete separation</strong>. If there is a feature that would perfectly separate the two classes, the logistic regression model can no longer be trained. This is because the weight for that feature would not converge, because the optimal weight would be infinite. This is really a bit unfortunate, because such a feature is really useful. But you do not need machine learning if you have a simple rule that separates both classes. The problem of complete separation can be solved by introducing penalization of the weights or defining a prior probability distribution of weights.</p>
+<p>On the good side, the logistic regression model is not only a classification model, but also gives you probabilities. This is a big advantage over models that can only provide the final classification. Knowing that an instance has a 99% probability for a class compared to 51% makes a big difference.</p>
+<p>Logistic regression can also be extended from binary classification to multi-class classification. Then it is called Multinomial Regression.</p>
+</section>
+<section id="logiciel" class="level3">
+<h3 class="anchored" data-anchor-id="logiciel">5.2.6 - Logiciel</h3>
+<p>J’ai utilisé la fonction <code>glm</code> dans R pour tous les exemples. Vous pouvez trouver la régression logistique dans n’importe quel langage de programmation qui peut être utilisé pour effectuer des analyses de données, tel que Python, Java, Stata, Matlab, …</p>
 
 
+</section>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -958,6 +1069,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../05-interpretable_models/05.1-linear-regression.html" class="pagination-link  aria-label=" 5.1="" -="" régéression="" linéaire"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">5.1 - Régéression linéaire</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="pagination-link" aria-label="5.3 - GLM, GAM et plus">
+        <span class="nav-page-text">5.3 - GLM, GAM et plus</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

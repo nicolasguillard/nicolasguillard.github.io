@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apprentissage automatique interprétable</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../10-neuralnet/10.3-concepts.html" rel="next">
+<link href="../10-neuralnet/10.1-learned-features.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../10-neuralnet/index.html">10 - Interprétation d’un réseau de neurone</a></li><li class="breadcrumb-item"><a href="../10-neuralnet/10.2-pixel-attribution.html">10.2 - Attribution de pixel</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Apprentissage automatique interprétable</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Recherche"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../00-summary/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Résumé</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-preface/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 - Préface de l’auteur</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../02-introduction/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 - Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.1-short_stories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.1 - Quelques histoires</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.2-ml_definitions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.2 - Qu’est-ce que l’apprentissage automatique ?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-introduction/02.3-terminology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3 - Terminologie</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 - Interprétabilité</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5 - Propriétés des Explications</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../04-datasets/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 - Jeux de données</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.1-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.1 - Location de vélo (Régression)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.2-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.2 - Commentaires indésirables sur YouTube (Classification de Texte)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-datasets/04.3-datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3 - Facteurs de Risque du Cancer du Col de l’Uterus (Classification)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../05-interpretable_models/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 - Modèles interprétables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.1-linear-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.1 - Régéression linéaire</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.2-logistic-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.2 - Régéression logistique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.3-glm-gam-more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.3 - GLM, GAM et plus</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.4-decision-tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.4 - Arbre de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.5-decision-rules.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.5 - Règles de décision</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.6-rulefit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.6 - Ajustement des règles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../05-interpretable_models/05.7-other-interpretable-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.7 - Autres modèles interprétables</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 - Méthodes indépendantes du modèle</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07-example/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 - Explications basées sur des exemples</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../08-global_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 - Méthodes globales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.1-pdp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.1 - Diagramme de dépendance partielle (PDP)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.2-ale.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.2 - Graphique des effets locaux accumulés (ALE)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.3-feature-interaction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.3 - Interactions avec les fonctionnalités</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.4-functional-decomposition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.4 - Functional Decomposition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.5 - Décomposition fonctionnelle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.6-global-surrogate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.6 - Substitut global</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-global_model_agnostic_methods/08.7-prototype-criticisms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8.7 - Prototypes et critiques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../09-local_model_agnostic_methods/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 - Méthodes locales indépendantes du modèle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.1-ice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.1 - Attente Conditionnelle Individuelle (<em>Individual Conditional Expectation - ICE</em>)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.2-lime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.2 - Substitut local (LIME)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.3-counterfactual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.3 - Explications contrefactuelles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.4-anchors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.4 - Règles de portée (ancres)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.5-shapley.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.5 - Valeurs de Shapley</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-local_model_agnostic_methods/09.6-shap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.6 - SHAP (SHapley Additive exPlanations)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../10-neuralnet/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10 - Interprétation d'un réseau de neurone</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.1-learned-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.1 - Caractéristiques apprises</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.2-pixel-attribution.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">10.2 - Attribution de pixel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.3-concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.3 - Détecter les concepts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.4-adversarial-examples.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.4 - Exemples adverses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../10-neuralnet/10.5-influential-instances.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.5 - Instances Influentes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../11-future/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11 - Un Regard dans une boule de cristal</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Basculer la section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.1-future-ml.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.1 - L’avenir de l’apprentissage automatique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../11-future/11.2-future-interpretability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.2 - L’avenir de l’interprétabilité</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../12-contribute/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12 - Contribuer à ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../13-citation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">13 - Citer ce livre</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../14-translations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">14 - Traductions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../15-acknowledgements/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">15 - Remerciements</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">Dans cette page</h2>
+   
+  <ul>
+  <li><a href="#attribution-de-pixel" id="toc-attribution-de-pixel" class="nav-link active" data-scroll-target="#attribution-de-pixel">10.2 - Attribution de pixel</a>
+  <ul>
+  <li><a href="#gradient-vanille-cartes-de-saillance" id="toc-gradient-vanille-cartes-de-saillance" class="nav-link" data-scroll-target="#gradient-vanille-cartes-de-saillance">10.2.1 - Gradient Vanille (Cartes de saillance)</a>
+  <ul class="collapse">
+  <li><a href="#les-problèmes-avec-vanilla-gradient" id="toc-les-problèmes-avec-vanilla-gradient" class="nav-link" data-scroll-target="#les-problèmes-avec-vanilla-gradient">10.2.1.1 - Les problèmes avec Vanilla Gradient</a></li>
+  </ul></li>
+  <li><a href="#deconvnet" id="toc-deconvnet" class="nav-link" data-scroll-target="#deconvnet">10.2.2 - DeconvNet</a></li>
+  <li><a href="#grad-cam" id="toc-grad-cam" class="nav-link" data-scroll-target="#grad-cam">10.2.3 - Grad-CAM</a></li>
+  <li><a href="#guided-grad-cam" id="toc-guided-grad-cam" class="nav-link" data-scroll-target="#guided-grad-cam">10.2.4 - Guided Grad-CAM</a></li>
+  <li><a href="#smoothgrad" id="toc-smoothgrad" class="nav-link" data-scroll-target="#smoothgrad">10.2.5 - SmoothGrad</a></li>
+  <li><a href="#exemples" id="toc-exemples" class="nav-link" data-scroll-target="#exemples">10.2.6 - Exemples</a></li>
+  <li><a href="#avantages" id="toc-avantages" class="nav-link" data-scroll-target="#avantages">10.2.7 - Avantages</a></li>
+  <li><a href="#inconvénients" id="toc-inconvénients" class="nav-link" data-scroll-target="#inconvénients">10.2.8 - Inconvénients</a></li>
+  <li><a href="#logiciels" id="toc-logiciels" class="nav-link" data-scroll-target="#logiciels">10.2.9 - Logiciels</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../10-neuralnet/index.html">10 - Interprétation d’un réseau de neurone</a></li><li class="breadcrumb-item"><a href="../10-neuralnet/10.2-pixel-attribution.html">10.2 - Attribution de pixel</a></li></ol></nav>
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modifié</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">10 mai 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="attribution-de-pixel" class="level2">
+<h2 class="anchored" data-anchor-id="attribution-de-pixel">10.2 - Attribution de pixel</h2>
+<!-- HTML only - Not in EN book-->
+<p>Les méthodes d’attribution de pixels mettent en évidence les pixels qui étaient pertinents pour une certaine classification d’image par un réseau neuronal. L’image suivante est un exemple d’explication :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images/vanilla.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>A saliency map in which pixels are colored by their contribution to the classification.</figcaption>
+</figure>
+</div>
+<p>Les méthodes d’attribution de pixels mettent en lumière les pixels qui ont été pertinents pour une certaine classification d’image effectuée par un réseau neuronal. Vous verrez plus tard dans ce chapitre ce qui se passe dans cette image particulière. Les méthodes d’attribution de pixels peuvent être trouvées sous divers noms : carte de sensibilité, carte de saillance, carte d’attribution de pixels, méthodes d’attribution basées sur les gradients, pertinence des caractéristiques, attribution des caractéristiques et contribution des caractéristiques.</p>
+<p>L’attribution de pixels est un cas particulier de l’attribution de caractéristiques, mais pour les images. L’attribution de caractéristiques explique les prédictions individuelles en attribuant chaque caractéristique d’entrée selon la mesure dans laquelle elle a changé la prédiction (négativement ou positivement). Les caractéristiques peuvent être des pixels d’entrée, des données tabulaires ou des mots. <a href="../09-local_model_agnostic_methods/09.6-shap.html">SHAP</a>, <a href="../09-local_model_agnostic_methods/09.5-shapley.html">les valeurs de Shapley</a> et <a href="../09-local_model_agnostic_methods/09.2-lime.html">LIME</a> sont des exemples de méthodes d’attribution de caractéristiques générales.</p>
+<p>Nous considérons les réseaux neuronaux qui produisent en sortie un vecteur de longueur <span class="math inline">\(C\)</span>, ce qui inclut la régression où <span class="math inline">\(C=1\)</span>. La sortie du réseau neuronal pour l’image <span class="math inline">\(I\)</span> est appelée <span class="math inline">\(S(I)=[S_1(I),\ldots,S_C(I)]\)</span>. Toutes ces méthodes prennent en entrée <span class="math inline">\(x\in\mathbb{R}^p\)</span> (peuvent être des pixels d’image, des données tabulaires, des mots, …) avec <span class="math inline">\(p\)</span> caractéristiques et produisent en sortie un score de pertinence pour chacune des <span class="math inline">\(p\)</span> caractéristiques d’entrée : <span class="math inline">\(R^c=[R_1^c,\ldots,R_p^c]\)</span>. Le <span class="math inline">\(c\)</span> indique la pertinence pour la <span class="math inline">\(c^{ième}\)</span> sortie <span class="math inline">\(S_C(I)\)</span>.</p>
+<p>Il existe une quantité déroutante d’approches d’attribution de pixels. Il est utile de comprendre qu’il existe deux types différents de méthodes d’attribution :</p>
+<p><strong>Basées sur l’occlusion ou la perturbation</strong> : Des méthodes comme <a href="../09-local_model_agnostic_methods/09.6-shap.html">SHAP</a> et <a href="../09-local_model_agnostic_methods/09.2-lime.html">LIME</a> manipulent des parties de l’image pour générer des explications (agnostiques au modèle).</p>
+<p><strong>Basées sur le gradient</strong> : De nombreuses méthodes calculent le gradient de la prédiction (ou du score de classification) par rapport aux caractéristiques d’entrée. Les méthodes basées sur le gradient (dont il en existe beaucoup) diffèrent principalement dans la manière dont le gradient est calculé.</p>
+<p>Les deux approches ont en commun que l’explication a la même taille que l’image d’entrée (ou peut au moins être projetée de manière significative sur celle-ci) et elles attribuent à chaque pixel une valeur qui peut être interprétée comme la pertinence du pixel pour la prédiction ou la classification de cette image.</p>
+<p>Une autre catégorisation utile pour les méthodes d’attribution de pixels est la question de base :</p>
+<p><strong>Les méthodes basées uniquement sur le gradient</strong> nous indiquent si un changement dans un pixel changerait la prédiction. Des exemples sont le Gradient Vanille et Grad-CAM. L’interprétation de l’attribution basée uniquement sur le gradient est : si j’augmentais les valeurs de couleur du pixel, la probabilité de la classe prédite augmenterait (pour un gradient positif) ou diminuerait (pour un gradient négatif). Plus la valeur absolue du gradient est grande, plus l’effet d’un changement de ce pixel est fort.</p>
+<p><strong>Les méthodes d’attribution de chemin</strong> comparent l’image actuelle à une image de référence, qui peut être une image “zéro” artificielle comme une image complètement grise. La différence entre la prédiction actuelle et la prédiction de base est répartie parmi les pixels. L’image de référence peut également être multiple : une distribution d’images. Cette catégorie comprend des méthodes basées sur le gradient spécifiques au modèle comme Deep Taylor et Integrated Gradients, ainsi que des méthodes agnostiques au modèle telles que <a href="../09-local_model_agnostic_methods/09.2-lime.html">LIME</a> et <a href="../09-local_model_agnostic_methods/09.6-shap.html">SHAP</a>. Certaines méthodes d’attribution de chemin sont “complètes”, ce qui signifie que la somme des scores de pertinence pour toutes les caractéristiques d’entrée est la différence entre la prédiction de l’image et la prédiction d’une image de référence. Des exemples sont <a href="../09-local_model_agnostic_methods/09.6-shap.html">SHAP</a> et Integrated Gradients. Pour les méthodes d’attribution de chemin, l’interprétation se fait toujours par rapport à la référence : la différence entre les scores de classification de l’image actuelle et de l’image de référence est attribuée aux pixels. Le choix de l’image de référence (distribution) a un grand effet sur l’explication. L’hypothèse habituelle est d’utiliser une image (distribution) “neutre”. Bien sûr, il est parfaitement possible d’utiliser votre selfie préféré, mais vous devriez vous demander si cela a du sens dans une application. Cela affirmerait certainement la domination parmi les autres membres du projet.</p>
+<p>À ce stade, je donnerais normalement une explication intuitive de la manière dont ces méthodes fonctionnent, mais je pense qu’il est préférable de commencer directement par la méthode du Gradient Vanille, car elle montre très bien la recette générale que de nombreuses autres méthodes suivent.</p>
+<section id="gradient-vanille-cartes-de-saillance" class="level3">
+<h3 class="anchored" data-anchor-id="gradient-vanille-cartes-de-saillance">10.2.1 - Gradient Vanille (Cartes de saillance)</h3>
+<p>L’idée du Gradient Vanille, introduite par Simonyan et al.&nbsp;(2013)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> en tant que l’une des premières approches d’attribution de pixels, est assez simple si vous connaissez déjà la rétropropagation. (Ils ont appelé leur approche “Saliency Image-Specific Class”, mais je préfère Gradient Vanille). Nous calculons le gradient de la fonction de perte pour la classe qui nous intéresse par rapport aux pixels d’entrée. Cela nous donne une carte de la taille des caractéristiques d’entrée avec des valeurs négatives à positives.</p>
+<p>La recette pour cette approche est :</p>
+<ol type="1">
+<li>Effectuer un passage en avant de l’image d’intérêt.</li>
+<li>Calculer le gradient du score de classe d’intérêt par rapport aux pixels d’entrée : <span class="math display">\[E_{grad}(I_0)=\frac{\delta{}S_c}{\delta{}I}|_{I=I_0}\]</span> Ici, nous fixons toutes les autres classes à zéro.</li>
+<li>Visualiser les gradients. Vous pouvez soit montrer les valeurs absolues, soit mettre en évidence séparément les contributions négatives et positives.</li>
+</ol>
+<p>Plus formellement, nous avons une image I et le réseau neuronal convolutionnel lui donne un score <span class="math inline">\(S_c(I)\)</span> pour la classe c.&nbsp;Le score est une fonction hautement non linéaire de notre image. L’idée derrière l’utilisation du gradient est que nous pouvons approximer ce score en appliquant une expansion de Taylor du premier ordre</p>
+<p><span class="math display">\[S_c(I)\approx{}w^T{}I+b\]</span></p>
+<p>où w est la dérivée de notre score :</p>
+<p><span class="math display">\[w = \frac{\delta S_C}{\delta I}|_{I_0}\]</span></p>
+<p>Maintenant, il y a une certaine ambiguïté sur la manière d’effectuer un passage en arrière des gradients, car des unités non linéaires telles que ReLU (Rectifying Linear Unit) “suppriment” le signe. Donc, lorsque nous faisons un passage en arrière, nous ne savons pas s’il faut attribuer une activation positive ou négative. Utilisant mes incroyables compétences en art ASCII, la fonction ReLU ressemble à ceci : <strong>_/</strong> et est définie comme <span class="math inline">\(X_{n+1}(x)=max(0,X_n)\)</span> de la couche <span class="math inline">\(X_n\)</span> à la couche <span class="math inline">\(X_{n-1}\)</span>. Cela signifie que lorsque l’activation d’un neurone est nulle, nous ne savons pas quelle valeur rétropropager. Dans le cas du Gradient Vanille, l’ambiguïté est résolue comme suit :</p>
+<p><span class="math display">\[\frac{\delta f}{\delta X_n} = \frac{\delta f}{\delta X_{n+1}} \cdot \mathbf{I}(X_n &gt; 0)\]</span></p>
+<p>Ici, <span class="math inline">\(\mathbf{I}\)</span> est la fonction indicatrice élément par élément, qui est zéro là où l’activation à la couche inférieure était négative, et un où elle est positive ou nulle. Le Gradient Vanille prend le gradient que nous avons rétropropagé jusqu’à présent jusqu’à la couche <span class="math inline">\(n+1\)</span>, puis fixe simplement les gradients à zéro où l’activation à la couche en dessous est négative.</p>
+<p>Regardons un exemple où nous avons les couches <span class="math inline">\(X_n\)</span> et <span class="math inline">\(X_{n+1}=\text{ReLU}(X_{n+1})\)</span>. Notre activation fictive à <span class="math inline">\(X_n\)</span> est :</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+1 &amp; 0 \\
+-1 &amp; -10 \\
+\end{pmatrix}
+\]</span></p>
+<p>Et voici nos gradients à <span class="math inline">\(X_{(n+1)}\)</span> :</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+0,4 &amp; 1,1 \\
+-0,5 &amp; -0,1  \\
+\end{pmatrix}
+\]</span></p>
+<p>Alors nos gradients à <span class="math inline">\(X_n\)</span> sont :</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+0,4 &amp; 0 \\
+0 &amp; 0  \\
+\end{pmatrix}
+\]</span></p>
+<section id="les-problèmes-avec-vanilla-gradient" class="level4">
+<h4 class="anchored" data-anchor-id="les-problèmes-avec-vanilla-gradient">10.2.1.1 - Les problèmes avec Vanilla Gradient</h4>
+<p>Le Gradient Vanille a un problème de saturation, comme expliqué dans Avanti et al.&nbsp;(2017)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Lorsque ReLU est utilisé, et lorsque l’activation passe en dessous de zéro, alors l’activation est plafonnée à zéro et ne change plus. L’activation est saturée. Par exemple : l’entrée de la couche est deux neurones avec des poids <span class="math inline">\(-1\)</span> et <span class="math inline">\(-1\)</span> et un biais de <span class="math inline">\(1\)</span>. Lors du passage à travers la couche ReLU, l’activation sera <span class="math inline">\(neuron_1\)</span> + <span class="math inline">\(neuron_2\)</span> si la somme des deux neurones est inférieure strictement à <span class="math inline">\(1\)</span>.Si la somme des deux est supérieure à <span class="math inline">\(1\)</span>, l’activation restera saturée à une activation de <span class="math inline">\(1\)</span>. Aussi, le gradient à ce point sera zéro, et le Gradient Vanille dira que ce neurone n’est pas important.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Note du traducteur">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note du traducteur
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Vérifier et illustrer l’exemple précédent</p>
+</div>
+</div>
+<p>Et maintenant, mes chers lecteurs, apprenez une autre méthode, plus ou moins gratuitement : DeconvNet.</p>
+</section>
+</section>
+<section id="deconvnet" class="level3">
+<h3 class="anchored" data-anchor-id="deconvnet">10.2.2 - DeconvNet</h3>
+<p>DeconvNet par Zeiler et Fergus (2014)<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> est presque identique au Gradient Vanille. L’objectif de DeconvNet est d’inverser un réseau neuronal et l’article propose des opérations qui sont des inverses des couches de filtrage, de pooling et d’activation. Si vous regardez dans l’article, cela semble très différent du Gradient Vanille, mais à part l’inversion de la couche ReLU, DeconvNet est équivalent à l’approche du Gradient Vanille. Le Gradient Vanille peut être considéré comme une généralisation de DeconvNet. DeconvNet fait un choix différent pour rétropropager le gradient à travers ReLU :</p>
+<p><span class="math display">\[R_n = R_{n+1}\mathbb{I}(R_{n+1} &gt; 0)\]</span></p>
+<p>où <span class="math inline">\(R_n\)</span> et <span class="math inline">\(R_{n+1}\)</span> sont les reconstructions des couches et <span class="math inline">\(\mathbb{I}\)</span> la fonction indicatrice. Lors de la rétropropagation de la couche <span class="math inline">\(n\)</span> à la couche <span class="math inline">\(n-1\)</span>, DeconvNet “se souvient” des activations dans la couche <span class="math inline">\(n\)</span> qui ont été mises à zéro lors du passage en avant et les met à zéro dans la couche <span class="math inline">\(n-1\)</span>. Les activations ayant une valeur négative dans la couche <span class="math inline">\(n\)</span> sont mises à zéro dans la couche <span class="math inline">\(n-1\)</span>. Le gradient <span class="math inline">\(X_n\)</span> pour l’exemple précédent devient :</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Note du traducteur">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note du traducteur
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Vérifier et illustrer l’exemple précédent</p>
+</div>
+</div>
+<p><span class="math display">\[
+\begin{pmatrix}
+0,4 &amp; 1,1 \\
+0 &amp; 0  \\
+\end{pmatrix}
+\]</span></p>
+</section>
+<section id="grad-cam" class="level3">
+<h3 class="anchored" data-anchor-id="grad-cam">10.2.3 - Grad-CAM</h3>
+<p>Grad-CAM fournit des explications visuelles pour les décisions prises par les CNN (réseaux de neurones convolutionnels). Contrairement à d’autres méthodes, le gradient n’est pas rétropropagé jusqu’à l’image, mais (généralement) jusqu’à la dernière couche convolutionnelle pour produire une carte de localisation grossière qui met en évidence les régions importantes de l’image.</p>
+<p>Grad-CAM signifie Gradient-weighted Class Activation Map (Carte d’Activation de Classe Pondérée par Gradient). Et, comme son nom l’indique, il est basé sur le gradient des réseaux neuronaux. Grad-CAM, comme d’autres techniques, attribue à chaque neurone un score de pertinence pour la décision d’intérêt. Cette décision d’intérêt peut être la prédiction de classe (que nous trouvons dans la couche de sortie), mais peut théoriquement être n’importe quelle autre couche dans le réseau neuronal. Grad-CAM rétropropage cette information à la dernière couche convolutionnelle. Grad-CAM peut être utilisé avec différents CNNs : avec des couches entièrement connectées, pour des sorties structurées telles que le sous-titrage et dans des sorties multi-tâches, et pour l’apprentissage par renforcement.</p>
+<p>Commençons par une considération intuitive de Grad-CAM. L’objectif de Grad-CAM est de comprendre sur quelles parties d’une image une couche convolutionnelle “regarde” pour une certaine classification. Pour rappel, la première couche convolutionnelle d’un CNN prend en entrée les images et produit des cartes de caractéristiques qui encodent les caractéristiques apprises (voir la section sur les <a href="../10-neuralnet/10.1-learned-features.html">caractéristiques apprises</a>). Les couches convolutionnelles de niveau supérieur font de même, mais prennent en entrée les cartes de caractéristiques des couches convolutionnelles précédentes. Pour comprendre comment le CNN prend des décisions, Grad-CAM analyse quelles régions sont activées dans les cartes de caractéristiques des dernières couches convolutionnelles. Il y a <span class="math inline">\(k\)</span> cartes de caractéristiques dans la dernière couche convolutionnelle, et je vais les appeler <span class="math inline">\(A_1, A_2, \ldots, A_k\)</span>. Comment pouvons-nous “voir” à partir des cartes de caractéristiques comment le réseau neuronal convolutionnel a effectué une certaine classification ? Dans la première approche, nous pourrions simplement visualiser les valeurs brutes de chaque carte de caractéristiques, faire une moyenne sur les cartes de caractéristiques et superposer cela sur notre image. Cela ne serait pas utile car les cartes de caractéristiques encodent des informations pour <strong>toutes les classes</strong>, mais nous sommes intéressés par une classe particulière. Grad-CAM doit décider de l’importance de chacune des <span class="math inline">\(k\)</span> cartes de caractéristiques pour notre classe c qui nous intéresse. Nous devons pondérer chaque pixel de chaque carte de caractéristiques avec le gradient avant de faire une moyenne sur les cartes de caractéristiques. Cela nous donne une carte thermique qui met en évidence les régions qui affectent positivement ou négativement la classe d’intérêt. Cette carte thermique est passée à travers la fonction ReLU, ce qui est une façon élégante de dire que nous fixons toutes les valeurs négatives à zéro. Grad-CAM élimine toutes les valeurs négatives en utilisant une fonction ReLU, avec l’argument que nous sommes uniquement intéressés par les parties qui contribuent à la classe sélectionnée c et non à d’autres classes. Le mot pixel pourrait être trompeur ici car la carte de caractéristiques est plus petite que l’image (à cause des unités de pooling) mais est mappée sur l’image originale. Nous échelonnons ensuite la carte Grad-CAM à l’intervalle <span class="math inline">\([0,1]\)</span> à des fins de visualisation et la superposons sur l’image originale.</p>
+<p>Regardons la recette pour Grad-CAM. Notre objectif est de trouver la carte de localisation, qui est définie comme suit :</p>
+<p><span class="math display">\[L^c_{Grad-CAM} \in \mathbb{R}^{u\times v} = \underbrace{\text{ReLU}}_{\text{Choisir valeurs positives}}\left(\sum_{k} \alpha_k^c A^k\right)\]</span></p>
+<p>Ici, <span class="math inline">\(u\)</span> est la largeur, <span class="math inline">\(v\)</span> la hauteur de l’explication et <span class="math inline">\(c\)</span> la classe d’intérêt.</p>
+<ol type="1">
+<li>Propager en avant l’image d’entrée à travers le réseau neuronal convolutionnel.</li>
+<li>Obtenir le score brut pour la classe d’intérêt, c’est-à-dire l’activation du neurone avant la couche softmax.</li>
+<li>Définir toutes les autres activations de classe à zéro.</li>
+<li>Rétropropager le gradient de la classe d’intérêt vers la dernière couche convolutionnelle avant les couches entièrement connectées : ().</li>
+<li>Ponderer chaque “pixel” de la carte de caractéristiques par le gradient pour la classe. Les indices i et j se réfèrent aux dimensions de largeur et de hauteur : <span class="math display">\[\alpha_k^c = \overbrace{\frac{1}{Z}\sum_{i}\sum_{j}}^{\text{pooling moyen global}} \underbrace{\frac{\delta y^c}{\delta A_{ij}^k}}_{\text{gradients via rétropropagation}}\]</span> Cela signifie que les gradients sont mis en commun de manière globale.</li>
+<li>Calculer une moyenne des cartes de caractéristiques, pondérée par pixel par le gradient.</li>
+<li>Appliquer ReLU à la carte de caractéristiques moyennée.</li>
+<li>Pour la visualisation : Échelonner les valeurs à l’intervalle entre <span class="math inline">\(0\)</span> et <span class="math inline">\(1\)</span>. Agrandir l’image et la superposer sur l’image originale.</li>
+<li>Étape supplémentaire pour Guided Grad-CAM : Multiplier la carte thermique avec la rétropropagation guidée.</li>
+</ol>
+</section>
+<section id="guided-grad-cam" class="level3">
+<h3 class="anchored" data-anchor-id="guided-grad-cam">10.2.4 - Guided Grad-CAM</h3>
+<p>D’après la description de Grad-CAM, vous pouvez deviner que la localisation est très grossière, car les dernières cartes de caractéristiques convolutionnelles ont une résolution beaucoup plus grossière par rapport à l’image d’entrée. En revanche, d’autres techniques d’attribution rétropropagent jusqu’aux pixels d’entrée. Elles sont donc beaucoup plus détaillées et peuvent vous montrer des bords ou des points individuels qui ont le plus contribué à une prédiction. Une fusion de ces deux méthodes est appelée Guided Grad-CAM. Et c’est super simple. Vous calculez pour une image à la fois l’explication Grad-CAM et l’explication d’une autre méthode d’attribution, telle que le Gradient Vanille. La sortie Grad-CAM est ensuite agrandie avec une interpolation bilinéaire, puis les deux cartes sont multipliées élément par élément. Grad-CAM fonctionne comme une lentille qui se concentre sur des parties spécifiques de la carte d’attribution pixel par pixel.</p>
+</section>
+<section id="smoothgrad" class="level3">
+<h3 class="anchored" data-anchor-id="smoothgrad">10.2.5 - SmoothGrad</h3>
+<p>L’idée de SmoothGrad par Smilkov et al.&nbsp;(2017)<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> est de rendre les explications basées sur les gradients moins bruyantes en ajoutant du bruit et en moyennant ces gradients artificiellement bruyants. SmoothGrad n’est pas une méthode d’explication autonome, mais une extension à toute méthode d’explication basée sur les gradients.</p>
+<p>SmoothGrad fonctionne de la manière suivante :</p>
+<ol type="1">
+<li>Générer plusieurs versions de l’image d’intérêt en y ajoutant du bruit.</li>
+<li>Créer des cartes d’attribution de pixels pour toutes les images.</li>
+<li>Moyenner les cartes d’attribution de pixels.</li>
+</ol>
+<p>Oui, c’est aussi simple que ça. Pourquoi cela devrait-il fonctionner ? La théorie est que la dérivée fluctue grandement à petite échelle. Les réseaux neuronaux n’ont aucune incitation, lors de l’entraînement, à maintenir les gradients lisses, leur objectif est de classer correctement les images. Moyenner plusieurs cartes “lisse” ces fluctuations :</p>
+<p><span class="math display">\[R_{sg}(x) = \frac{1}{N} \sum_{i=1}^n R(x + g_i)\]</span></p>
+<p>Ici, <span class="math inline">\(g_i \sim N(0,\sigma^2)\)</span> sont des vecteurs de bruit échantillonnés à partir de la distribution gaussienne. Le niveau de bruit “idéal” dépend de l’image d’entrée et du réseau. Les auteurs suggèrent un niveau de bruit de <span class="math inline">\(10%\)</span> à <span class="math inline">\(20%\)</span>, ce qui signifie que <span class="math inline">\(\frac{\sigma}{x_{max} - x_{min}}\)</span> devrait être entre <span class="math inline">\(0,1\)</span> et <span class="math inline">\(0,2\)</span>. Les limites <span class="math inline">\(x_{min}\)</span> et <span class="math inline">\(x_{max}\)</span> se réfèrent aux valeurs de pixels minimales et maximales de l’image. L’autre paramètre est le nombre d’échantillons n, pour lequel il a été suggéré d’utiliser <span class="math inline">\(n = 50\)</span>, car il y a des rendements décroissants au-delà de cela.</p>
+</section>
+<section id="exemples" class="level3">
+<h3 class="anchored" data-anchor-id="exemples">10.2.6 - Exemples</h3>
+<p>Voyons quelques exemples de l’apparence de ces cartes et comment les méthodes se comparent qualitativement. Le réseau examiné est VGG-16 (Simonyan et al.&nbsp;2014<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>) qui a été entraîné sur ImageNet et peut donc distinguer plus de 20 000 classes. Pour les images suivantes, nous créerons des explications pour la classe ayant le score de classification le plus élevé.</p>
+<p>Voici les images et leur classification par le réseau neuronal :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images/original-images-classification.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Images of a dog classified as greyhound, a ramen soup classified as soup bowl, and an octopus classified as eel.</figcaption>
+</figure>
+</div>
+<p>L’image à gauche avec le chien honorable gardant le livre “Interpretable Machine Learning” a été classifiée comme “Lévrier” avec une probabilité de <span class="math inline">\(35%\)</span> (il semble que “Livre Interpretable Machine Learning” n’était pas l’une des <span class="math inline">\(20 000\)</span> classes). L’image au milieu montre un bol de délicieuse soupe de ramen et est correctement classifiée comme “Bol de soupe” avec une probabilité de <span class="math inline">\(50%\)</span>. La troisième image montre un poulpe sur le fond de l’océan, qui est incorrectement classifié comme “Anguille” avec une forte probabilité de <span class="math inline">\(70%\)</span>.</p>
+<p>Et voici les attributions de pixels qui visent à expliquer la classification :</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../_static/images/smoothgrad.png" class="img-fluid figure-img" data-align="center"></p>
+<figcaption>Pixel attributions or saliency maps for the Vanilla Gradient method, SmoothGrad and Grad-CAM.</figcaption>
+</figure>
+</div>
+<p>Malheureusement, c’est un peu confus. Mais examinons les explications individuelles, en commençant par le chien. Le Gradient Vanille et le Gradient Vanille + SmoothGrad mettent tous deux en évidence le chien, ce qui a du sens. Mais ils mettent aussi en évidence certaines zones autour du livre, ce qui est étrange. Grad-CAM met en évidence uniquement la zone du livre, ce qui n’a aucun sens. Et à partir de là, cela devient un peu plus compliqué. La méthode du Gradient Vanille semble échouer pour le bol de soupe et le poulpe (ou, comme le réseau le pense, anguille). Les deux images ressemblent à des images résiduelles de regarder le soleil trop longtemps. (S’il vous plaît, ne regardez pas directement le soleil). SmoothGrad aide beaucoup, au moins les zones sont plus définies. Dans l’exemple de la soupe, certains ingrédients sont mis en évidence, tels que les œufs et la viande, mais aussi la zone autour des baguettes. Dans l’image du poulpe, l’animal lui-même est principalement mis en évidence. Pour le bol de soupe, Grad-CAM met en évidence la partie œuf et, pour une raison quelconque, la partie supérieure du bol. Les explications du poulpe par Grad-CAM sont encore plus désordonnées.</p>
+<p>Vous pouvez déjà voir ici les difficultés à évaluer si nous faisons confiance aux explications. Comme première étape, nous devons considérer quelles parties de l’image contiennent des informations pertinentes pour la classification de l’image. Mais ensuite, nous devons aussi réfléchir à ce que le réseau neuronal a pu utiliser pour la classification. Peut-être que le bol de soupe a été correctement classifié en fonction de la combinaison des œufs et des baguettes, comme le suggère SmoothGrad ? Ou peut-être que le réseau neuronal a reconnu la forme du bol plus quelques ingrédients, comme le suggère Grad-CAM ? Nous ne savons tout simplement pas.</p>
+<p>Et c’est là le grand problème avec toutes ces méthodes. Nous n’avons pas de vérité absolue pour les explications. Nous ne pouvons que, dans un premier temps, rejeter les explications qui n’ont manifestement aucun sens (et même dans cette étape, nous n’avons pas une grande confiance. Le processus de prédiction dans le réseau neuronal est très compliqué).</p>
+</section>
+<section id="avantages" class="level3">
+<h3 class="anchored" data-anchor-id="avantages">10.2.7 - Avantages</h3>
+<p>Les explications sont <strong>visuelles</strong> et nous sommes rapides à reconnaître les images. En particulier, lorsque les méthodes mettent en évidence uniquement les pixels importants, il est facile de reconnaître immédiatement les régions importantes de l’image.</p>
+<p>Les méthodes basées sur les gradients sont généralement <strong>plus rapides à calculer que les méthodes agnostiques au modèle</strong>. Par exemple, <a href="../09-local_model_agnostic_methods/09.2-lime.html">LIME</a> et <a href="../09-local_model_agnostic_methods/09.6-shap.html">SHAP</a> peuvent également être utilisés pour expliquer les classifications d’images, mais sont plus coûteux à calculer.</p>
+<p>Il existe <strong>de nombreuses méthodes parmi lesquelles choisir</strong>.</p>
+</section>
+<section id="inconvénients" class="level3">
+<h3 class="anchored" data-anchor-id="inconvénients">10.2.8 - Inconvénients</h3>
+<p>Comme pour la plupart des méthodes d’interprétation, il est <strong>difficile de savoir si une explication est correcte</strong>, et une grande partie de l’évaluation est uniquement qualitative (« Ces explications semblent correctes, publions l’article tout de suite »).</p>
+<p>Les méthodes d’attribution de pixels peuvent être très <strong>fragiles</strong>. Ghorbani et al.&nbsp;(2019)<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> ont montré qu’introduire de petites perturbations (adverses) dans une image, qui conduisent toujours à la même prédiction, peut entraîner la mise en évidence de pixels très différents comme explications.</p>
+<p>Kindermans et al.&nbsp;(2019)<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> ont également montré que ces méthodes d’attribution de pixels <strong>peuvent être hautement peu fiables</strong>. Ils ont ajouté un décalage constant aux données d’entrée, c’est-à-dire qu’ils ont ajouté les mêmes changements de pixels à toutes les images. Ils ont comparé deux réseaux, le réseau original et le réseau “décalé” où le biais de la première couche est modifié pour s’adapter au décalage constant des pixels. Les deux réseaux produisent les mêmes prédictions. De plus, le gradient est le même pour les deux. Mais les explications ont changé, ce qui est une propriété indésirable. Ils ont examiné DeepLift, Gradient Vanille et Gradients Intégrés.</p>
+<p>L’article “Sanity checks for saliency maps”<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> a étudié si les méthodes de salience sont <strong>insensibles au modèle et aux données</strong>. L’insensibilité est hautement indésirable, car cela signifierait que l’“explication” est sans rapport avec le modèle et les données. Les méthodes insensibles au modèle et aux données d’entraînement sont similaires aux détecteurs de bords. Les détecteurs de bords mettent simplement en évidence des changements de couleur de pixels forts dans les images et sont sans rapport avec un modèle de prédiction ou des caractéristiques abstraites de l’image, et ne nécessitent aucune formation. Les méthodes testées étaient le Gradient Vanille, Gradient x Entrée, Gradients Intégrés, Rétropropagation Guidée, Guided Grad-CAM et SmoothGrad (avec Gradient Vanille). Le Gradient Vanille et Grad-CAM ont passé le test d’insensibilité, tandis que la Rétropropagation Guidée et Guided Grad-CAM ont échoué. Cependant, le papier de vérification de la santé lui-même a trouvé des critiques de Tomsett et al.&nbsp;(2020)<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> avec un article appelé “Sanity checks for saliency metrics” (bien sûr). Ils ont trouvé un manque de cohérence pour les métriques d’évaluation (je sais, cela devient assez méta maintenant). Donc, nous revenons là où nous avons commencé… Il reste difficile d’évaluer les explications visuelles. Cela rend très difficile pour un praticien.</p>
+<p>Dans l’ensemble, c’est un <strong>état de choses très insatisfaisant</strong>. Nous devons attendre un peu plus de recherche sur ce sujet. Et s’il vous plaît, pas plus d’invention de nouvelles méthodes de salience, mais plus de rigueur sur la façon de les évaluer.</p>
+</section>
+<section id="logiciels" class="level3">
+<h3 class="anchored" data-anchor-id="logiciels">10.2.9 - Logiciels</h3>
+<p>Il existe plusieurs implémentations logicielles de méthodes d’attribution de pixels. Pour l’exemple, j’ai utilisé <a href="https://pypi.org/project/tf-keras-vis/">tf-keras-vis</a>. L’une des bibliothèques les plus complètes est <a href="https://github.com/albermax/innvestigate">iNNvestigate</a>, qui implémente le Gradient Vanille, SmoothGrad, DeconvNet, la Rétropropagation Guidée, PatternNet, LRP et plus encore. Beaucoup de ces méthodes sont implémentées dans la <a href="https://github.com/marcoancona/DeepExplain">Boîte à Outils DeepExplain</a>.</p>
+<!-- REFERENCES -->
+<!--
+[^integrated-gradients]: Sundararajan, Mukund, Ankur Taly, and Qiqi Yan. "Axiomatic attribution for deep networks." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.
+-->
+<!--
+[^grad-cam]: Selvaraju, Ramprasaath R., et al. "Grad-cam: Visual explanations from deep networks via gradient-based localization." Proceedings of the IEEE international conference on computer vision. (2017).
+-->
+<!--
+[^guided-backpropagation]: Springenberg, Jost Tobias, et al. "Striving for simplicity: The all convolutional net." arXiv preprint arXiv:1412.6806 (2014).
+-->
+<!--
+[^lrp]: Bach, Sebastian, et al. "On pixel-wise explanations for non-linear classifier decisions by layer-wise relevance propagation." PloS one 10.7 (2015).
+-->
+<!-- References about problems -->
+<!--
+[^better-understanding]: Ancona, Marco, et al. "Towards better understanding of gradient-based attribution methods for deep neural networks." arXiv preprint arXiv:1711.06104 (2017).
+-->
+<!--
+[^perplexing-behavior]: Nie, Weili, Yang Zhang, and Ankit Patel. "A theoretical explanation for perplexing behaviors of backpropagation-based visualizations." arXiv preprint arXiv:1805.07039 (2018).
+-->
+<!-- Toolboxes -->
+<!--
+[^innvestigate]: Alber, Maximilian, Sebastian Lapuschkin, Philipp Seegerer, Miriam Hägele, Kristof T. Schütt, Grégoire Montavon, Wojciech Samek, Klaus-Robert Müller, Sven Dähne, and Pieter-Jan Kindermans. "iNNvestigate neural networks!." J. Mach. Learn. Res. 20, no. 93 (2019): 1-8.
+-->
+<!--
+[^human-visuals]: Linsley, Drew, et al. "What are the visual features underlying human versus machine vision?." Proceedings of the IEEE International Conference on Computer Vision Workshops. 2017.
+-->
+
+
+</section>
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Simonyan, Karen, Andrea Vedaldi, and Andrew Zisserman. “Deep inside convolutional networks: Visualising image classification models and saliency maps.” arXiv preprint arXiv:1312.6034 (2013).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Shrikumar, Avanti, Peyton Greenside, and Anshul Kundaje. “Learning important features through propagating activation differences.” Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, (2017).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Zeiler, Matthew D., and Rob Fergus. “Visualizing and understanding convolutional networks.” European conference on computer vision. Springer, Cham (2014).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Smilkov, Daniel, et al.&nbsp;“SmoothGrad: removing noise by adding noise.” arXiv preprint arXiv:1706.03825 (2017).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Simonyan, Karen, and Andrew Zisserman. “Very deep convolutional networks for large-scale image recognition.” arXiv preprint arXiv:1409.1556 (2014).<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Ghorbani, Amirata, Abubakar Abid, and James Zou. “Interpretation of neural networks is fragile.” Proceedings of the AAAI Conference on Artificial Intelligence. Vol. 33. 2019.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Kindermans, Pieter-Jan, Sara Hooker, Julius Adebayo, Maximilian Alber, Kristof T. Schütt, Sven Dähne, Dumitru Erhan, and Been Kim. “The (un) reliability of saliency methods.” In Explainable AI: Interpreting, Explaining and Visualizing Deep Learning, pp.&nbsp;267-280. Springer, Cham (2019).<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Adebayo, Julius, Justin Gilmer, Michael Muelly, Ian Goodfellow, Moritz Hardt, and Been Kim. “Sanity checks for saliency maps.” arXiv preprint arXiv:1810.03292 (2018).<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Tomsett, Richard, Dan Harborne, Supriyo Chakraborty, Prudhvi Gurram, and Alun Preece. “Sanity checks for saliency metrics.” In Proceedings of the AAAI Conference on Artificial Intelligence, vol.&nbsp;34, no. 04, pp.&nbsp;6021-6029. 2020.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../10-neuralnet/10.1-learned-features.html" class="pagination-link  aria-label=" 10.1="" -="" caractéristiques="" apprises"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">10.1 - Caractéristiques apprises</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../10-neuralnet/10.3-concepts.html" class="pagination-link" aria-label="10.3 - Détecter les concepts">
+        <span class="nav-page-text">10.3 - Détecter les concepts</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
