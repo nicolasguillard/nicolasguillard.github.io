@@ -560,7 +560,7 @@ window.Quarto = {
 <p>Il existe plusieurs algorithmes qui peuvent faire croître un arbre. Ils diffèrent dans la structure possible de l’arbre (par exemple, le nombre de divisions par noeud), les critères pour trouver les divisions, quand arrêter les divisions et comment estimer les modèles simples au sein des noeuds feuilles. L’algorithme de classification et de régression par arbres (CART) est probablement l’algorithme le plus populaire pour l’induction d’arbres. Nous nous concentrerons sur CART, mais l’interprétation est similaire pour la plupart des autres types d’arbres. Je recommande le livre ‘Les éléments de l’apprentissage statistique’ (Friedman, Hastie et Tibshirani 2009) <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> pour une introduction plus détaillée à CART.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_4_tree.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_4_tree.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Arbre de décision avec données artificielles. Les instances avec une valeur supérieure à 3 pour la fonctionnalité x1 se retrouvent dans le noeud 5. Toutes les autres instances sont affectées au noeud 3 ou au noeud 4, selon que les valeurs de la fonctionnalité x2 dépassent 1.</figcaption>
 </figure>
 </div>
@@ -585,7 +585,7 @@ window.Quarto = {
 <p>Examinons à nouveau les <a href="../04-datasets/04.1-datasets.html">données sur la location de vélos</a>. Nous voulons prédire le nombre de vélos loués un certain jour avec un arbre de décision. L’arbre appris ressemble à ceci :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_4_2_example.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_4_2_example.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Arbre de régression ajusté sur les données de location de vélos. La profondeur maximale autorisée pour l’arbre a été fixée à 2. La fonction de tendance (jours depuis 2011) et la température (temp) ont été sélectionnées pour les divisions. Les boîtes à moustaches montrent la distribution du nombre de vélos dans le nœud terminal.</figcaption>
 </figure>
 </div>
@@ -594,7 +594,7 @@ window.Quarto = {
 <p>L’arbre visualisé montre que la tendance de la température et du temps a été utilisée pour les divisions, mais ne quantifie pas quelle caractéristique était la plus importante. La mesure de l’importance des caractéristiques montre que la tendance temporelle est bien plus importante que la température.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_4_2_importance.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_4_2_importance.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Importance des caractéristiques mesurées par l’amélioration moyenne de la pureté du noeud.</figcaption>
 </figure>
 </div>

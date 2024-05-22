@@ -568,14 +568,14 @@ window.Quarto = {
 <p>Revenons à l’<a href="../04-datasets/04.3-datasets.html">ensemble de données sur le cancer du col de l’utérus</a> et voyons comment la prédiction de chaque instance est associée à la fonctionnalité « Âge ». Nous analyserons une forêt aléatoire qui prédit la probabilité de cancer pour une femme compte tenu des facteurs de risque. Dans le <a href="../08-global_model_agnostic_methods/08.1-pdp.html">graphique de dépendance partielle</a>, nous avons vu que la probabilité de cancer augmente vers l’âge de 50 ans, mais est-ce vrai pour chaque femme de l’ensemble de données ? Le graphique ICE révèle que pour la plupart des femmes, l’effet de l’âge suit la tendance moyenne d’augmentation à 50 ans, à quelques exceptions près : pour les quelques femmes qui ont une probabilité prédite élevée à un jeune âge, la probabilité prédite de cancer ne change pas. beaucoup avec l’âge.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/9_1_1_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/9_1_1_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Graphique ICE de la probabilité de cancer du col de l’utérus par âge. Chaque ligne représente une femme. Pour la plupart des femmes, la probabilité prévue de cancer augmente avec l’âge. Pour certaines femmes dont la probabilité prédite de cancer est supérieure à 0,4, la prédiction ne change pas beaucoup à un âge plus avancé.</figcaption>
 </figure>
 </div>
 <p>La figure suivante montre les tracés ICE pour la <a href="../04-datasets/04.1-datasets.html">prévision de la location de vélos</a>. Le modèle de prédiction sous-jacent est une forêt aléatoire.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/9_1_1_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/9_1_1_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Graphiques ICE des locations de vélos prévues en fonction des conditions météorologiques. Les mêmes effets peuvent être observés que dans les diagrammes de dépendance partielle.</figcaption>
 </figure>
 </div>
@@ -591,7 +591,7 @@ window.Quarto = {
 <p>Par exemple, prenons le tracé ICE du cancer du col de l’utérus pour l’âge et centrez les lignes sur l’âge observé le plus jeune :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/9_1_1_2_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/9_1_1_2_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Graphique ICE centré pour la probabilité prévue de cancer par âge. Les lignes sont fixées à 0 à 14 ans. Par rapport à 14 ans, les prédictions pour la plupart des femmes restent inchangées jusqu’à l’âge de 45 ans, où la probabilité prédite augmente.</figcaption>
 </figure>
 </div>
@@ -599,7 +599,7 @@ window.Quarto = {
 <p>Jetons un coup d’œil aux tracés ICE centrés pour la prédiction de la location de vélos :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/9_1_1_2_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/9_1_1_2_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Graphiques ICE centrés du nombre prévu de vélos selon les conditions météorologiques. Les lignes montrent la différence de prédiction par rapport à la prédiction avec la valeur de la caractéristique respective à son minimum observé.</figcaption>
 </figure>
 </div>

@@ -606,21 +606,21 @@ window.Quarto = {
 <p>OneR couvre toujours toutes les instances de l’ensemble de données, car il utilise tous les niveaux de l’entité sélectionnée. Les valeurs manquantes peuvent être soit traitées comme une valeur de caractéristique supplémentaire, soit imputées au préalable.</p>
 <p>Un modèle OneR est un arbre de décision avec une seule division. La répartition n’est pas nécessairement binaire comme dans CART, mais dépend du nombre de valeurs de caractéristiques uniques.</p>
 <p>Regardons un exemple de la façon dont la meilleure fonctionnalité est choisie par OneR. Le tableau suivant présente un ensemble de données artificielles sur les maisons avec des informations sur leur valeur, leur emplacement, leur taille et si les animaux sont autorisés. Nous souhaitons apprendre un modèle simple pour prédire la valeur d’une maison.</p>
-<p><img src="../_static/images2/5_5_1_table_1.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_1_table_1.png" class="img-fluid" data-align="center"></p>
 <p>OneR crée les tableaux croisés entre chaque fonctionnalité et le résultat :</p>
-<p><img src="../_static/images2/5_5_1_table_2.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_1_table_2.png" class="img-fluid" data-align="center"></p>
 <p>Pour chaque fonctionnalité, nous parcourons le tableau ligne par ligne : chaque valeur de fonctionnalité est la partie SI d’une règle ; la classe la plus courante pour les instances avec cette valeur de caractéristique est la prédiction, la partie ALORS de la règle. Par exemple, la fonction de taille avec les niveaux <code>basse</code>, <code>moyenne</code> et <code>elevee</code> donne trois règles. Pour chaque fonctionnalité, nous calculons le taux d’erreur total des règles générées, qui est la somme des erreurs. La fonctionnalité de localisation a les valeurs possibles <code>mauvaise</code> et <code>bonne</code>. La valeur la plus fréquente pour les maisons situées dans de mauvais emplacements est <code>basse</code> et lorsque nous l’utilisons comme prédiction, nous faisons deux erreurs, car deux maisons ont une valeur <code>moyenne</code>. La valeur prédite des maisons bien situées est égale à <code>elevee</code> et encore une fois, nous commettons deux erreurs, car deux maisons ont une valeur <code>moyenne</code>. L’erreur que nous faisons en utilisant la fonction de localisation est de 4/10, pour la fonction de taille, elle est de 3/10 et pour la fonction d’animal de compagnie, elle est de 4/10. La fonctionnalité de taille produit les règles avec l’erreur la plus faible et sera utilisée pour le modèle OneR final :</p>
 <p>SI <code>size = petite</code> ALORS <code>value = basse</code><br> SI <code>size = moyenne</code> ALORS <code>value = moyenne</code><br> SI <code>size = grance</code> ALORS <code>value = elevee</code></p>
 <p>OneR préfère les fonctionnalités avec de nombreux niveaux possibles, car ces fonctionnalités peuvent plus facilement suradapter la cible. Imaginez un ensemble de données qui ne contient que du bruit et aucun signal, ce qui signifie que toutes les caractéristiques prennent des valeurs aléatoires et n’ont aucune valeur prédictive pour la cible. Certaines fonctionnalités ont plus de niveaux que d’autres. Les fonctionnalités avec plus de niveaux peuvent désormais être surajustées plus facilement. Une fonctionnalité qui a un niveau distinct pour chaque instance des données prédirait parfaitement l’ensemble de l’ensemble de données d’entraînement. Une solution serait de diviser les données en ensembles de formation et de validation, d’apprendre les règles sur les données de formation et d’évaluer l’erreur totale de choix de la fonctionnalité sur l’ensemble de validation.</p>
 <p>Les égalités sont un autre problème, c’est-à-dire lorsque deux caractéristiques aboutissent à la même erreur totale. OneR résout les égalités en prenant soit la première caractéristique avec l’erreur la plus faible, soit celle avec la valeur p la plus basse d’un test du chi carré.</p>
 <p><strong>Exemple</strong></p>
 <p>Essayons OneR avec des données réelles. Nous utilisons la <a href="../04-datasets/04.3-datasets.html">tâche de classification du cancer du col de l’utérus</a> pour tester l’algorithme OneR. Toutes les caractéristiques d’entrée continue ont été discrétisées en leurs 5 quantiles. Les règles suivantes sont créées :</p>
-<p><img src="../_static/images2/5_5_1_table_3.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_1_table_3.png" class="img-fluid" data-align="center"></p>
 <p>La fonctionnalité âge a été choisie par OneR comme la meilleure fonctionnalité prédictive. Puisque le cancer est rare, pour chaque règle, la classe majoritaire et donc l’étiquette prédite sont toujours en bonne santé, ce qui est plutôt inutile. Cela n’a pas de sens d’utiliser la prédiction d’étiquette dans ce cas déséquilibré. Le tableau croisé entre les intervalles « Âge » et Cancer/En bonne santé ainsi que le pourcentage de femmes atteintes de cancer est plus informatif :</p>
-<p><img src="../_static/images2/5_5_1_table_4.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_1_table_4.png" class="img-fluid" data-align="center"></p>
 <p>Mais avant de commencer à interpréter quoi que ce soit : étant donné que la prédiction pour chaque fonctionnalité et chaque valeur est saine, le taux d’erreur total est le même pour toutes les fonctionnalités. Les liens dans l’erreur totale sont, par défaut, résolus en utilisant la première fonctionnalité parmi celles avec les taux d’erreur les plus bas (ici, toutes les fonctionnalités ont 55/858), qui se trouve être la fonctionnalité Âge.</p>
 <p>OneR ne prend pas en charge les tâches de régression. Mais nous pouvons transformer une tâche de régression en tâche de classification en découpant le résultat continu en intervalles. Nous utilisons cette astuce pour prédire le nombre de <a href="../04-datasets/04.1-datasets.html">vélos loués</a> avec OneR en découpant le nombre de vélos en quatre quartiles (0-25%, 25-50%, 50-75% et 75-100%). Le tableau suivant montre la fonctionnalité sélectionnée après l’ajustement du modèle OneR :</p>
-<p><img src="../_static/images2/5_5_1_table_5.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_1_table_5.png" class="img-fluid" data-align="center"></p>
 <p>La fonctionnalité sélectionnée est le mois. La fonctionnalité mensuelle a (surprise !) 12 niveaux de fonctionnalités, ce qui est plus que la plupart des autres fonctionnalités. Il existe donc un risque de surapprentissage. Du côté le plus optimiste : la fonction mensuelle peut gérer la tendance saisonnière (par exemple moins de vélos loués en hiver) et les prévisions semblent raisonnables.</p>
 <p>Nous passons maintenant du simple algorithme OneR à une procédure plus complexe utilisant des règles avec des conditions plus complexes composées de plusieurs fonctionnalités : Sequential Covering.</p>
 </section>
@@ -642,7 +642,7 @@ window.Quarto = {
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_5_2_figure_1.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_5_2_figure_1.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>L’algorithme de couverture fonctionne en couvrant séquentiellement l’espace des fonctionnalités avec des règles uniques et en supprimant les points de données déjà couverts par ces règles. À des fins de visualisation, les fonctionnalités x1 et x2 sont continues, mais la plupart des algorithmes d’apprentissage de règles nécessitent des fonctionnalités catégorielles.</figcaption>
 </figure>
 </div>
@@ -657,7 +657,7 @@ window.Quarto = {
 <p>La figure suivante illustre la recherche de poutres dans un arbre :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_5_2_figure_2.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_5_2_figure_2.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Apprendre une règle en recherchant un chemin dans un arbre de décision. Un arbre de décision est développé pour prédire la cible d’intérêt. Nous commençons au nœud racine, suivons goulûment et itérativement le chemin qui produit localement le sous-ensemble le plus pur (par exemple la plus haute précision) et ajoutons toutes les valeurs divisées à la condition de règle. On obtient : Si <code>location = good</code> et <code>size = big</code>, alors value=high.</figcaption>
 </figure>
 </div>
@@ -667,7 +667,7 @@ window.Quarto = {
 <p>Nous utiliserons RIPPER pour les exemples.</p>
 <p>L’algorithme RIPPER ne trouve aucune règle dans la tâche de classification du <a href="../04-datasets/04.3-datasets.html">cancer du col de l’utérus</a>.</p>
 <p>Lorsque nous utilisons RIPPER sur la tâche de régression pour prédire <a href="../04-datasets/04.1-datasets.html">le nombre de vélos</a>, certaines règles sont trouvées. Puisque RIPPER ne fonctionne que pour la classification, le décompte des vélos doit être transformé en un résultat catégorique. J’y suis parvenu en réduisant le nombre de vélos en quartiles. Par exemple (4548, 5956) est l’intervalle couvrant le nombre de vélos prévu entre 4548 et 5956. Le tableau suivant montre la liste de décision des règles apprises.</p>
-<p><img src="../_static/images2/5_5_2_table_1.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_2_table_1.png" class="img-fluid" data-align="center"></p>
 <p>L’interprétation est simple : si les conditions sont réunies, nous prédisons l’intervalle sur la droite pour le nombre de vélos. La dernière règle est la règle par défaut qui s’applique lorsqu’aucune des autres règles ne s’applique à une instance. Pour prédire une nouvelle instance, commencez par le haut de la liste et vérifiez si une règle s’applique. Lorsqu’une condition correspond, le côté droit de la règle correspond à la prédiction pour cette instance. La règle par défaut garantit qu’il y a toujours une prédiction.</p>
 </section>
 <section id="bayesian-rule-lists" class="level3">
@@ -725,13 +725,13 @@ window.Quarto = {
 <p><strong>Exemples</strong></p>
 <p>Voilà pour la théorie, voyons maintenant la méthode BRL en action. Les exemples utilisent une variante plus rapide de BRL appelée Scalable Bayesian Rule Lists (SBRL) par Yang et al.&nbsp;(2017)<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Nous utilisons l’algorithme SBRL pour prédire le <a href="../04-datasets/04.3-datasets.html">risque de cancer du col de l’utérus</a>. J’ai d’abord dû discrétiser toutes les fonctionnalités d’entrée pour que l’algorithme SBRL fonctionne. À cette fin, j’ai regroupé les caractéristiques continues en fonction de la fréquence des valeurs par quantiles.</p>
 <p>Nous obtenons les règles suivantes :</p>
-<p><img src="../_static/images2/5_5_3_table_2.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_3_table_2.png" class="img-fluid" data-align="center"></p>
 <p>Notez que nous obtenons des règles raisonnables, puisque la prédiction sur la partie ALORS n’est pas le résultat de la classe, mais la probabilité prédite de cancer.</p>
 <p>Les conditions ont été sélectionnées à partir de modèles pré-exploités avec l’algorithme FP-Growth. Le tableau suivant affiche l’ensemble des conditions parmi lesquelles l’algorithme SBRL peut choisir pour créer une liste de décisions. Le nombre maximum de valeurs de fonctionnalités dans une condition que j’autorisais en tant qu’utilisateur était de deux. Voici un échantillon de dix modèles :</p>
-<p><img src="../_static/images2/5_5_3_table_3.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_3_table_3.png" class="img-fluid" data-align="center"></p>
 <p>Ensuite, nous appliquons l’algorithme SBRL à <a href="../04-datasets/04.1-datasets.html">la tâche de prédiction de location de vélos</a>. Cela ne fonctionne que si le problème de régression consistant à prédire le nombre de vélos est converti en une tâche de classification binaire. J’ai arbitrairement créé une tâche de classification en créant une étiquette qui vaut 1 si le nombre de vélos dépasse 4000 vélos par jour, sinon 0.</p>
 <p>La liste suivante a été apprise par SBRL :</p>
-<p><img src="../_static/images2/5_5_3_table_4.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_5_3_table_4.png" class="img-fluid" data-align="center"></p>
 <p>Prévoyons la probabilité que le nombre de vélos dépasse 4 000 par jour en 2012 avec une température de 17 degrés Celsius. La première règle ne s’applique pas, car elle ne s’applique qu’aux jours de 2011. La deuxième règle s’applique, car le jour est en 2012 et 17 degrés se situent dans l’intervalle <span class="math inline">\([7.35 , 19.9)\)</span>. Notre prédiction concernant la probabilité que plus de 4 000 vélos soient loués est de 88%.</p>
 </section>
 <section id="avantages" class="level3">

@@ -560,7 +560,7 @@ window.Quarto = {
 <p>Le modèle de régression linéaire ne tient pas compte des interactions entre les caractéristiques. Ne serait-il pas pratique d’avoir un modèle aussi simple et interprétable que les modèles linéaires, mais intégrant également des interactions de fonctionnalités ? RuleFit comble cette lacune. RuleFit apprend un modèle linéaire clairsemé avec les fonctionnalités d’origine ainsi qu’un certain nombre de nouvelles fonctionnalités qui sont des règles de décision. Ces nouvelles fonctionnalités capturent les interactions entre les fonctionnalités d’origine. RuleFit génère automatiquement ces fonctionnalités à partir d’arbres de décision. Chaque chemin à travers un arbre peut être transformé en règle de décision en combinant les décisions fractionnées en une règle. Les prédictions de nœuds sont ignorées et seules les divisions sont utilisées dans les règles de décision :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/rulefit.jpg" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/rulefit.jpg" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>4 règles peuvent être générées à partir d’un arbre à 3 nœuds terminaux.</figcaption>
 </figure>
 </div>
@@ -572,12 +572,12 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="interprétation-et-exemple">5.6.1 - Interprétation et exemple</h3>
 <p>Puisque RuleFit estime finalement un modèle linéaire, l’interprétation est la même que pour <a href="../05-interpretable_models/05.1-linear-regression.html">les modèles linéaires</a> « normaux » . La seule différence est que le modèle possède de nouvelles fonctionnalités dérivées des règles de décision. Les règles de décision sont des caractéristiques binaires : une valeur de 1 signifie que toutes les conditions de la règle sont remplies, sinon la valeur est 0. Pour les termes linéaires dans RuleFit, l’interprétation est la même que dans les modèles de régression linéaire : si la caractéristique augmente d’une unité , le résultat prédit change en fonction du poids des caractéristiques correspondant.</p>
 <p>Dans cet exemple, nous utilisons RuleFit pour prédire le nombre de <a href="../04-datasets/04.1-datasets.html">vélos loués</a> un jour donné. Le tableau présente cinq des règles générées par RuleFit, ainsi que leurs poids et importances Lasso. Le calcul est expliqué plus loin dans le chapitre.</p>
-<p><img src="../_static/images2/5_6_1_table_1.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images2/5_6_1_table_1.png" class="img-fluid" data-align="center"></p>
 <p>La règle la plus importante était : « jours_depuis_2011 &gt; 111 &amp; temps de repos (« GOOD », « MISTY ») » et le poids correspondant est 795. L’interprétation est : Si jours_depuis_2011 &gt; 111 &amp; temps de repos (« GOOD », « MISTY ») , le nombre prévu de vélos augmente de 795, lorsque toutes les autres valeurs de caractéristiques restent fixes. Au total, 278 règles de ce type ont été créées à partir des 8 fonctionnalités originales. Beaucoup! Mais grâce au Lasso, seuls 59 des 278 ont un poids différent de 0.</p>
 <p>Le calcul de l’importance des caractéristiques globales révèle que la tendance de la température et du temps sont les caractéristiques les plus importantes :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_6_1_figure_1.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_6_1_figure_1.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Mesures d’importance des caractéristiques pour un modèle RuleFit prédisant le nombre de vélos. Les caractéristiques les plus importantes pour les prévisions étaient la température et la tendance temporelle.</figcaption>
 </figure>
 </div>

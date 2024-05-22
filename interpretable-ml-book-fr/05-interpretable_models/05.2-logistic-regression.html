@@ -570,7 +570,7 @@ window.Quarto = {
 <p>Les modèles linéaires ne s’étendent pas aux problèmes de classification avec plusieurs classes. Vous devriez commencer à étiqueter la classe suivante avec 2, puis 3, et ainsi de suite. Les classes pourraient ne pas avoir d’ordre significatif, mais le modèle linéaire forcerait une structure étrange sur la relation entre les caractéristiques et vos prédictions de classe. Plus la valeur d’une caractéristique avec un poids positif est élevée, plus elle contribue à la prédiction d’une classe avec un numéro plus élevé, même si les classes qui se trouvent avoir un numéro similaire ne sont pas plus proches que d’autres classes.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_2_1_logistic_regression.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_2_1_logistic_regression.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>A linear model classifies tumors as malignant (1) or benign (0) given their size. The lines show the prediction of the linear model. For the data on the left, we can use 0.5 as classification threshold. After introducing a few more malignant tumor cases, the regression line shifts and a threshold of 0.5 no longer separates the classes. Points are slightly jittered to reduce over-plotting.</figcaption>
 </figure>
 </div>
@@ -582,7 +582,7 @@ window.Quarto = {
 <p>Et cela ressemble à :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_2_2_logistic_function.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_2_2_logistic_function.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>The logistic function. It outputs numbers between 0 and 1. At input 0, it outputs 0.5.</figcaption>
 </figure>
 </div>
@@ -593,7 +593,7 @@ window.Quarto = {
 <p>Revenons à l’exemple de la taille de la tumeur. Mais au lieu du modèle de régression linéaire, utilisons le modèle de régression logistique :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_2_2_tumor_size.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_2_2_tumor_size.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>The logistic regression model finds the correct decision boundary between malignant and benign depending on tumor size. The line is the logistic function shifted and squeezed to fit the data.</figcaption>
 </figure>
 </div>
@@ -639,7 +639,7 @@ Note du traducteur
 <p>Nous utilisons le modèle de régression logistique pour prédire le <a href="#cervical">cancer du col de l’utérus</a> en fonction de certains facteurs de risque. Le tableau suivant montre les poids estimés, les rapports des odds associés et l’erreur standard des estimations.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_2_4_example_table.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_2_4_example_table.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>The results of fitting a logistic regression model on the cervical cancer dataset. Shown are the features used in the model, their estimated weights and corresponding odds ratios, and the standard errors of the estimated weights.</figcaption>
 </figure>
 </div>

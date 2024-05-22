@@ -624,7 +624,7 @@ Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe
 <p>Dans cet exemple, nous utilisons le modèle de régression linéaire pour prédire le <a href="#bike-data">nombre de vélos loués</a> un jour donné, en fonction des informations météorologiques et calendaires. Pour l’interprétation, nous examinons les poids de régression estimés. Les caractéristiques sont composées de caractéristiques numériques et catégorielles. Pour chaque caractéristique, le tableau montre le poids estimé, l’erreur standard de l’estimation (<span class="math inline">\(SE\)</span>) et la valeur absolue de la statistique t (<span class="math inline">\(|t|\)</span>).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_1_2_linear_regression_example.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_1_2_linear_regression_example.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Interpretation of a numerical feature (temperature): An increase of the temperature by 1 degree Celsius increases the predicted number of bicycles by 110.7, when all other features remain fixed.</figcaption>
 </figure>
 </div>
@@ -640,7 +640,7 @@ Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe
 <p>Les informations du tableau des poids (estimation des poids et de la variance) peuvent être visualisées dans un graphique des poids. Le graphique suivant montre les résultats du précédent modèle de régression linéaire.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_1_3_1_weight_plot.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_1_3_1_weight_plot.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Weights are displayed as points and the 95% confidence intervals as lines.</figcaption>
 </figure>
 </div>
@@ -654,7 +654,7 @@ Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe
 <p>Les effets des caractéristiques catégorielles peuvent être résumés dans un seul diagramme à boîtes, par rapport au graphique des poids, où chaque catégorie a sa propre ligne.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_1_3_2_effect_plot.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_1_3_2_effect_plot.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>The feature effect plot shows the distribution of effects (= feature value times feature weight) across the data per feature.</figcaption>
 </figure>
 </div>
@@ -666,14 +666,14 @@ Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe
 <p>De combien chaque caractéristique d’une instance a-t-elle contribuée à la prédiction ? La contribution spécifique de chaque caractéristique d’une instance à la prédiction peut être évaluée en calculant les effets pour cette instance. Une interprétation des effets spécifiques à l’instance n’a de sens qu’en comparaison avec la distribution de l’effet pour chaque caractéristique. Nous souhaitons expliquer la prédiction du modèle linéaire pour l’instance <code>r i</code>-ème du jeu de données sur les locations de vélos. L’instance présente les valeurs de caractéristiques suivantes.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_1_4_explain_indiv_predict.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_1_4_explain_indiv_predict.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Table</figcaption>
 </figure>
 </div>
 <p>Pour obtenir les effets des caractéristiques de cette instance, nous devons multiplier ses valeurs de caractéristiques par les poids correspondants du modèle de régression linéaire. Pour la valeur “<code>r df["workingday", "value"]</code>” de la caractéristique “<code>r df["workingday", "feature"]</code>”, l’effet est <code>r round(lm_summary_print[paste(df["workingday", "feature"], df["workingday", "value"], sep = ""), "Estimate"], 1)</code>. Pour une température de <code>r round(as.numeric(as.character(df["temp", "value"])), 1)</code> degrés Celsius, l’effet est <code>r round(as.numeric(as.character(df["temp", "value"])) * lm_summary_print[as.character(df["temp", "feature"]), "Estimate"], 1)</code>. Nous ajoutons ces effets individuels sous forme de croix au graphique des effets, ce qui nous montre la distribution des effets dans les données. Cela nous permet de comparer les effets individuels à la distribution des effets dans les données.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_1_4_explain_indiv_predict_fig.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_1_4_explain_indiv_predict_fig.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>The effect plot for one instance shows the effect distribution and highlights the effects of the instance of interest.</figcaption>
 </figure>
 </div>
@@ -710,7 +710,7 @@ Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe
 <p>Le terme <span class="math inline">\(\|\boldsymbol{\beta}\|_1\)</span>, la norme L1 du vecteur de caractéristiques, conduit à une pénalisation des poids importants. Comme la norme L1 est utilisée, de nombreux poids reçoivent une estimation de 0 et les autres sont réduits. Le paramètre lambda <span class="math inline">\((\lambda)\)</span> contrôle la force de l’effet de régularisation et est généralement ajusté par validation croisée. Surtout lorsque lambda est grand, de nombreux poids deviennent 0. Les poids des caractéristiques peuvent être visualisés en fonction du terme de pénalité lambda. Chaque poids de caractéristique est représenté par une courbe dans la figure suivante.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_1_7_1_lasso.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_1_7_1_lasso.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>With increasing penalty of the weights, fewer and fewer features receive a non-zero weight estimate. These curves are also called regularization paths. The number above the plot is the number of non-zero weights.</figcaption>
 </figure>
 </div>
@@ -719,7 +719,7 @@ Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe
 <p>Nous allons prédire les locations de vélos en utilisant Lasso. Nous fixons le nombre de caractéristiques que nous voulons avoir dans le modèle à l’avance. Commençons d’abord par fixer le nombre à 2 caractéristiques :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_1_7_1_lasso_table_1.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_1_7_1_lasso_table_1.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Table</figcaption>
 </figure>
 </div>
@@ -727,7 +727,7 @@ Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe
 <p>Maintenant, sélectionnons 5 caractéristiques :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/5_1_7_1_lasso_table_2.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/5_1_7_1_lasso_table_2.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Table</figcaption>
 </figure>
 </div>

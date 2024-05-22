@@ -614,7 +614,7 @@ Note
 <p>Nous pouvons créer une coalition aléatoire en lançant des pièces de monnaie à plusieurs reprises jusqu’à ce que nous obtenions une chaîne de 0 et de 1. Par exemple, le vecteur <span class="math inline">\((1, 0, 1, 0)\)</span> signifie que nous avons une coalition des première et troisième caractéristiques. Les <span class="math inline">\(K\)</span> coalitions échantillonnées deviennent l’ensemble de données pour le modèle de régression. La cible du modèle de régression est la prédiction d’une coalition. (« Attendez ! », dites-vous. « Le modèle n’a pas été formé sur ces données de coalition binaires et ne peut pas faire de prédictions à leur sujet. ») Pour passer des coalitions de valeurs de caractéristiques à des instances de données valides, nous avons besoin d’une fonction <span class="math inline">\(h_x(z')=z\)</span> où <span class="math inline">\(h_x:\{0,1\}^M\rightarrow\mathbb{R}^p\)</span>. La fonction <span class="math inline">\(h_x\)</span> met en relation les <span class="math inline">\(1\)</span> à la valeur correspondante de l’instance x que nous voulons expliquer. Pour les données tabulaires, elle met en relation les <span class="math inline">\(0\)</span> aux valeurs d’une autre instance que nous échantillonnons à partir des données. Cela signifie que nous assimilons « la valeur de caractéristique est absente » à « la valeur de caractéristique est remplacée par une valeur de caractéristique aléatoire à partir des données ». Pour les données tabulaires, la figure suivante visualise le mappage des coalitions aux valeurs de caractéristiques :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shap-simplified-features.jpg" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shap-simplified-features.jpg" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>La fonction <span class="math inline">\(h_x\)</span> met en relation une coalition à une instance valide. Pour les fonctionnalités actuelles (1), <span class="math inline">\(h_x\)</span> fait correspondre aux valeurs des caractéristiques de <span class="math inline">\(x\)</span>. Pour les fonctionnalités absentes (0), <span class="math inline">\(h_x\)</span> fait correspondre aux valeurs d’une instance de données échantillonnées de manière aléatoire.</figcaption>
 </figure>
 </div>
@@ -624,7 +624,7 @@ Note
 <p>Pour les images, la figure suivante décrit une fonction de mappage possible :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shap-superpixel.jpg" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shap-superpixel.jpg" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Fonction <span class="math inline">\(h_x\)</span> mappe des coalitions de superpixels (sp) en images. Les superpixels sont des groupes de pixels. Pour les fonctionnalités actuelles (1), <span class="math inline">\(h_x\)</span> renvoie la partie correspondante de l’image originale. Pour les fonctionnalités absentes (0), <span class="math inline">\(h_x\)</span> grise la zone correspondante. L’attribution de la couleur moyenne des pixels environnants ou similaire serait également une option.</figcaption>
 </figure>
 </div>
@@ -652,10 +652,10 @@ Note
 <p>J’ai formé un classificateur forestier aléatoire avec 100 arbres pour prédire le <a href="../04-datasets/04.3-datasets.html">risque de cancer du col de l’utérus</a>. Nous utiliserons SHAP pour expliquer les prédictions individuelles. Nous pouvons utiliser la méthode d’estimation rapide TreeSHAP au lieu de la méthode KernelSHAP, plus lente, puisqu’une forêt aléatoire est un ensemble d’arbres. Mais au lieu de s’appuyer sur la distribution conditionnelle, cet exemple utilise la distribution marginale. Ceci est décrit dans l’emballage, mais pas dans le document d’origine. La fonction Python TreeSHAP est plus lente avec la distribution marginale, mais toujours plus rapide que KernelSHAP, car elle évolue linéairement avec les lignes des données.</p>
 <p>Parce que nous utilisons ici la distribution marginale, l’interprétation est la même que dans le <a href="../09-local_model_agnostic_methods/09.5-shapley.html">chapitre sur les valeurs de Shapley</a>. Mais avec le package Python shap vient une visualisation différente : vous pouvez visualiser les attributions de fonctionnalités telles que les valeurs Shapley sous forme de « forces ». Chaque valeur de caractéristique est une force qui augmente ou diminue la prédiction. La prédiction part de la ligne de base. La ligne de base des valeurs Shapley est la moyenne de toutes les prédictions. Dans le graphique, chaque valeur de Shapley est une flèche qui pousse pour augmenter (valeur positive) ou diminuer (valeur négative) la prédiction. Ces forces s’équilibrent lors de la prédiction réelle de l’instance de données.</p>
 <p>La figure suivante montre les tracés de force d’explication SHAP pour deux femmes de l’ensemble de données sur le cancer du col de l’utérus :</p>
-<p><img src="../_static/images/shap-explain-1.png" class="img-fluid" data-align="center"></p>
+<p><img src="../images/shap-explain-1.png" class="img-fluid" data-align="center"></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shap-explain-2.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shap-explain-2.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Valeurs SHAP pour expliquer les probabilités prédites de cancer de deux individus. La ligne de base – la probabilité moyenne prédite – est de 0,066. La première femme a un risque prédit faible de 0,06. Les effets augmentant le risque, comme les MST, sont compensés par des effets décroissants, comme l’âge. La deuxième femme a un risque prédit élevé de 0,71. L’âge de 51 ans et 34 ans de tabagisme augmentent son risque prévu de cancer.</figcaption>
 </figure>
 </div>
@@ -670,7 +670,7 @@ Note
 <p>Ensuite, nous trions les caractéristiques par importance décroissante et les traçons. La figure suivante montre l’importance de la fonctionnalité SHAP pour la forêt aléatoire formée auparavant pour prédire le cancer du col de l’utérus.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shap-importance.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shap-importance.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Importance des caractéristiques SHAP mesurée en tant que valeurs absolues moyennes de Shapley. Le nombre d’années d’utilisation de contraceptifs hormonaux était la caractéristique la plus importante, modifiant en moyenne la probabilité absolue prédite de cancer de 2,4 points de pourcentage (0,024 sur l’axe des x).</figcaption>
 </figure>
 </div>
@@ -682,7 +682,7 @@ Note
 <p>Le tracé récapitulatif combine l’importance des fonctionnalités avec les effets des fonctionnalités. Chaque point du tracé récapitulatif est une valeur Shapley pour une fonctionnalité et une instance. La position sur l’axe des y est déterminée par la caractéristique et sur l’axe des x par la valeur de Shapley. La couleur représente la valeur de la fonctionnalité de faible à élevée. Les points qui se chevauchent sont instables dans la direction de l’axe y, nous avons donc une idée de la distribution des valeurs Shapley par entité. Les fonctionnalités sont classées selon leur importance.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shap-importance-extended.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shap-importance-extended.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Graphique récapitulatif SHAP. Un faible nombre d’années sous contraceptif hormonal réduit le risque prévu de cancer, un grand nombre d’années augmente le risque. Votre rappel régulier : tous les effets décrivent le comportement du modèle et ne sont pas nécessairement causals dans le monde réel.</figcaption>
 </figure>
 </div>
@@ -695,7 +695,7 @@ Note
 <p>La figure suivante montre la dépendance de la fonction SHAP aux contraceptifs hormonaux pendant des années :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shap-dependence.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shap-dependence.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Graphique de dépendance SHAP pendant des années aux contraceptifs hormonaux. Par rapport à 0 an, quelques années diminuent la probabilité prédite et un nombre élevé d’années augmente la probabilité prédite de cancer.</figcaption>
 </figure>
 </div>
@@ -711,7 +711,7 @@ Note
 <p>Comment pouvons-nous utiliser l’indice d’interaction ? Par exemple, pour colorer automatiquement le tracé de dépendance des fonctionnalités SHAP avec l’interaction la plus forte :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shap-dependence-interaction.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shap-dependence-interaction.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Graphique de dépendance des fonctionnalités SHAP avec visualisation des interactions. Les années passées sous contraceptifs hormonaux interagissent avec les MST. Dans les cas proches de 0 ans, la survenue d’une MST augmente le risque prévu de cancer. Pendant plusieurs années sous contraceptif, la survenue d’une MST réduit le risque prévu. Encore une fois, il ne s’agit pas d’un modèle causal. Les effets pourraient être dus à des facteurs de confusion (par exemple, les MST et un risque moindre de cancer pourraient être corrélés à un plus grand nombre de visites chez le médecin).</figcaption>
 </figure>
 </div>
@@ -723,7 +723,7 @@ Note
 <p>Le tracé se compose de nombreux tracés de force, chacun expliquant la prédiction d’une instance. Nous faisons pivoter les tracés de force verticalement et les plaçons côte à côte en fonction de leur similarité de regroupement.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shap-clustering.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shap-clustering.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Explications SHAP empilées regroupées par similarité d’explication. Chaque position sur l’axe des X est une instance des données. Les valeurs SHAP rouges augmentent la prédiction, les valeurs bleues la diminuent. Un groupe se démarque : à droite se trouve un groupe avec un risque de cancer prévu élevé.</figcaption>
 </figure>
 </div>

@@ -582,7 +582,7 @@ Note
 <p>Vous avez entraîné un modèle d’apprentissage automatique pour prédire les prix des appartements. Pour un certain appartement, il prévoit 300 000 € et vous devez expliquer cette prévision. L’appartement a une superficie de 50 m 2 , est situé au 2ème étage, dispose d’un parc à proximité et les chats sont interdits :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shapley-instance.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shapley-instance.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Le prix prévu pour un appartement de $50 m<span class="math inline">\(2\)</span> au 2ème étage avec un parc à proximité et une interdiction de chat est de 300 000 €. Notre objectif est d’expliquer comment chacune de ces valeurs de caractéristiques a contribué à la prédiction.</figcaption>
 </figure>
 </div>
@@ -595,7 +595,7 @@ Note
 <p>Dans la figure suivante, nous évaluons la contribution de la <code>cat-banned</code> valeur de la caractéristique lorsqu’elle est ajoutée à une coalition de <code>park-nearby</code> et <code>area-50</code>. Nous simulons cela uniquement <code>park-nearby</code>, <code>cat-banned</code> et <code>area-50</code> sont une coalition en tirant au hasard un autre appartement à partir des données et en utilisant sa valeur pour la caractéristique d’étage La valeur <code>floor-2nd</code> a été remplacée par celle tirée au hasard floor-1st. On prédit ensuite le prix de l’appartement avec cette combinaison (310 000 €). Dans un deuxième temps, nous retirons cat-bannedde la coalition en la remplaçant par une valeur aléatoire de la caractéristique chat autorisé/banni de l’appartement tiré au sort. Dans l’exemple, c’était <code>cat-allowed</code>, mais cela aurait pu être <code>cat-banned</code> à nouveau. Nous prévoyons le prix de l’appartement pour la coalition des <code>park-nearby</code> et <code>area-50</code> (320 000 €). La contribution de <code>cat-banned</code> était de 310 000 € - 320 000 € = -10 000 €. Cette estimation dépend des valeurs de l’appartement tiré au hasard qui a servi de « donneur » pour les valeurs des caractéristiques du chat et de l’étage. Nous obtiendrons de meilleures estimations si nous répétons cette étape d’échantillonnage et faisons la moyenne des contributions.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shapley-instance-intervention.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shapley-instance-intervention.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Un échantillon de répétition pour estimer la contribution de cat-bannedà la prédiction lorsqu’il est ajouté à la coalition de <code>park-nearby</code> et <code>area-50</code>.</figcaption>
 </figure>
 </div>
@@ -614,7 +614,7 @@ Note
 <p>Pour chacune de ces coalitions, nous calculons le prix prévu de l’appartement avec et sans la valeur caractéristique <code>cat-banned</code> et prenons la différence pour obtenir la contribution marginale. La valeur Shapley est la moyenne (pondérée) des contributions marginales. Nous remplaçons les valeurs des caractéristiques qui ne font pas partie d’une coalition par des valeurs de caractéristiques aléatoires de l’ensemble de données d’appartement pour obtenir une prédiction du modèle d’apprentissage automatique.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/shapley-coalitions.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/shapley-coalitions.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Les 8 coalitions nécessaires pour calculer la valeur Shapley exacte de la <code>cat-banned</code> valeur de la caractéristique.</figcaption>
 </figure>
 </div>
@@ -627,14 +627,14 @@ Note
 <p>Nous utilisons la valeur de Shapley pour analyser les prédictions d’un modèle forestier aléatoire prédisant <a href="../04-datasets/04.3-datasets.html">le cancer du col de l’utérus</a> :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/9_5_2_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/9_5_2_fig_1.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Valeurs Shapley pour une femme dans l’ensemble de données sur le cancer du col de l’utérus. Avec une prédiction de 0,57, la probabilité de cancer de cette femme est de 0,54 supérieure à la prédiction moyenne de 0,03. Le nombre de MST diagnostiquées augmente le plus la probabilité. La somme des contributions donne la différence entre la prévision réelle et moyenne (0,54).</figcaption>
 </figure>
 </div>
 <p>Pour l’<a href="../04-datasets/04.1-datasets.html">ensemble de données de location de vélos</a>, nous formons également une forêt aléatoire pour prédire le nombre de vélos loués pour une journée, en fonction des informations météorologiques et du calendrier. Les explications créées pour la prédiction aléatoire de la forêt d’un jour particulier :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images2/9_5_2_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images2/9_5_2_fig_2.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Valeurs Shapley pour le jour 285. Avec une prévision de 2409 vélos de location, ce jour est de -2108 en dessous de la prévision moyenne de 4518. La situation météorologique et l’humidité ont eu les contributions négatives les plus importantes. La température de cette journée a eu une contribution positive. La somme des valeurs de Shapley donne la différence entre les prévisions réelles et moyennes (-2 108).</figcaption>
 </figure>
 </div>

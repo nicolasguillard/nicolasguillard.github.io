@@ -569,11 +569,11 @@ window.Quarto = {
 <p>Les réseaux neuronaux convolutionnels apprennent des caractéristiques et des concepts abstraits à partir de pixels d’images bruts. La <a href="#sec-feature_visualization">visualisation de caractéristiques</a> visualise les caractéristiques apprises par maximisation de l’activation. La <a href="#sec-network_dissection">dissection de réseau</a> étiquette les unités de réseau neuronal (p.&nbsp;ex. les canaux) avec des concepts humains.</p>
 <p>Les réseaux neuronaux profonds apprennent des caractéristiques de haut niveau dans les couches cachées. C’est l’une de leurs plus grandes forces et réduit le besoin d’ingénierie des caractéristiques. Supposons que vous voulez construire un classificateur d’images avec une machine à vecteurs de support. Les matrices de pixels bruts ne constituent pas la meilleure entrée pour entraîner votre SVM, donc vous créez de nouvelles caractéristiques basées sur la couleur, le domaine fréquentiel, les détecteurs de bords, etc. Avec les réseaux neuronaux convolutionnels, l’image est introduite dans le réseau sous sa forme brute (i.e.&nbsp;les pixels). Le réseau transforme l’image à de nombreuses reprises. D’abord, l’image passe par de plusieurs couches convolutionnelles. Dans ces couches convolutionnelles, le réseau y apprend de nouvelles caractéristiques de plus en plus complexes. Ensuite, l’information de l’image transformée passe à travers les couches entièrement connectées et se transforme en une classification ou une prédiction.</p>
 <!--
-![Architecture of Inception V1 neural network. Each enumerated unit (3a to 5b) represents a layer with differently sized convolutions and pooling. Figure from Olah, et al. (2019, CC-BY 4.0) [https://distill.pub/2017/activation-atlas/](https://distill.pub/2017/activation-atlas/).](../_static/images/inceptionv1.svg){align=center}
+![Architecture of Inception V1 neural network. Each enumerated unit (3a to 5b) represents a layer with differently sized convolutions and pooling. Figure from Olah, et al. (2019, CC-BY 4.0) [https://distill.pub/2017/activation-atlas/](https://distill.pub/2017/activation-atlas/).](../images/inceptionv1.svg){align=center}
 -->
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/cnn-features.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/cnn-features.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Features learned by a convolutional neural network (Inception V1) trained on the ImageNet data. The features range from simple features in the lower convolutional layers (left) to more abstract features in the higher convolutional layers (right). Figure from Olah, et al.&nbsp;(2017, CC-BY 4.0) <a href="https://distill.pub/2017/feature-visualization/appendix/">https://distill.pub/2017/feature-visualization/appendix/</a>.</figcaption>
 </figure>
 </div>
@@ -590,12 +590,12 @@ window.Quarto = {
 <p>“Unité” fait référence soit à des neurones individuels, des canaux (également appelés cartes de caractéristiques), des couches entières ou à la probabilité de classe finale en classification (ou le neurone pré-softmax correspondant, ce qui est recommandé). Les neurones individuels sont des unités atomiques du réseau, donc nous obtiendrions le plus d’informations en créant des visualisations de caractéristiques pour chaque neurone. Mais il y a un problème : Les réseaux neuronaux contiennent souvent des millions de neurones. Examiner la visualisation de caractéristiques de chaque neurone prendrait trop de temps. Les canaux (parfois appelés cartes d’activation) en tant qu’unités sont un bon choix pour la visualisation de caractéristiques. Nous pouvons aller plus loin et visualiser une couche convolutionnelle entière. Les couches en tant qu’unité sont utilisées pour le DeepDream de Google, qui ajoute de manière répétée les caractéristiques visualisées d’une couche à l’image originale, résultant en une version onirique de l’entrée.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/units.jpg" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/units.jpg" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Feature visualization can be done for different units. A) Convolution neuron, B) Convolution channel, C) Convolution layer, D) Neuron, E) Hidden layer, F) Class probability neuron (or corresponding pre-softmax neuron)</figcaption>
 </figure>
 </div>
 <!--
-![Optimized images for Inception V1 (channels mixed3a, mixed4c, mixed4d and mixed5a). Images are maximized for a random direction of the activations. Figure from Olah, et al. 2017 (CC-BY 4.0) [https://distill.pub/2017/feature-visualization/](https://distill.pub/2017/feature-visualization/).](../_static/images/trippy.png){align=center fig-alt="Optimized images for Inception V1 (channels mixed3a, mixed4c, mixed4d and mixed5a). Images are maximized for a random direction of the activations. Figure from Olah, et al. 2017 (CC-BY 4.0) https://distill.pub/2017/feature-visualization/."}
+![Optimized images for Inception V1 (channels mixed3a, mixed4c, mixed4d and mixed5a). Images are maximized for a random direction of the activations. Figure from Olah, et al. 2017 (CC-BY 4.0) [https://distill.pub/2017/feature-visualization/](https://distill.pub/2017/feature-visualization/).](../images/trippy.png){align=center fig-alt="Optimized images for Inception V1 (channels mixed3a, mixed4c, mixed4d and mixed5a). Images are maximized for a random direction of the activations. Figure from Olah, et al. 2017 (CC-BY 4.0) https://distill.pub/2017/feature-visualization/."}
 -->
 <section id="visualisation-des-caractéristiques-par-optimisation" class="level4">
 <h4 class="anchored" data-anchor-id="visualisation-des-caractéristiques-par-optimisation">10.1.1.1 Visualisation des caractéristiques par optimisation</h4>
@@ -606,7 +606,7 @@ window.Quarto = {
 <p>Dans cette formule, tous les neurones dans le canal <span class="math inline">\(z\)</span> sont pondérés de manière égale. Alternativement, vous pouvez également maximiser des directions aléatoires, ce qui signifie que les neurones seraient multipliés par différents paramètres, y compris des directions négatives. De cette façon, nous étudions comment les neurones interagissent au sein du canal. Au lieu de maximiser l’activation, vous pouvez également la minimiser (ce qui correspond à maximiser la direction négative). De manière intéressante, lorsque vous maximisez la direction négative, vous obtenez des caractéristiques très différentes pour la même unité :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/a484.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/a484.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Positive (left) and negative (right) activation of Inception V1 neuron 484 from layer mixed4d pre relu. While the neuron is maximally activated by wheels, something which seems to have eyes yields a negative activation.</figcaption>
 </figure>
 </div>
@@ -614,7 +614,7 @@ window.Quarto = {
 <p>Une autre approche consiste à générer de nouvelles images, en partant de bruit aléatoire. Pour obtenir des visualisations significatives, il y a généralement des contraintes sur l’image, par exemple que seuls de petits changements sont autorisés. Pour réduire le bruit dans la visualisation des caractéristiques, vous pouvez appliquer du jittering, de la rotation ou du redimensionnement à l’image avant l’étape d’optimisation. D’autres options de régularisation incluent la pénalisation de fréquence (par exemple, réduire la variance des pixels voisins) ou générer des images avec des prioris appris, par exemple avec des réseaux adverses génératifs (GANs)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> ou des autoencodeurs débruitants<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/activation-optim.png" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/activation-optim.png" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Iterative optimization from random image to maximizing activation. Olah, et al.&nbsp;2017 (CC-BY 4.0), <a href="https://distill.pub/2017/feature-visualization/">https://distill.pub/2017/feature-visualization/</a>.</figcaption>
 </figure>
 </div>
@@ -649,7 +649,7 @@ window.Quarto = {
 <p>La figure suivante visualise comment une image est transmise à un canal et associée aux concepts étiquetés.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/dissection-network.png" class="img-fluid figure-img" data-align="center&quot;"></p>
+<p><img src="../images/dissection-network.png" class="img-fluid figure-img" data-align="center&quot;"></p>
 <figcaption>For a given input image and a trained network (fixed weights), we propagate the image forward to the target layer, upscale the activations to match the original image size and compare the maximum activations with the ground truth pixel-wise segmentation. Figure originally from http://netdissect.csail.mit.edu/.</figcaption>
 </figure>
 </div>
@@ -681,13 +681,13 @@ window.Quarto = {
 <p>La figure suivante illustre l’intersection et l’union du masque d’activation et du masque de concept pour une seule image :</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/dissection-dog-exemplary.jpg" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/dissection-dog-exemplary.jpg" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>The Intersection over Union (IoU) is computed by comparing the human ground truth annotation and the top activated pixels.</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../_static/images/dissection-dogs.jpeg" class="img-fluid figure-img" data-align="center"></p>
+<p><img src="../images/dissection-dogs.jpeg" class="img-fluid figure-img" data-align="center"></p>
 <figcaption>Activation mask for inception - 4e channel 750 which detects dogs with <span class="math inline">\(IoU=0.203\)</span>. Figure originally from <a href="http://netdissect.csail.mit.edu/">http://netdissect.csail.mit.edu/</a></figcaption>
 </figure>
 </div>
