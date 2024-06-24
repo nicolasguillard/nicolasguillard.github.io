@@ -1,2 +1,2 @@
 User-agent: *
-Disallow: /interpretable-ml-book-fr/
+Disallow: /
