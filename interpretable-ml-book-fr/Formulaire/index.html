@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr-FR" xml:lang="fr-FR"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.5.43">
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Apprentissage automatique interprétable – scope_of_interpretability</title>
+<title>Apprentissage automatique interprétable – Des remarques ?</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../03-Interpretability/03.4-evaluation_of_interpretability.html" rel="next">
-<link href="../03-Interpretability/03.2-taxonomy_of_interpretability_methods.html" rel="prev">
+<link href="../References/index.html" rel="next">
+<link href="../15-acknowledgements/index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -82,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-Interpretability/index.html">3 - Interprétabilité</a></li><li class="breadcrumb-item"><a href="../03-Interpretability/03.3-scope_of_interpretability.html">3.3 - Portée de l’Interprétabilité</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Formulaire/index.html">Des remarques ?</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Basculer la barre latérale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Recherche" onclick="window.quartoOpenSearch();">
@@ -171,7 +171,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link active">
+  <a href="../03-Interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
@@ -479,7 +479,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../Formulaire/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../Formulaire/index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Des remarques ?</span></a>
   </div>
 </li>
@@ -494,27 +494,13 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
-    <h2 id="toc-title">Dans cette page</h2>
-   
-  <ul>
-  <li><a href="#portée-de-linterprétabilité" id="toc-portée-de-linterprétabilité" class="nav-link active" data-scroll-target="#portée-de-linterprétabilité">3.3 - Portée de l’Interprétabilité</a>
-  <ul>
-  <li><a href="#transparence-dun-algorithme" id="toc-transparence-dun-algorithme" class="nav-link" data-scroll-target="#transparence-dun-algorithme">3.3.1 - Transparence d’un algorithme</a></li>
-  <li><a href="#interprétabilité-globale-et-holistique-du-modèle" id="toc-interprétabilité-globale-et-holistique-du-modèle" class="nav-link" data-scroll-target="#interprétabilité-globale-et-holistique-du-modèle">3.3.2 - Interprétabilité Globale et Holistique du Modèle</a></li>
-  <li><a href="#interprétabilité-globale-du-modèle-à-un-niveau-modulaire" id="toc-interprétabilité-globale-du-modèle-à-un-niveau-modulaire" class="nav-link" data-scroll-target="#interprétabilité-globale-du-modèle-à-un-niveau-modulaire">3.3.3 - Interprétabilité Globale du Modèle à un Niveau Modulaire</a></li>
-  <li><a href="#interprétabilité-locale-pour-une-prédiction-unique" id="toc-interprétabilité-locale-pour-une-prédiction-unique" class="nav-link" data-scroll-target="#interprétabilité-locale-pour-une-prédiction-unique">3.3.4 - Interprétabilité Locale pour une Prédiction Unique</a></li>
-  <li><a href="#interprétabilité-locale-pour-un-groupe-de-prédictions" id="toc-interprétabilité-locale-pour-un-groupe-de-prédictions" class="nav-link" data-scroll-target="#interprétabilité-locale-pour-un-groupe-de-prédictions">3.3.5 - Interprétabilité Locale pour un Groupe de Prédictions</a></li>
-  </ul></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-Interpretability/index.html">3 - Interprétabilité</a></li><li class="breadcrumb-item"><a href="../03-Interpretability/03.3-scope_of_interpretability.html">3.3 - Portée de l’Interprétabilité</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<h1 class="title">Des remarques ?</h1>
 </div>
 
 
@@ -537,162 +523,13 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-warning callout-titled" title="Avertissement">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Avertissement
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>En cours de traduction.</p>
-</div>
-</div>
-<section id="portée-de-linterprétabilité" class="level2">
-<h2 class="anchored" data-anchor-id="portée-de-linterprétabilité">3.3 - Portée de l’Interprétabilité</h2>
-<p>Un algorithme entraîne un modèle qui produit les prédictions. Chaque étape peut être évaluée en termes de transparence ou d’interprétabilité.</p>
-<section id="transparence-dun-algorithme" class="level3">
-<h3 class="anchored" data-anchor-id="transparence-dun-algorithme">3.3.1 - Transparence d’un algorithme</h3>
-<p><em>Comment l’algorithme crée-t-il le modèle ?</em></p>
-<p>La transparence de l’algorithme concerne la manière dont l’algorithme apprend un modèle à partir des données et le type de relations qu’il peut apprendre. Si vous utilisez des réseaux neuronaux convolutionnels pour classer des images, vous pouvez expliquer que l’algorithme apprend des détecteurs de bords et des filtres sur les couches les plus basses. Cela représente une compréhension de la façon dont l’algorithme fonctionne, mais pas pour le modèle spécifique qui est appris à la fin, ni pour la manière dont les prédictions individuelles sont faites. La transparence de l’algorithme nécessite uniquement la connaissance de l’algorithme et non des données ou du modèle appris. Ce livre se concentre sur l’interprétabilité du modèle et non sur la transparence de l’algorithme. Des algorithmes tels que la méthode des moindres carrés pour les modèles linéaires sont bien étudiés et compris. Ils se caractérisent par une grande transparence. Les approches d’apprentissage profond (poussant un gradient à travers un réseau avec des millions de poids) sont moins bien comprises et leur fonctionnement interne est l’objet de recherches en cours. Ils sont considérés comme moins transparents.</p>
-</section>
-<section id="interprétabilité-globale-et-holistique-du-modèle" class="level3">
-<h3 class="anchored" data-anchor-id="interprétabilité-globale-et-holistique-du-modèle">3.3.2 - Interprétabilité Globale et Holistique du Modèle</h3>
-<p><em>Comment le modèle entraîné fait-il des prédictions ?</em></p>
-<p>On pourrait décrire un modèle comme interprétable si vous pouvez comprendre l’ensemble du modèle d’un seul coup (Lipton 2016<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>). Pour expliquer la sortie globale du modèle, vous avez besoin du modèle entraîné, de la connaissance de l’algorithme et des données. Ce niveau d’interprétabilité concerne la compréhension de la manière dont le modèle prend des décisions, basée sur une vue holistique de ses caractéristiques et de chacun des composants appris tels que les poids, d’autres paramètres et structures. Quelles caractéristiques sont importantes et quel type d’interactions se produisent entre elles ? L’interprétabilité globale du modèle aide à comprendre la distribution de votre résultat cible basé sur les caractéristiques. L’interprétabilité globale du modèle est très difficile à atteindre en pratique. Tout modèle qui dépasse quelques paramètres ou poids est peu susceptible de s’intégrer dans la mémoire à court terme de l’humain moyen. Je soutiens que vous ne pouvez pas vraiment imaginer un modèle linéaire avec 5 caractéristiques, car cela signifierait dessiner mentalement l’hyperplan estimé dans un espace à 5 dimensions. Tout espace de caractéristiques avec plus de 3 dimensions est tout simplement inconcevable pour les humains. Habituellement, lorsque les gens essaient de comprendre un modèle, ils ne considèrent que des parties de celui-ci, comme les poids dans les modèles linéaires.</p>
-</section>
-<section id="interprétabilité-globale-du-modèle-à-un-niveau-modulaire" class="level3">
-<h3 class="anchored" data-anchor-id="interprétabilité-globale-du-modèle-à-un-niveau-modulaire">3.3.3 - Interprétabilité Globale du Modèle à un Niveau Modulaire</h3>
-<p><em>Comment les parties du modèle affectent-elles les prédictions ?</em></p>
-<p>Un modèle Naive Bayes avec des centaines de caractéristiques serait trop volumineux pour que vous et moi le gardions dans notre mémoire de travail. Et même si nous parvenions à mémoriser tous les poids, nous ne serions pas capables de faire rapidement des prédictions pour de nouveaux points de données. De plus, vous devez avoir la distribution conjointe de toutes les caractéristiques en tête pour estimer l’importance de chaque caractéristique et comment les caractéristiques affectent les prédictions en moyenne. Une tâche impossible. Mais vous pouvez facilement comprendre un seul poids. Bien que l’interprétabilité globale du modèle soit généralement hors de portée, il y a de bonnes chances de comprendre au moins certains modèles à un niveau modulaire. Tous les modèles ne sont pas interprétables au niveau des paramètres. Pour les modèles linéaires, les parties interprétables sont les poids, pour les arbres, ce seraient les divisions (caractéristiques sélectionnées plus points de coupure) et les prédictions des nœuds feuilles. Les modèles linéaires, par exemple, semblent comme s’ils pouvaient être parfaitement interprétés à un niveau modulaire, mais l’interprétation d’un seul poids est interdépendante de tous les autres poids. L’interprétation d’un seul poids est toujours accompagnée de la note de bas de page que les autres caractéristiques d’entrée restent à la même valeur, ce qui n’est pas le cas dans de nombreuses applications réelles. Un modèle linéaire qui prédit la valeur d’une maison, qui prend en compte à la fois la taille de la maison et le nombre de pièces, peut avoir un poids négatif pour la caractéristique des pièces. Cela peut arriver parce qu’il y a déjà la caractéristique de la taille de la maison, fortement corrélée. Sur un marché où les gens préfèrent des pièces plus grandes, une maison avec moins de pièces pourrait valoir plus qu’une maison avec plus de pièces si les deux ont la même taille. Les poids n’ont de sens que dans le contexte des autres caractéristiques du modèle. Mais les poids dans un modèle linéaire peuvent encore être mieux interprétés que les poids d’un réseau neuronal profond.</p>
-</section>
-<section id="interprétabilité-locale-pour-une-prédiction-unique" class="level3">
-<h3 class="anchored" data-anchor-id="interprétabilité-locale-pour-une-prédiction-unique">3.3.4 - Interprétabilité Locale pour une Prédiction Unique</h3>
-<p><em>Pourquoi le modèle a-t-il fait une certaine prédiction pour une instance ?</em></p>
-<p>Vous pouvez vous concentrer sur une seule instance et examiner ce que le modèle prédit pour cette entrée, et expliquer pourquoi. Si vous regardez une prédiction individuelle, le comportement du modèle par ailleurs complexe peut se comporter de manière plus agréable. Localement, la prédiction peut dépendre uniquement de manière linéaire ou monotone de certaines caractéristiques, plutôt que d’avoir une dépendance complexe envers elles. Par exemple, la valeur d’une maison peut dépendre de manière non linéaire de sa taille. Mais si vous ne regardez qu’une maison particulière de 100 mètres carrés, il est possible que pour ce sous-ensemble de données, votre prédiction de modèle dépende linéairement de la taille. Vous pouvez le découvrir en simulant comment le prix prédit change lorsque vous augmentez ou diminuez la taille de 10 mètres carrés. Les explications locales peuvent donc être plus précises que les explications globales. Ce livre présente des méthodes qui peuvent rendre les prédictions individuelles plus interprétables dans la <a href="../06-model_agnostic_methods/">section sur les méthodes agnostiques au modèle</a>.</p>
-</section>
-<section id="interprétabilité-locale-pour-un-groupe-de-prédictions" class="level3">
-<h3 class="anchored" data-anchor-id="interprétabilité-locale-pour-un-groupe-de-prédictions">3.3.5 - Interprétabilité Locale pour un Groupe de Prédictions</h3>
-<p><em>Pourquoi le modèle a-t-il fait des prédictions spécifiques pour un groupe d’instances ?</em></p>
-<p>Les prédictions du modèle pour plusieurs instances peuvent être expliquées soit avec des méthodes d’interprétation globale du modèle (à un niveau modulaire), soit avec des explications d’instances individuelles. Les méthodes globales peuvent être appliquées en prenant le groupe d’instances, en les traitant comme si le groupe était l’ensemble de données complet, et en utilisant les méthodes globales avec ce sous-ensemble. Les méthodes d’explication individuelle peuvent être utilisées sur chaque instance puis listées ou agrégées pour l’ensemble du groupe.</p>
-<!-- REFERENCES -->
-<!-- 02 -->
-<!-- 02.3 -->
-<!-- 03 -->
-<!-- 03.1 -->
-<!--
-[^Miller2017]: Miller, Tim. "Explanation in artificial intelligence: Insights from the social sciences." arXiv Preprint arXiv:1706.07269. (2017).
--->
-<!-- 03.3 -->
-<!-- 03.4 -->
-<!--
-[^Doshi2017]: Doshi-Velez, Finale, and Been Kim. "Towards a rigorous science of interpretable machine learning," no. Ml: 1–13. https://arxiv.org/abs/1702.08608 (2017).
--->
-<!-- 03.5 -->
-<!-- 03.6 -->
-<!--
-[^Miller2017]: Miller, Tim. "Explanation in artificial intelligence: Insights from the social sciences." arXiv Preprint arXiv:1706.07269. (2017).
--->
-<!-- 04.1 -->
-<!-- 04.2 -->
-<!-- 04.3 -->
-<!-- 05.1 -->
-<!-- 05.4 -->
-<!--
-[^Hastie]: Friedman, Jerome, Trevor Hastie, and Robert Tibshirani. "The elements of statistical learning". hastie.su.domains/ElemStatLearn (2009).
--->
-<!-- 05.5 -->
-<!-- 05.6 -->
-<!-- 06.0 -->
-<!--
-[^Ribeiro2016]: Ribeiro, Marco Tulio, Sameer Singh, and Carlos Guestrin. "Model-agnostic interpretability of machine learning." ICML Workshop on Human Interpretability in Machine Learning. (2016).
--->
-<!-- 07.0 -->
-<!-- 08.1 -->
-<!-- 08.2 -->
-<!-- 08.3 -->
-<!--
-[^Friedman2008]: Friedman, Jerome H, and Bogdan E Popescu. "Predictive learning via rule ensembles." The Annals of Applied Statistics. JSTOR, 916–54. (2008).
--->
-<!--
-[^pdp-importance]: Greenwell, Brandon M., Bradley C. Boehmke, and Andrew J. McCarthy. "A simple and effective model-based variable importance measure." arXiv preprint arXiv:1805.04755 (2018).
--->
-<!-- 08.4 -->
-<!--
-[^fanova]: Hooker, Giles. "Discovering additive structure in black box functions." Proceedings of the tenth ACM SIGKDD international conference on Knowledge discovery and data mining. (2004).
--->
-<!--
-[^ale]: Apley, Daniel W., and Jingyu Zhu. "Visualizing the effects of predictor variables in black box supervised learning models." Journal of the Royal Statistical Society: Series B (Statistical Methodology) 82.4 (2020): 1059-1086.
--->
-<!-- 08.5 -->
-<!-- 08.7 -->
-<!--
-[^critique]: Kim, Been, Rajiv Khanna, and Oluwasanmi O. Koyejo. "Examples are not enough, learn to criticize! Criticism for interpretability." Advances in Neural Information Processing Systems (2016).
--->
-<!-- 09.1 -->
-<!-- 09.2 -->
-<!-- 09.3 -->
-<!-- 09.4 -->
-<!-- 09.5 -->
-<!-- 09.6 -->
-<!--
-[^lundberg2017]: Lundberg, Scott M., and Su-In Lee. "A unified approach to interpreting model predictions." Advances in Neural Information Processing Systems (2017).
--->
-<!--
-[^cond1]: Sundararajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation." arXiv preprint arXiv:1908.08474 (2019).
--->
-<!--
-[^cond2]: Janzing, Dominik, Lenon Minorics, and Patrick Blöbaum. "Feature relevance quantification in explainable AI: A causal problem." International Conference on Artificial Intelligence and Statistics. PMLR (2020).
--->
-<!--
-[^fool]: Slack, Dylan, Sophie Hilgard, Emily Jia, Sameer Singh, and Himabindu Lakkaraju. "Fooling lime and shap: Adversarial attacks on post hoc explanation methods." In Proceedings of the AAAI/ACM Conference on AI, Ethics, and Society, pp. 180-186 (2020).
--->
-<!-- 10.0 -->
-<!-- 10.1 -->
-<!-- 10.2 -->
-<!--
-[^integrated-gradients]: Sundararajan, Mukund, Ankur Taly, and Qiqi Yan. "Axiomatic attribution for deep networks." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.
--->
-<!--
-[^grad-cam]: Selvaraju, Ramprasaath R., et al. "Grad-cam: Visual explanations from deep networks via gradient-based localization." Proceedings of the IEEE international conference on computer vision. (2017).
--->
-<!--
-[^guided-backpropagation]: Springenberg, Jost Tobias, et al. "Striving for simplicity: The all convolutional net." arXiv preprint arXiv:1412.6806 (2014).
--->
-<!--
-[^lrp]: Bach, Sebastian, et al. "On pixel-wise explanations for non-linear classifier decisions by layer-wise relevance propagation." PloS one 10.7 (2015).
--->
-<!-- References about problems -->
-<!--
-[^better-understanding]: Ancona, Marco, et al. "Towards better understanding of gradient-based attribution methods for deep neural networks." arXiv preprint arXiv:1711.06104 (2017).
--->
-<!--
-[^perplexing-behavior]: Nie, Weili, Yang Zhang, and Ankit Patel. "A theoretical explanation for perplexing behaviors of backpropagation-based visualizations." arXiv preprint arXiv:1805.07039 (2018).
--->
-<!-- Toolboxes -->
-<!--
-[^innvestigate]: Alber, Maximilian, Sebastian Lapuschkin, Philipp Seegerer, Miriam Hägele, Kristof T. Schütt, Grégoire Montavon, Wojciech Samek, Klaus-Robert Müller, Sven Dähne, and Pieter-Jan Kindermans. "iNNvestigate neural networks!." J. Mach. Learn. Res. 20, no. 93 (2019): 1-8.
--->
-<!--
-[^human-visuals]: Linsley, Drew, et al. "What are the visual features underlying human versus machine vision?." Proceedings of the IEEE International Conference on Computer Vision Workshops. 2017.
--->
-<!-- 10.3 -->
-<!-- 10.4 -->
-<!-- 10.5 -->
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe6b958EUT_jZrb1WIdIOJodJKmtpLi39AcFMgj2PY5wykbfQ/viewform?embedded=true" width="640" height="1046" frameborder="0" marginheight="0" marginwidth="0">
+Loading…
+</iframe>
 
 
-</section>
-</section>
 
-
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
-
-<ol>
-<li id="fn1"><p>Lipton, Zachary C. “The mythos of model interpretability.” arXiv preprint arXiv:1606.03490, (2016).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1120,13 +957,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../03-Interpretability/03.2-taxonomy_of_interpretability_methods.html" class="pagination-link" aria-label="3.2 - Taxonomie des Méthodes d'Interprétabilité">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span>
+      <a href="../15-acknowledgements/index.html" class="pagination-link" aria-label="15 - Remerciements">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">15 - Remerciements</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../03-Interpretability/03.4-evaluation_of_interpretability.html" class="pagination-link" aria-label="3.4 - Evaluation de l'interprétabilité">
-        <span class="nav-page-text">3.4 - Evaluation de l’interprétabilité</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../References/index.html" class="pagination-link" aria-label="Références">
+        <span class="nav-page-text">Références</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
