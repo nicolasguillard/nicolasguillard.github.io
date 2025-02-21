@@ -150,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../03-Interpretability/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3 - Interprétabilité</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -159,37 +159,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.5 - Propriétés des Explications</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
   </div>
 </li>
@@ -540,7 +540,7 @@ Version original (en)
 <h1>2 - Introduction</h1>
 <p>Ce livre vous explique comment rendre les modèles d’apprentissage automatique (supervisé) interprétables. Les chapitres contiennent des formules mathématiques, mais vous devriez être capable de comprendre les idées derrière les méthodes même sans ces formules. Ce livre n’est pas destiné aux personnes qui tentent d’apprendre l’apprentissage automatique à partir de zéro. Si vous êtes novice sur ce sujet, il existe de nombreux ouvrages et autres ressources pour apprendre les bases. Je recommande le livre <a href="https://hastie.su.domains/ElemStatLearn/"><em>“The Elements of Statistical Learning”</em> par Hastie, Tibshirani, and Friedman (2009)</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> [NdT : en anglais] et le cours en ligne d’<a href="https://www.coursera.org/learn/machine-learning">Andrew Ng’s “<em>Machine Learning” online course</em></a> sur la plateforme <a href="https://www.coursera.com">coursera.com</a> [NdT : en anglais] pour débuter en apprentissage machine. Les deux sont disponibles gratuitement.</p>
 <p>De nouvelles méthodes d’interprétation des modèles d’apprentissage automatique sont publiées à une vitesse vertigineuse. Suivre tout ce qui est publié serait de la folie et tout simplement impossible. C’est pourquoi vous ne trouverez pas dans ce livre les méthodes les plus récentes et les plus sophistiquées, mais des méthodes établies et des concepts de base de l’interprétabilité de l’apprentissage automatique. Ces bases vous prépareront à rendre les modèles interprétables. Intégrer ces concepts de base vous permettra également de mieux comprendre et évaluer tout nouvel article sur l’interprétabilité publié sur <a href="https://arxiv.org/">arxiv.org</a> dans les 5 dernières minutes depuis que vous avez commencé à lire ce livre (j’exagère peut-être légèrement le taux de publication).</p>
-<p>Ce livre commence avec quelques <a href="../02-introduction/02.1-short_stories.html">courtes histoires</a> dystopiques qu’il n’est pas nécessaire de lire pour comprendre le livre, mais qui, je l’espère, vous divertiront, mais aussi qu’elles vous entraineront dans la réflexion. Ensuite, le livre explore les concepts de <a href="../03-interpretability/index.qmd">l’interprétabilité de l’apprentissage automatique</a>. Nous y discutons des situations où l’interprétabilité est importante, et des différents types d’explications qui existent. Les termes utilisés tout au long du livre peuvent être consultés dans la <a href="../02-introduction/02.3-terminology.html">section consacrée à la terminologie</a>. La plupart des modèles et des méthodes expliqués sont présentés en utilisant des exemples de données réelles qui sont décrites dans le <a href="../04-datasets/index.html">chapitre concenant les jeux de données</a>. Une façon de rendre l’apprentissage automatique interprétable est d’utiliser des <a href="../05-interpretable_models/index.html">modèles réputés interprétables</a>, tels que les modèles linéaires ou les arbres de décision. Une autre option est l’utilisation d’<a href="../06-model_agnostic_methods/index.html">outils d’interprétation agnostiques au modèle</a> qui peuvent être appliqués à tout modèle d’apprentissage automatique supervisé. Les méthodes agnostiques peuvent être divisées en <a href="../08-global_model_agnostic_methods/index.html">méthodes globales</a> qui décrivent le comportement moyen du modèle, et en <a href="../09-local_model_agnostic_methods/index.html">méthodes locales</a> qui expliquent les prédictions individuellement. Le chapitre sur les méthodes agnostiques au modèle traite de méthodes telles que les <a href="../08-global_model_agnostic_methods/08.1-pdp.html">graphiques de dépendance partielle</a> et l’<a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html">importance des caractéristiques</a>. Les méthodes agnostiques fonctionnent en modifiant l’entrée du modèle d’apprentissage automatique afin de mesurer les changements de la prédiction en sortie. Le livre se termine par une perspective optimiste sur ce à quoi pourrait ressembler <a href="../11-future/index.html">l’avenir de l’apprentissage automatique interprétable</a>.</p>
+<p>Ce livre commence avec quelques <a href="../02-introduction/02.1-short_stories.html">courtes histoires</a> dystopiques qu’il n’est pas nécessaire de lire pour comprendre le livre, mais qui, je l’espère, vous divertiront, mais aussi qu’elles vous entraineront dans la réflexion. Ensuite, le livre explore les concepts de <a href="../03-interpretability/index.html">l’interprétabilité de l’apprentissage automatique</a>. Nous y discutons des situations où l’interprétabilité est importante, et des différents types d’explications qui existent. Les termes utilisés tout au long du livre peuvent être consultés dans la <a href="../02-introduction/02.3-terminology.html">section consacrée à la terminologie</a>. La plupart des modèles et des méthodes expliqués sont présentés en utilisant des exemples de données réelles qui sont décrites dans le <a href="../04-datasets/index.html">chapitre concenant les jeux de données</a>. Une façon de rendre l’apprentissage automatique interprétable est d’utiliser des <a href="../05-interpretable_models/index.html">modèles réputés interprétables</a>, tels que les modèles linéaires ou les arbres de décision. Une autre option est l’utilisation d’<a href="../06-model_agnostic_methods/index.html">outils d’interprétation agnostiques au modèle</a> qui peuvent être appliqués à tout modèle d’apprentissage automatique supervisé. Les méthodes agnostiques peuvent être divisées en <a href="../08-global_model_agnostic_methods/index.html">méthodes globales</a> qui décrivent le comportement moyen du modèle, et en <a href="../09-local_model_agnostic_methods/index.html">méthodes locales</a> qui expliquent les prédictions individuellement. Le chapitre sur les méthodes agnostiques au modèle traite de méthodes telles que les <a href="../08-global_model_agnostic_methods/08.1-pdp.html">graphiques de dépendance partielle</a> et l’<a href="../08-global_model_agnostic_methods/08.5-permutation-feature-importance.html">importance des caractéristiques</a>. Les méthodes agnostiques fonctionnent en modifiant l’entrée du modèle d’apprentissage automatique afin de mesurer les changements de la prédiction en sortie. Le livre se termine par une perspective optimiste sur ce à quoi pourrait ressembler <a href="../11-future/index.html">l’avenir de l’apprentissage automatique interprétable</a>.</p>
 <p>Vous pouvez soit lire le livre du début à la fin, soit passer directement aux méthodes qui vous intéressent.</p>
 <p>J’espère que vous apprécierez la lecture de ce livre!</p>
 <!-- REFERENCES -->

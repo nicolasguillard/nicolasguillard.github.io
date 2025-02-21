@@ -179,7 +179,7 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../03-Interpretability/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3 - Interprétabilité</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -188,37 +188,37 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.5 - Propriétés des Explications</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
   </div>
 </li>
@@ -666,7 +666,7 @@ Avertissement
 <h3 class="anchored" data-anchor-id="avantages">9.2.4 - Avantages</h3>
 <p>Même si vous <strong>remplacez le modèle d’apprentissage automatique sous-jacent</strong>, vous pouvez toujours utiliser le même modèle local interprétable pour l’explication. Supposons que les personnes qui examinent les explications comprennent le mieux les arbres de décision. Parce que vous utilisez des modèles de substitution locaux, vous utilisez des arbres de décision comme explications sans avoir à utiliser un arbre de décision pour faire les prédictions. Par exemple, vous pouvez utiliser un SVM. Et s’il s’avère qu’un modèle xgboost fonctionne mieux, vous pouvez remplacer le SVM tout en utilisant un arbre de décision pour expliquer les prédictions.</p>
 <p>Les modèles de substitution locaux bénéficient de la littérature et de l’expérience en matière de formation et d’interprétation de modèles interprétables.</p>
-<p>Lorsque vous utilisez le Lasso ou des arbres courts, les <strong>explications résultantes sont courtes (= sélectives) et éventuellement contrastées</strong>. Par conséquent, ils donnent <a href="../03-interpretability/03.6-human_friendly_explanations.qmd">des explications adaptées aux humains</a>. C’est pourquoi je vois LIME davantage dans les applications où le destinataire de l’explication est un profane ou quelqu’un qui dispose de très peu de temps. Cela n’est pas suffisant pour des attributions complètes, donc je ne vois pas LIME dans les scénarios de conformité où vous pourriez être légalement tenu d’expliquer complètement une prédiction. Également pour déboguer les modèles d’apprentissage automatique, il est utile d’avoir toutes les raisons au lieu de quelques-unes.</p>
+<p>Lorsque vous utilisez le Lasso ou des arbres courts, les <strong>explications résultantes sont courtes (= sélectives) et éventuellement contrastées</strong>. Par conséquent, ils donnent <a href="../03-interpretability/03.6-human_friendly_explanations.html">des explications adaptées aux humains</a>. C’est pourquoi je vois LIME davantage dans les applications où le destinataire de l’explication est un profane ou quelqu’un qui dispose de très peu de temps. Cela n’est pas suffisant pour des attributions complètes, donc je ne vois pas LIME dans les scénarios de conformité où vous pourriez être légalement tenu d’expliquer complètement une prédiction. Également pour déboguer les modèles d’apprentissage automatique, il est utile d’avoir toutes les raisons au lieu de quelques-unes.</p>
 <p>LIME est l’une des rares méthodes qui <strong>fonctionne pour les données tabulaires, le texte et les images</strong>.</p>
 <p>La <strong>mesure de la fidélité</strong> (dans quelle mesure le modèle interprétable se rapproche des prédictions de la boîte noire) nous donne une bonne idée de la fiabilité du modèle interprétable pour expliquer les prédictions de la boîte noire dans le voisinage de l’instance de données d’intérêt.</p>
 <p>LIME est implémenté en Python (bibliothèque <a href="https://github.com/marcotcr/lime">lime</a> et R (<a href="https://cran.r-project.org/web/packages/lime/index.html">package lime</a> et <a href="https://cran.r-project.org/web/packages/iml/index.html">package iml</a>) et est <strong>très simple à utiliser</strong>.</p>

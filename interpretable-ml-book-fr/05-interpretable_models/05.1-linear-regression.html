@@ -179,7 +179,7 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../03-Interpretability/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../03-interpretability/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3 - Interprétabilité</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Basculer la section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -188,37 +188,37 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.1-importance_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.1 - Importance de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.2-taxonomy_of_interpretability_methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.2 - Taxonomie des Méthodes d’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.3-scope_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.3 - Portée de l’Interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.4-evaluation_of_interpretability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.4 - Evaluation de l’interprétabilité</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.5-properties_of_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.5 - Propriétés des Explications</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-Interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
+  <a href="../03-interpretability/03.6-human_friendly_explanations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3.6 - Explications conviviales pour l’être humain</span></a>
   </div>
 </li>
@@ -721,7 +721,7 @@ Vous ne voulez pas de caractéristiques fortement corrélées, car cela perturbe
 </section>
 <section id="est-ce-que-les-modèles-linéaires-produisent-des-bonnes-explications" class="level3">
 <h3 class="anchored" data-anchor-id="est-ce-que-les-modèles-linéaires-produisent-des-bonnes-explications">5.1.6 - Est-ce que les modèles linéaires produisent des bonnes explications ?</h3>
-<p>Au regard des attributs qui constituent une bonne explication, tels que présentés dans le chapitre sur les <a href="../03-interpretability/03.6-human_friendly_explanations.qmd#good-explanation">explications conviviales pour l’être humain</a>, les modèles linéaires ne créent pas les meilleures explications. Ils sont contrastifs, mais l’instance de référence est un point de données où toutes les caractéristiques numériques sont à zéro et les caractéristiques catégorielles sont à leurs catégories de référence. Il s’agit généralement d’une instance artificielle et dénuée de sens, peu susceptible de se produire dans vos données ou dans la réalité. Il y a une exception : si toutes les caractéristiques numériques sont centrées sur la moyenne (caractéristique moins la moyenne de la caractéristique) et que toutes les caractéristiques catégorielles sont codées par effet, l’instance de référence est le point de données où toutes les caractéristiques prennent la valeur moyenne de la caractéristique. Cela peut aussi être un point de données inexistant, mais il peut au moins être plus probable ou plus significatif. Dans ce cas, les poids multipliés par les valeurs des caractéristiques (effets des caractéristiques) expliquent la contribution au résultat prédit en contraste avec l’“instance moyenne”. Un autre aspect d’une bonne explication est la sélectivité, qui peut être atteinte dans les modèles linéaires en utilisant moins de caractéristiques ou en entraînant des modèles linéaires parcimonieux. Mais par défaut, les modèles linéaires ne créent pas d’explications sélectives. Les modèles linéaires créent des explications véridiques, tant que l’équation linéaire est un modèle approprié pour la relation entre les caractéristiques et le résultat. Plus il y a de non-linéarités et d’interactions, moins le modèle linéaire sera précis et moins les explications seront véridiques. La linéarité rend les explications plus générales et plus simples. La nature linéaire du modèle, je crois, est le principal facteur pour lequel les gens utilisent des modèles linéaires pour expliquer les relations.</p>
+<p>Au regard des attributs qui constituent une bonne explication, tels que présentés dans le chapitre sur les <a href="../03-interpretability/03.6-human_friendly_explanations.html#good-explanation">explications conviviales pour l’être humain</a>, les modèles linéaires ne créent pas les meilleures explications. Ils sont contrastifs, mais l’instance de référence est un point de données où toutes les caractéristiques numériques sont à zéro et les caractéristiques catégorielles sont à leurs catégories de référence. Il s’agit généralement d’une instance artificielle et dénuée de sens, peu susceptible de se produire dans vos données ou dans la réalité. Il y a une exception : si toutes les caractéristiques numériques sont centrées sur la moyenne (caractéristique moins la moyenne de la caractéristique) et que toutes les caractéristiques catégorielles sont codées par effet, l’instance de référence est le point de données où toutes les caractéristiques prennent la valeur moyenne de la caractéristique. Cela peut aussi être un point de données inexistant, mais il peut au moins être plus probable ou plus significatif. Dans ce cas, les poids multipliés par les valeurs des caractéristiques (effets des caractéristiques) expliquent la contribution au résultat prédit en contraste avec l’“instance moyenne”. Un autre aspect d’une bonne explication est la sélectivité, qui peut être atteinte dans les modèles linéaires en utilisant moins de caractéristiques ou en entraînant des modèles linéaires parcimonieux. Mais par défaut, les modèles linéaires ne créent pas d’explications sélectives. Les modèles linéaires créent des explications véridiques, tant que l’équation linéaire est un modèle approprié pour la relation entre les caractéristiques et le résultat. Plus il y a de non-linéarités et d’interactions, moins le modèle linéaire sera précis et moins les explications seront véridiques. La linéarité rend les explications plus générales et plus simples. La nature linéaire du modèle, je crois, est le principal facteur pour lequel les gens utilisent des modèles linéaires pour expliquer les relations.</p>
 </section>
 <section id="sparse-linear" class="level3">
 <h3 class="anchored" data-anchor-id="sparse-linear">5.1.7 - Modèles Linéaires Parcimonieux</h3>
