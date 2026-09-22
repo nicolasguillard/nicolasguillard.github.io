@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="manifest" href="manifest.json">
+		<meta name="keywords" content="reversi">
+		<meta name="description" content="A simple reversi game written in JavaScript">
+		<meta name="theme-color" content="#008000">
+		<link rel="shortcut icon" href="./favicon.png" type="image/png">
+		<link rel="apple-touch-icon" href="./apple-icon.png">
+		<title>Reversi</title>
+		<link rel="stylesheet" href="./index.css" />
+	</head>
+	<body>
+		<div id="setup">
+			<div id="minigrid">
+				<div class="square" data-player="2"></div>
+				<div class="square" data-player="1"></div>
+				<div class="square" data-player="1"></div>
+				<div class="square" data-player="2"></div>
+			</div>
+			<h1>Reversi</h1>
+			<div class="option">
+				<button class="btn" id="howto">About</button>
+				<button class="btn" id="theme">Light Mode</button>
+			</div>
+			<div class="option">
+				<div class="label">Number of Players</div>
+				<select name="players" id="players">
+					<option value="0">0</option>
+					<option value="1" selected>1</option>
+					<option value="2">2</option>
+				</select>
+			</div>
+			<div class="option" id="pid">
+				<div class="label">Disk Color</div>
+				<div class="suboption">
+					<div id="diskc">
+						<div id="setupdisk"></div>
+					</div>
+
+					<select name="playerId" id="playerId">
+						<option value="2" selected="1">Black</option>
+						<option value="1">White</option>
+					</select>
+				</div>
+			</div>
+			<div class="option sequence-option">
+				<div class="sequence-option-header">
+					<div class="label">Or replay a Game Sequence or display a Game State</div>
+					<button type="button" id="clearSequence" class="btn btn-small">Clear</button>
+				</div>
+				<textarea id="gameSequence" placeholder="e.g., D3 C4 E3 F4... OR xo.......x..x...xxxxxooo..ooo......ooo..........................o "></textarea>
+			</div>
+			<button id="play" class="btn">Start!</button>
+			<div id="about"></div>
+		</div>
+		<div id="rules" class="modal">
+			<h1>Reversi++</h1>
+			<p>A simple reversi game and dedicated tool written in vanilla JS.</p>
+			<a id="github" href="https://github.com/nicolasguillard/reversi" target="_blank">
+				<img src="./GitHub-Mark-64px.png" alt="GitHub">
+				View project on GitHub
+			</a>, fork of <a id="github" href="https://github.com/lazy-guy/reversi" target="_blank">
+				<img src="./GitHub-Mark-64px.png" alt="GitHub">
+				Previous project</a>
+			<h1>How To Play</h1>
+			<p>Reversi is a simple strategy board game for two players, played on a 8x8 uncheckered board.</p>
+			<p>There are 64 disks, which are white on one side and black on the other. Players take turn placing the disks on board with their assigned color facing up. Black moves first.</p>
+			<p>A player must place his disks such that there exists at least one enemy's disk which is surrounded by your new disk and one of your older disk. The surrounded enemy's disks will now be reversed (or outflanked) and now belongs to you.</p>
+			<p>A valid move is one where at least one piece is reversed.</p>
+			<p>The game ends when neither player can play a valid move. The player with the most pieces on the board wins.</p>
+			<button id="closeModal">×</button>
+		</div>
+		<div id="victory" class="modal">
+			<div id="winner"></div>
+			<div id="victory-btns">
+				<button id="playAgain" class="btn">Play Again!</button>
+				<button id="back" class="btn">Back to Main Menu!</button>
+				<button id="cancel" class="btn">Cancel!</button>
+			</div>
+		</div>
+		<div id="error-modal" class="modal">
+			<h2>⚠️ Erreur de Validation</h2>
+			<div id="error-message"></div>
+			<button id="closeError" class="btn">OK</button>
+		</div>
+		<div id="backdrop"></div>
+		<div id="game">
+			<div id="state">
+				<div class="score">
+					<div id="blackdisk"></div>
+					<span id="scorep1">02</span>
+				</div>
+				<button id="stop">× Stop</button>
+				<div id="turn"></div>
+				<button id="undo">↺ Undo</button>
+				<div class="score">
+					<div id="whitedisk"></div>
+					<span id="scorep2">02</span>
+				</div>
+				<!-- ←↺⟲⤺ -->
+			</div>
+			<div id="game-container">
+				<div id="grid"></div>
+				<div id="move-history">
+					<h3>Move History</h3>
+					<div id="history-content"></div>
+					<button type="button" id="copySequence" class="btn btn-small" disabled>Copy sequence</button>
+					<button type="button" id="copyBoardState" class="btn btn-small">Copy board state</button>
+				</div>
+			</div>
+			<div id="advantage-container">
+				<div class="label">Black Advantage</div>
+				<span id="advantage-sparkline"></span>
+			</div>
+			<div class="show-checkboxes-container">
+				<div class="show-moves-container">
+					<input type="checkbox" id="showValidMoves" checked />
+					<label for="showValidMoves">Show valid moves</label>
+				</div>
+				<div class="show-moves-container">
+					<input type="checkbox" id="showLastMove" checked />
+					<label for="showLastMove">Show last move</label>
+				</div>
+				<div class="show-moves-container">
+					<input type="checkbox" id="showMoveNumbers" />
+					<label for="showMoveNumbers">Show move numbers</label>
+				</div>
+				<div class="show-moves-container">
+					<input type="checkbox" id="showSquareIndices" />
+					<label for="showSquareIndices">Show square indices</label>
+				</div>
+				<div class="show-moves-container">
+					<input type="checkbox" id="showMoveIndices" />
+					<label for="showMoveIndices">Show move indices (line indices by default)</label>
+				</div>
+				<div class="show-moves-container">
+					<input type="checkbox" id="showFlippedBackground" />
+					<label for="showFlippedBackground">Show flipped disks</label>
+				</div>
+			</div>
+			<div id="navigation-btns">
+				<button id="first" class="btn nav-btn">⏮</button>
+				<button id="play-replay" class="btn nav-btn">▶</button>
+				<button id="pause-replay" class="btn nav-btn" style="display: none;">⏸</button>
+				<button id="previous" class="btn nav-btn">◀◀</button>
+				<button id="next" class="btn nav-btn">▶▶</button>
+				<button id="last" class="btn nav-btn">⏭</button>
+				<select id="replayDelay" title="Delay between replayed moves">
+					<option value="200">200 ms</option>
+					<option value="400">400 ms</option>
+					<option value="600" selected>600 ms</option>
+					<option value="800">800 ms</option>
+					<option value="1000">1000 ms</option>
+					<option value="1500">1500 ms</option>
+					<option value="2000">2000 ms</option>
+				</select>
+			</div>
+		</div>
+		<script src="./vendor/jquery.min.js"></script>
+		<script src="./vendor/jquery.sparkline.min.js"></script>
+		<script src="./engine.js"></script>
+		<script src="./index.js"></script>
+	</body>
+</html>
