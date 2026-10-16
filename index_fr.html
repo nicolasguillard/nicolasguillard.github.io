@@ -26,6 +26,23 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+			.shadow {
+				box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) !important;
+			}
+			.shadow:hover {
+				box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
+  				cursor: default;
+			}
+			.imgproj {
+				width: 288px;
+				max-width: 100%;
+        max-height: 90%;
+				display: block;
+				margin: auto;
+			}
+		</style>
 </head>
 
 <body class="index-page">
@@ -53,8 +70,9 @@
 
     <nav id="navmenu" class="navmenu">
       <ul>
-        <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Résumé</a></li>
+        <li><a href="#home"><i class="bi bi-house navicon"></i> Accueil</a></li>
         <li><a href="#portfolio"><i class="bi bi-images navicon"></i> Portfolio</a></li>
+        <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Résumé</a></li>
       </ul>
     </nav>
   </header>
@@ -62,11 +80,11 @@
   <main class="main">
     
     <!-- NG Section -->
-    <section id="ng" class="resume section">
+    <section id="home" class="home section">
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Nicolas GUILLARD</h2>
-        <p> Depuis début 2023 je me suis plongé avec passion dans le domaine de l'IA, après une ré-immersion en 2020 pendant le Covid et un premier contact durant mes études. Je considère qu'il constitue une des plus belles aventures scientifiques de l'humanité. Mais son exploration peut mener, à l'instar d'autres, autant vers de grands bienfaits que vers des calamités catastrophiques. Comprendre le fonctionnement de ces objets que sont les modèles d'IA, avoir conscience des risques et des enjeux, maîtriser leur emploi, représentent des piliers essentielles pour en tirer le meilleur parti en toute confiance, afin de nous aider à résoudre nos problèmes actuels et relever nos prochains défis, à comprendre le monde, et pourquoi pas, nous aider à mieux nous comprendre nous-mêmes et devenir une meilleure humanité.
+        <p> Depuis début 2023, je me suis plongé avec passion dans le domaine de l'IA, après une ré-immersion en 2020 pendant le Covid et un premier contact durant mes études. Je considère qu'il constitue une des plus belles aventures scientifiques de l'humanité. Mais son exploration peut mener, à l'instar d'autres, autant vers de grands bienfaits que vers des calamités catastrophiques. Comprendre le fonctionnement de ces objets que sont les modèles d'IA, avoir conscience des risques et des enjeux, maîtriser leur emploi, représentent des piliers essentielles pour en tirer le meilleur parti en toute confiance, afin de nous aider à résoudre nos problèmes actuels et relever nos prochains défis, à comprendre le monde, et pourquoi pas, nous aider à mieux nous comprendre nous-mêmes et devenir une meilleure humanité.
         <br><br>
         C'est pourquoi je m'intéresse aux sujets de l'interprétabilité et l'évaluation dans le cadre de la sécurité de l'IA.
         </p>
@@ -77,128 +95,133 @@
     <section id="portfolio" class="portfolio section">
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Portfolio - Projets sélectionnés</h2>
-        <p>Liste de travaux et contributions.</p>
+        <h2>Portfolio</h2>
+        <p>Liste de quelques travaux et contributions :</p>
       </div><!-- End Section Title -->
 
       <div class="container">
-
-        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
-
-          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/molnar_v2_translation.png"class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>Interpretable Machine Learning (Traduction française)</h4>
-                  <p>Traduction du livre Interpretable Machine Learning de Christoph Molnar (2024 - En cours)</p>
-                  
-                  <!--
-                  <a href="https://nicolasguillard.github.io/interpretable-ml-book-fr/images/cutout.png" title="Interpretable Machine Learning" data-gallery="interpretable-machine-learning-fr-translation" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                  -->
-                  
-                  <a href="https://nicolasguillard.github.io/interpretable-ml-book-fr" title="Project source Github" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
+        
+        <div class="card ms-3 mb-3 me-2 shadow" data-aos="fade-up"><!-- Portfolio Item -->
+          <div class="row g-0">
+            <div class="col-md-4 imgproj">
+              <img src="./assets/img/fr/cnam_rcp211.png" class="img-fluid rounded-start align-middle" alt="">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Apprentissage par renforcement des jeux Atari, par DeepMind (Version française)</h5>
+                <p class="card-text">Rapport de projet CNAM RCP211 au sujet de la reproduction de l'article <a href="https://arxiv.org/abs/1311.2901">"V. Mnih et al."</a>. Mai 2025</p>
+                <p class="card-text"><a href="https://drive.google.com/file/d/1cNJtFIvFotKv_np4YuuRzMuf45ULV6OT/view?usp=sharing" title="Lien vers ce rapport" class="details-link" target="_blank">Rapport de projet CNAM RCP211 : Apprentissage par renforcement des jeux Atari par DeepMind</a></p>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
+          </div>
+        </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/atlas_translation_fr.png" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>Atlas de la Sécurité de l'IA (Traduction française)</h4>
-                  <p>Version française de <a href="https://ai-safety-atlas.com">AI Safety Atlas</a> par Markov Grey, Charbel-Raphaël Segerie et al., Centre français de la Sécurité de l'IA (CeSIA), 2025.</p>
-                  <a href="https://centresecuriteia.github.io/fr/" title="AI Safety Atlas (Version française)" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
+        <div class="card ms-3 mb-3 me-2 shadow" data-aos="fade-up"><!-- Portfolio Item -->
+          <div class="row g-0">
+            <div class="col-md-4 imgproj">
+              <img src="./assets/img/fr/cnam_rcp209.png" class="img-fluid rounded-start align-middle" alt="">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Interpétabilité des modèles profonds CNN (Version française)</h5>
+                <p class="card-text">Rapport de projet CNAM RCP209 : Reproduction de l'article <a href="https://arxiv.org/abs/1311.2901">"M. D. Zeiler and R. Fergus"</a>. Avril 2025</p>
+                <p class="card-text"><a href="https://drive.google.com/file/d/1Uwt97t0a3jKrqL0wsJ53kNKIKpeZ8Zmk/view?usp=sharing" title="Lien vers ce rapport" class="details-link" target="_blank">Rapport de projet CNAM RCP209 : interpétabilité des CNN</a></p>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
+          </div>
+        </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/cnam_rcp211.png" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>Rapport de projet CNAM RCP211 : Apprentissage par renforcement des jeux Atari par DeepMind (Version française)</h4>
-                  <p>Reproduction de l'article <a href="https://arxiv.org/abs/1311.2901">"V. Mnih et al."</a>. Mai 2025</p>
-                  <a href="https://drive.google.com/file/d/1cNJtFIvFotKv_np4YuuRzMuf45ULV6OT/view?usp=sharing" title="Rapport de projet CNAM RCP211 : Apprentissage par renforcement des jeux Atari par DeepMind" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
+        <div class="card ms-3 mb-3 me-2 shadow" data-aos="fade-up"><!-- Portfolio Item -->
+          <div class="row g-0">
+            <div class="col-md-4 imgproj">
+              <img src="./assets/img/fr/cs_workshop_2025.png" class="img-fluid rounded-start align-middle" alt="">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Atelier d'interprétabilité mécanistique pour Automatans @ CentraleSupélec (Version française)</h5>
+                <p class="card-text">Matériel et ressources en français créés pour manipuler les concepts de Mech Interp. Mars 2025</p>
+                <p class="card-text"><a href="https://github.com/nicolasguillard/workshop_cs_202503/blob/main/README_EN.md" title="Lien vers le projet dans GitHub" class="details-link" target="_blank">Atelier d'interprétabilité mécanistique pour Automatans @ CentraleSupélec</a></p>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
+          </div>
+        </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/cnam_rcp209.png" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>Rapport de projet CNAM RCP209 : interpétabilité des CNN (Version française)</h4>
-                  <p>Reproduction de l'article <a href="https://arxiv.org/abs/1311.2901">"M. D. Zeiler and R. Fergus"</a>. Avril 2025</p>
-                  <a href="https://drive.google.com/file/d/1Uwt97t0a3jKrqL0wsJ53kNKIKpeZ8Zmk/view?usp=sharing" title="Rapport de projet CNAM RCP209 : interpétabilité des CNN" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
+        <div class="card ms-3 mb-3 me-2 shadow" data-aos="fade-up"><!-- Portfolio Item -->
+          <div class="row g-0">
+            <div class="col-md-4 imgproj">
+              <img src="./assets/img/fr/LLM_Interpretability.png" class="img-fluid rounded-start align-middle" alt="">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">LLM et interprétabilité (English version)</h5>
+                <p class="card-text">Présentation du domaine de l'interprétabilité dans l'IA, l'apprentissage automatique et pour les LLM, et introduction à l'interprétabilité mécanistique. Janvier 2025.</p>
+                <p class="card-text"><a href="https://drive.google.com/file/d/12suNSBCTOi3WbeZcoHo9c5M24HxEBs7J/view?usp=sharing" title="Lien vers le support de la présentation" class="details-link" target="_blank">LLM et interprétabilité</a></p>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
+          </div>
+        </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/cs_workshop_2025.png" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>Atelier d'interprétabilité mécanistique pour Automatans @ CentraleSupélec (Version française)</h4>
-                  <p>Matériel et ressources en français créés pour manipuler les concepts de Mech Interp. Mars 2025</p>
-                  <a href="https://github.com/nicolasguillard/workshop_cs_202503/blob/main/README_EN.md" title="Atelier d'interprétabilité mécanistique pour Automatans @ CentraleSupélec" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
+        <div class="card ms-3 mb-3 me-2 shadow" data-aos="fade-up"><!-- Portfolio Item -->
+          <div class="row g-0">
+            <div class="col-md-4 imgproj">
+              <img src="./assets/img/fr/cnam_rcp217.png" class="img-fluid rounded-start align-middle" alt="">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Evaluation de l'interprétabilité de modèles GNN (Version française)</h5>
+                <p class="card-text">Rapport de projet CNAM RCP217 : Etude de l'article <a href="https://arxiv.org/abs/2012.15445">"Explainability in Graph Neural Networks: A Taxonomic Survey"</a>. Septembre 2024</p>
+                <p class="card-text"><a href="https://drive.google.com/file/d/1nG4SipAZUSgSKycGBxU-YkriSuw6Ck6M/view?usp=sharing" title="Lien vers ce rapport" class="details-link" target="_blank">GNN interpretability evaluation</a></p>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
+          </div>
+        </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/LLM_Interpretability.png" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>LLM et interprétabilité</h4>
-                  <p>Présentation du domaine de l'interprétabilité dans l'IA, l'apprentissage automatique et pour les LLM, et introduction à l'interprétabilité mécanistique. Janvier 2025. <i>Tout le contenu, à l'exception de la couverture, est en anglais.</i></p>
-                  <a href="https://drive.google.com/file/d/12suNSBCTOi3WbeZcoHo9c5M24HxEBs7J/view?usp=sharing" title="LLM et interprétabilité" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
+        <div class="card ms-3 mb-3 me-2 shadow" data-aos="fade-up"><!-- Portfolio Item -->
+          <div class="row g-0">
+            <div class="col-md-4 imgproj">
+              <img src="./assets/img/fr/ai_and_cybersecurity.png" class="img-fluid rounded-start align-middle" alt="">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">IA et cybersécurité - Une introduction (version française)</h5>
+                <p class="card-text">Présentation sur les aspects de la cybersécurité dans le contexte de la sécurité de l'intelligence artificielle. Juillet 2024</p>
+                <p class="card-text"><a href="https://drive.google.com/file/d/1UNFE-EqSdVbGWf1q95dDkdQ-dqVqJ4kc/view?usp=sharing" title="Lien vers le support de la présentation" class="details-link" target="_blank">IA et cybersécurité - Une introduction</a></p>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
+          </div>
+        </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/cnam_rcp217.png" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>Rapport de projet CNAM RCP217 : évaluation de l'interprétabilité de GNN (Version française)</h4>
-                  <p>Etude de l'article <a href="https://arxiv.org/abs/2012.15445">"Explainability in Graph Neural Networks: A Taxonomic Survey"</a>. Septembre 2024</p>
-                  <a href="https://drive.google.com/file/d/1nG4SipAZUSgSKycGBxU-YkriSuw6Ck6M/view?usp=sharing" title="GNN interpretability evaluation" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
+        <div class="card ms-3 mb-3 me-2 shadow" data-aos="fade-up"><!-- Portfolio Item -->
+          <div class="row g-0">
+            <div class="col-md-4 imgproj">
+              <img src="assets/img/fr/molnar_v2_translation.png" class="img-fluid rounded-start align-middle" alt="Illustration">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Interpretable Machine Learning (Traduction française)</h5>
+                <p class="card-text">Traduction du livre Interpretable Machine Learning de Christoph Molnar (2024 - En cours)</p>
+                <p class="card-text"><a href="https://nicolasguillard.github.io/interpretable-ml-book-fr" title="Interpretable Machine Learning - FR" class="details-link" target="_blank">Accès au livre en ligne</a></p>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
+          </div>
+        </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/ai_and_cybersecurity.png" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>IA et cybersécurité - Une introduction (version française)</h4>
-                  <p>Présentation sur les aspects de la cybersécurité dans le contexte de la sécurité de l'intelligence artificielle. Juillet 2024</p>
-                  <a href="https://drive.google.com/file/d/1UNFE-EqSdVbGWf1q95dDkdQ-dqVqJ4kc/view?usp=sharing" title="IA et cybersécurité - Une introduction" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
+        <div class="card ms-3 mb-3 me-2 shadow" data-aos="fade-up"><!-- Portfolio Item -->
+          <div class="row g-0">
+            <div class="col-md-4 imgproj">
+              <img src="./assets/img/fr/cybergeography_atlas_title.png" class="img-fluid rounded-start align-middle" alt="">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Cybergéographie</h5>
+                <p class="card-text">Version française du site web de Martin Dodge consacré à la cybergéographie (2001-2006)</p>
+                <p class="card-text"><a href="http://www.cybergeography-fr.org/atlas/atlas.php" title="Lien vers le site" class="details-link" target="_blank">cybergeography-fr.org</a></p>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
+          </div>
+        </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <div class="portfolio-content h-100">
-                <img src="./assets/img/fr/cybergeography_atlas_title.png" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4>Cybergéographie (Traduction française)</h4>
-                  <p>Version française du site web de Martin Dodge consacré à la cybergéographie (2001-2006)</p>
-                  <!--
-                  <a href="http://www.cybergeography-fr.org/atlas/title.png" title="Cybergeography" data-gallery="cybergeography-fr-translation" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                  -->
-                  <a href="http://www.cybergeography-fr.org/atlas/atlas.php" title="cybergeography-fr" class="details-link" target="_blank"><i class="bi bi-link-45deg"></i></a>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-          </div><!-- End Portfolio Container -->
-
-        </div>
-
-      </div>
+      </div><!-- End Portfolio Container -->
 
     </section><!-- /Portfolio Section -->
 
@@ -333,7 +356,7 @@
 
     <div class="container">
       <div class="copyright text-center ">
-        <p><strong class="px-1 sitename">Nicolas Guillard</strong></p>
+        <p><strong class="sitename">Nicolas Guillard</strong> - <i>dernière mise à jour : 16/10/2026</i></p>
       </div>
       <div class="credits">
         Modèle de site web créé par <a href="https://bootstrapmade.com/">BootstrapMade</a>
